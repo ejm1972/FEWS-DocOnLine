@@ -1,0 +1,1 @@
+mvn install:install-file -DgroupId=com.sun.media -DartifactId=jai_codec -Dversion=1.1.2_01 -Dpackaging=jar -Dfile=jai_codec.jar

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    					http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd" >
+
+	<util:properties id="utilsProperties" location="classpath:utils.properties"/>
+	<util:properties id="mailProperties" location="classpath:mail.properties"/>
+	<util:properties id="dolProperties" location="classpath:doconline.properties" />
+	<util:properties id="wsProperties" location="classpath:ws.properties"/>
+	
+	<!-- Inicializar log4j -->
+	<bean id="log4jInitializer"
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="staticMethod" value="org.springframework.util.Log4jConfigurer.initLogging" />
+		<property name="arguments">
+			<list>
+				<value>classpath:log4j.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!--
+	  Configura el encryptor, basado en una password string fija que es
+	  con la que se encripta los datos
+	-->
+	<bean id="passwordConfiguration" class="org.jasypt.encryption.pbe.config.SimplePBEConfig">
+		<property name="algorithm" value="PBEWithMD5AndDES" />
+	  	<property name="password" value="monedero" />
+	</bean>
+
+	<!--
+	    Crea el encriptor
+	-->
+	<bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+		<property name="config" ref="passwordConfiguration" />
+	</bean>
+
+	<!-- Integración con Spring, esta clase reemplaza el PropertyPlaceholderConfigurer -->
+	<bean id="propertyConfigurer" class="org.jasypt.spring.properties.EncryptablePropertyPlaceholderConfigurer">
+		<constructor-arg ref="configurationEncryptor" />
+		<property name="locations">
+	   		<list>
+				<value>classpath:doconline.properties</value>
+	   		</list>
+		</property>
+	</bean>
+	<!--
+	<bean id="propertiesFile" class="java.lang.String">
+  		<constructor-arg value="classpath:#{servletContext.contextPath}.properties"/>
+	</bean>	
+	<bean id="propertyConfigurer" class="org.jasypt.spring.properties.EncryptablePropertyPlaceholderConfigurer">
+		<constructor-arg ref="configurationEncryptor" />
+		<property name="locations">
+			<list>
+				<ref bean="propertiesFile"/>
+			</list>
+		</property>
+	</bean>
+	-->
+
+</beans>

@@ -1,0 +1,708 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="DocOnlineServicioWeb" resourceRoot="" soapui-version="4.5.1" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="DocOnlineServicioWebSoap12Binding" type="wsdl" bindingName="{http://impl.ws.doconline.coninf.com.ar}DocOnlineServicioWebSoap12Binding" soapVersion="1_2" anonymous="optional" definition="http://localhost:8282/doconline-ws/services/DocOnlineServicioWeb?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache/><con:endpoints><con:endpoint>http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap12Endpoint/</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:autorizarComprobante" name="autorizarComprobante" bindingOperationName="autorizarComprobante" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap12Endpoint/</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:impl="http://impl.ws.doconline.coninf.com.ar" xmlns:xsd="http://tx.model.rest.doconline.coninf.com.ar/xsd">
+   <soap:Header/>
+   <soap:Body>
+      <impl:autorizarComprobante>
+         <!--Optional:-->
+         <impl:ctx>
+            <!--Optional:-->
+            <xsd:idSesion>?</xsd:idSesion>
+            <!--Optional:-->
+            <xsd:interfaz>?</xsd:interfaz>
+            <!--Optional:-->
+            <xsd:nroTransaccion>?</xsd:nroTransaccion>
+         </impl:ctx>
+         <!--Optional:-->
+         <impl:concepto>?</impl:concepto>
+         <!--Optional:-->
+         <impl:tipoDoc>?</impl:tipoDoc>
+         <!--Optional:-->
+         <impl:nroDoc>?</impl:nroDoc>
+         <!--Optional:-->
+         <impl:tipoCbte>?</impl:tipoCbte>
+         <!--Optional:-->
+         <impl:ptoVta>?</impl:ptoVta>
+         <!--Optional:-->
+         <impl:nroCbte>?</impl:nroCbte>
+         <!--Optional:-->
+         <impl:impTotal>?</impl:impTotal>
+         <!--Optional:-->
+         <impl:impTotConcNoGrav>?</impl:impTotConcNoGrav>
+         <!--Optional:-->
+         <impl:impNeto>?</impl:impNeto>
+         <!--Optional:-->
+         <impl:impIva>?</impl:impIva>
+         <!--Optional:-->
+         <impl:impTrib>?</impl:impTrib>
+         <!--Optional:-->
+         <impl:impOpEx>?</impl:impOpEx>
+         <!--Optional:-->
+         <impl:fechaCbte>?</impl:fechaCbte>
+         <!--Optional:-->
+         <impl:fechaVencPago>?</impl:fechaVencPago>
+         <!--Optional:-->
+         <impl:fechaServDesde>?</impl:fechaServDesde>
+         <!--Optional:-->
+         <impl:fechaServHasta>?</impl:fechaServHasta>
+         <!--Optional:-->
+         <impl:monedaId>?</impl:monedaId>
+         <!--Optional:-->
+         <impl:monedaCtz>?</impl:monedaCtz>
+         <!--Zero or more repetitions:-->
+         <impl:tributos>
+            <!--Optional:-->
+            <xsd:tributoAlic>?</xsd:tributoAlic>
+            <!--Optional:-->
+            <xsd:tributoBaseImp>?</xsd:tributoBaseImp>
+            <!--Optional:-->
+            <xsd:tributoDesc>?</xsd:tributoDesc>
+            <!--Optional:-->
+            <xsd:tributoId>?</xsd:tributoId>
+            <!--Optional:-->
+            <xsd:tributoImporte>?</xsd:tributoImporte>
+         </impl:tributos>
+         <!--Zero or more repetitions:-->
+         <impl:ivas>
+            <!--Optional:-->
+            <xsd:ivaBaseImp>?</xsd:ivaBaseImp>
+            <!--Optional:-->
+            <xsd:ivaId>?</xsd:ivaId>
+            <!--Optional:-->
+            <xsd:ivaImporte>?</xsd:ivaImporte>
+         </impl:ivas>
+      </impl:autorizarComprobante>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:autorizarComprobante"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="urn:cerrarSesion" name="cerrarSesion" bindingOperationName="cerrarSesion" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap12Endpoint/</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:impl="http://impl.ws.doconline.coninf.com.ar">
+   <soap:Header/>
+   <soap:Body>
+      <impl:cerrarSesion>
+         <!--Optional:-->
+         <impl:interfaz>?</impl:interfaz>
+         <!--Optional:-->
+         <impl:idSesion>?</impl:idSesion>
+      </impl:cerrarSesion>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:cerrarSesion"/></con:call></con:operation><con:operation isOneWay="false" action="urn:consultarComprobante" name="consultarComprobante" bindingOperationName="consultarComprobante" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap12Endpoint/</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:impl="http://impl.ws.doconline.coninf.com.ar" xmlns:xsd="http://tx.model.rest.doconline.coninf.com.ar/xsd">
+   <soap:Header/>
+   <soap:Body>
+      <impl:consultarComprobante>
+         <!--Optional:-->
+         <impl:ctx>
+            <!--Optional:-->
+            <xsd:idSesion>?</xsd:idSesion>
+            <!--Optional:-->
+            <xsd:interfaz>?</xsd:interfaz>
+            <!--Optional:-->
+            <xsd:nroTransaccion>?</xsd:nroTransaccion>
+         </impl:ctx>
+         <!--Optional:-->
+         <impl:tipoCbte>?</impl:tipoCbte>
+         <!--Optional:-->
+         <impl:ptoVta>?</impl:ptoVta>
+         <!--Optional:-->
+         <impl:cbte>?</impl:cbte>
+      </impl:consultarComprobante>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:consultarComprobante"/></con:call></con:operation><con:operation isOneWay="false" action="urn:consultarUltimoComprobante" name="consultarUltimoComprobante" bindingOperationName="consultarUltimoComprobante" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap12Endpoint/</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:impl="http://impl.ws.doconline.coninf.com.ar" xmlns:xsd="http://tx.model.rest.doconline.coninf.com.ar/xsd">
+   <soap:Header/>
+   <soap:Body>
+      <impl:consultarUltimoComprobante>
+         <!--Optional:-->
+         <impl:ctx>
+            <!--Optional:-->
+            <xsd:idSesion>?</xsd:idSesion>
+            <!--Optional:-->
+            <xsd:interfaz>?</xsd:interfaz>
+            <!--Optional:-->
+            <xsd:nroTransaccion>?</xsd:nroTransaccion>
+         </impl:ctx>
+         <!--Optional:-->
+         <impl:tipoCbte>?</impl:tipoCbte>
+         <!--Optional:-->
+         <impl:ptoVta>?</impl:ptoVta>
+      </impl:consultarUltimoComprobante>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:consultarUltimoComprobante"/></con:call></con:operation><con:operation isOneWay="false" action="urn:iniciarSesion" name="iniciarSesion" bindingOperationName="iniciarSesion" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap12Endpoint/</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:impl="http://impl.ws.doconline.coninf.com.ar">
+   <soap:Header/>
+   <soap:Body>
+      <impl:iniciarSesion>
+         <!--Optional:-->
+         <impl:interfaz>?</impl:interfaz>
+         <!--Optional:-->
+         <impl:clave>?</impl:clave>
+      </impl:iniciarSesion>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:iniciarSesion"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="DocOnlineServicioWebSoap11Binding" type="wsdl" bindingName="{http://impl.ws.doconline.coninf.com.ar}DocOnlineServicioWebSoap11Binding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8282/doconline-ws/services/DocOnlineServicioWeb?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8282/doconline-ws/services/DocOnlineServicioWeb?wsdl"><con:part><con:url>http://localhost:8282/doconline-ws/services/DocOnlineServicioWeb?wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://impl.ws.doconline.coninf.com.ar" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://impl.ws.doconline.coninf.com.ar" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ax25="http://response.model.rest.doconline.coninf.com.ar/xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax23="http://tx.model.rest.doconline.coninf.com.ar/xsd" xmlns:ax21="http://sql.java/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <wsdl:documentation>DocOnlineServicioWeb</wsdl:documentation>
+  <wsdl:types>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://sql.java/xsd">
+      <xs:complexType name="SQLException">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="SQLState" nillable="true" type="xs:string"/>
+          <xs:element minOccurs="0" name="errorCode" type="xs:int"/>
+          <xs:element minOccurs="0" name="nextException" nillable="true" type="ax21:SQLException"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://response.model.rest.doconline.coninf.com.ar/xsd">
+      <xs:complexType name="Response">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="codigo" nillable="true" type="xs:int"/>
+          <xs:element minOccurs="0" name="descripcion" nillable="true" type="xs:string"/>
+          <xs:element minOccurs="0" name="esReintento" nillable="true" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="observacion" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ResponseAutorizarComprobante">
+        <xs:complexContent>
+          <xs:extension base="ax25:Response">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="cae" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="errMsg" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="excepcionWsaa" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="excepcionWsfev1" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="fechaVencimiento" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="obs" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="resultado" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="xmlRequest" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="xmlResponse" nillable="true" type="xs:string"/>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="ResponseConsultarComprobante">
+        <xs:complexContent>
+          <xs:extension base="ax25:Response">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="cae" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="errMsg" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="excepcionWsaa" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="excepcionWsfev1" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="fechaCbte" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="fechaVencimiento" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="impTotal" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="obs" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="xmlRequest" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="xmlResponse" nillable="true" type="xs:string"/>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="ResponseConsultarUltimoComprobante">
+        <xs:complexContent>
+          <xs:extension base="ax25:Response">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="errMsg" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="excepcionWsaa" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="excepcionWsfev1" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="obs" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="ultimoComprobante" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="xmlRequest" nillable="true" type="xs:string"/>
+              <xs:element minOccurs="0" name="xmlResponse" nillable="true" type="xs:string"/>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="ResponseAutenticacion">
+        <xs:complexContent>
+          <xs:extension base="ax25:Response">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="idSesion" nillable="true" type="xs:string"/>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://tx.model.rest.doconline.coninf.com.ar/xsd">
+      <xs:complexType name="ControlTransaccion">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="idSesion" nillable="true" type="xs:string"/>
+          <xs:element minOccurs="0" name="interfaz" nillable="true" type="xs:int"/>
+          <xs:element minOccurs="0" name="nroTransaccion" nillable="true" type="xs:long"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Tributo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="tributoAlic" nillable="true" type="xs:decimal"/>
+          <xs:element minOccurs="0" name="tributoBaseImp" nillable="true" type="xs:decimal"/>
+          <xs:element minOccurs="0" name="tributoDesc" nillable="true" type="xs:string"/>
+          <xs:element minOccurs="0" name="tributoId" nillable="true" type="xs:int"/>
+          <xs:element minOccurs="0" name="tributoImporte" nillable="true" type="xs:decimal"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TipoIva">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ivaBaseImp" nillable="true" type="xs:decimal"/>
+          <xs:element minOccurs="0" name="ivaId" nillable="true" type="xs:int"/>
+          <xs:element minOccurs="0" name="ivaImporte" nillable="true" type="xs:decimal"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://impl.ws.doconline.coninf.com.ar" xmlns:ax26="http://response.model.rest.doconline.coninf.com.ar/xsd" xmlns:ax24="http://tx.model.rest.doconline.coninf.com.ar/xsd" xmlns:ax22="http://sql.java/xsd">
+      <xs:import namespace="http://sql.java/xsd"/>
+      <xs:import namespace="http://tx.model.rest.doconline.coninf.com.ar/xsd"/>
+      <xs:import namespace="http://response.model.rest.doconline.coninf.com.ar/xsd"/>
+      <xs:element name="DocOnlineServicioWebSQLException">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="SQLException" nillable="true" type="ax21:SQLException"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="autorizarComprobante">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="ctx" nillable="true" type="ax23:ControlTransaccion"/>
+            <xs:element minOccurs="0" name="concepto" type="xs:int"/>
+            <xs:element minOccurs="0" name="tipoDoc" type="xs:int"/>
+            <xs:element minOccurs="0" name="nroDoc" type="xs:long"/>
+            <xs:element minOccurs="0" name="tipoCbte" type="xs:int"/>
+            <xs:element minOccurs="0" name="ptoVta" type="xs:int"/>
+            <xs:element minOccurs="0" name="nroCbte" type="xs:long"/>
+            <xs:element minOccurs="0" name="impTotal" nillable="true" type="xs:decimal"/>
+            <xs:element minOccurs="0" name="impTotConcNoGrav" nillable="true" type="xs:decimal"/>
+            <xs:element minOccurs="0" name="impNeto" nillable="true" type="xs:decimal"/>
+            <xs:element minOccurs="0" name="impIva" nillable="true" type="xs:decimal"/>
+            <xs:element minOccurs="0" name="impTrib" nillable="true" type="xs:decimal"/>
+            <xs:element minOccurs="0" name="impOpEx" nillable="true" type="xs:decimal"/>
+            <xs:element minOccurs="0" name="fechaCbte" nillable="true" type="xs:string"/>
+            <xs:element minOccurs="0" name="fechaVencPago" nillable="true" type="xs:string"/>
+            <xs:element minOccurs="0" name="fechaServDesde" nillable="true" type="xs:string"/>
+            <xs:element minOccurs="0" name="fechaServHasta" nillable="true" type="xs:string"/>
+            <xs:element minOccurs="0" name="monedaId" nillable="true" type="xs:string"/>
+            <xs:element minOccurs="0" name="monedaCtz" nillable="true" type="xs:decimal"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="tributos" nillable="true" type="ax23:Tributo"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="ivas" nillable="true" type="ax23:TipoIva"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="autorizarComprobanteResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="ax25:ResponseAutorizarComprobante"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="consultarComprobante">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="ctx" nillable="true" type="ax23:ControlTransaccion"/>
+            <xs:element minOccurs="0" name="tipoCbte" type="xs:int"/>
+            <xs:element minOccurs="0" name="ptoVta" type="xs:int"/>
+            <xs:element minOccurs="0" name="cbte" type="xs:int"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="consultarComprobanteResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="ax25:ResponseConsultarComprobante"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="consultarUltimoComprobante">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="ctx" nillable="true" type="ax23:ControlTransaccion"/>
+            <xs:element minOccurs="0" name="tipoCbte" type="xs:int"/>
+            <xs:element minOccurs="0" name="ptoVta" type="xs:int"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="consultarUltimoComprobanteResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="ax25:ResponseConsultarUltimoComprobante"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="cerrarSesion">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="interfaz" type="xs:int"/>
+            <xs:element minOccurs="0" name="idSesion" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="cerrarSesionResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="ax25:Response"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="iniciarSesion">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="interfaz" type="xs:int"/>
+            <xs:element minOccurs="0" name="clave" nillable="true" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="iniciarSesionResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="ax25:ResponseAutenticacion"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="consultarComprobanteRequest">
+    <wsdl:part name="parameters" element="ns:consultarComprobante"/>
+  </wsdl:message>
+  <wsdl:message name="consultarComprobanteResponse">
+    <wsdl:part name="parameters" element="ns:consultarComprobanteResponse"/>
+  </wsdl:message>
+  <wsdl:message name="DocOnlineServicioWebSQLException">
+    <wsdl:part name="parameters" element="ns:DocOnlineServicioWebSQLException"/>
+  </wsdl:message>
+  <wsdl:message name="iniciarSesionRequest">
+    <wsdl:part name="parameters" element="ns:iniciarSesion"/>
+  </wsdl:message>
+  <wsdl:message name="iniciarSesionResponse">
+    <wsdl:part name="parameters" element="ns:iniciarSesionResponse"/>
+  </wsdl:message>
+  <wsdl:message name="autorizarComprobanteRequest">
+    <wsdl:part name="parameters" element="ns:autorizarComprobante"/>
+  </wsdl:message>
+  <wsdl:message name="autorizarComprobanteResponse">
+    <wsdl:part name="parameters" element="ns:autorizarComprobanteResponse"/>
+  </wsdl:message>
+  <wsdl:message name="cerrarSesionRequest">
+    <wsdl:part name="parameters" element="ns:cerrarSesion"/>
+  </wsdl:message>
+  <wsdl:message name="cerrarSesionResponse">
+    <wsdl:part name="parameters" element="ns:cerrarSesionResponse"/>
+  </wsdl:message>
+  <wsdl:message name="consultarUltimoComprobanteRequest">
+    <wsdl:part name="parameters" element="ns:consultarUltimoComprobante"/>
+  </wsdl:message>
+  <wsdl:message name="consultarUltimoComprobanteResponse">
+    <wsdl:part name="parameters" element="ns:consultarUltimoComprobanteResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="DocOnlineServicioWebPortType">
+    <wsdl:operation name="consultarComprobante">
+      <wsdl:input message="ns:consultarComprobanteRequest" wsaw:Action="urn:consultarComprobante"/>
+      <wsdl:output message="ns:consultarComprobanteResponse" wsaw:Action="urn:consultarComprobanteResponse"/>
+      <wsdl:fault message="ns:DocOnlineServicioWebSQLException" name="DocOnlineServicioWebSQLException" wsaw:Action="urn:consultarComprobanteDocOnlineServicioWebSQLException"/>
+    </wsdl:operation>
+    <wsdl:operation name="iniciarSesion">
+      <wsdl:input message="ns:iniciarSesionRequest" wsaw:Action="urn:iniciarSesion"/>
+      <wsdl:output message="ns:iniciarSesionResponse" wsaw:Action="urn:iniciarSesionResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="autorizarComprobante">
+      <wsdl:input message="ns:autorizarComprobanteRequest" wsaw:Action="urn:autorizarComprobante"/>
+      <wsdl:output message="ns:autorizarComprobanteResponse" wsaw:Action="urn:autorizarComprobanteResponse"/>
+      <wsdl:fault message="ns:DocOnlineServicioWebSQLException" name="DocOnlineServicioWebSQLException" wsaw:Action="urn:autorizarComprobanteDocOnlineServicioWebSQLException"/>
+    </wsdl:operation>
+    <wsdl:operation name="cerrarSesion">
+      <wsdl:input message="ns:cerrarSesionRequest" wsaw:Action="urn:cerrarSesion"/>
+      <wsdl:output message="ns:cerrarSesionResponse" wsaw:Action="urn:cerrarSesionResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="consultarUltimoComprobante">
+      <wsdl:input message="ns:consultarUltimoComprobanteRequest" wsaw:Action="urn:consultarUltimoComprobante"/>
+      <wsdl:output message="ns:consultarUltimoComprobanteResponse" wsaw:Action="urn:consultarUltimoComprobanteResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DocOnlineServicioWebSoap11Binding" type="ns:DocOnlineServicioWebPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="consultarComprobante">
+      <soap:operation soapAction="urn:consultarComprobante" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DocOnlineServicioWebSQLException">
+        <soap:fault use="literal" name="DocOnlineServicioWebSQLException"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="iniciarSesion">
+      <soap:operation soapAction="urn:iniciarSesion" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="autorizarComprobante">
+      <soap:operation soapAction="urn:autorizarComprobante" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DocOnlineServicioWebSQLException">
+        <soap:fault use="literal" name="DocOnlineServicioWebSQLException"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cerrarSesion">
+      <soap:operation soapAction="urn:cerrarSesion" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="consultarUltimoComprobante">
+      <soap:operation soapAction="urn:consultarUltimoComprobante" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DocOnlineServicioWebSoap12Binding" type="ns:DocOnlineServicioWebPortType">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="consultarComprobante">
+      <soap12:operation soapAction="urn:consultarComprobante" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DocOnlineServicioWebSQLException">
+        <soap12:fault use="literal" name="DocOnlineServicioWebSQLException"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="iniciarSesion">
+      <soap12:operation soapAction="urn:iniciarSesion" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="autorizarComprobante">
+      <soap12:operation soapAction="urn:autorizarComprobante" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DocOnlineServicioWebSQLException">
+        <soap12:fault use="literal" name="DocOnlineServicioWebSQLException"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cerrarSesion">
+      <soap12:operation soapAction="urn:cerrarSesion" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="consultarUltimoComprobante">
+      <soap12:operation soapAction="urn:consultarUltimoComprobante" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DocOnlineServicioWebHttpBinding" type="ns:DocOnlineServicioWebPortType">
+    <http:binding verb="POST"/>
+    <wsdl:operation name="consultarComprobante">
+      <http:operation location="consultarComprobante"/>
+      <wsdl:input>
+        <mime:content type="application/xml" part="parameters"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="application/xml" part="parameters"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="iniciarSesion">
+      <http:operation location="iniciarSesion"/>
+      <wsdl:input>
+        <mime:content type="application/xml" part="parameters"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="application/xml" part="parameters"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="autorizarComprobante">
+      <http:operation location="autorizarComprobante"/>
+      <wsdl:input>
+        <mime:content type="application/xml" part="parameters"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="application/xml" part="parameters"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cerrarSesion">
+      <http:operation location="cerrarSesion"/>
+      <wsdl:input>
+        <mime:content type="application/xml" part="parameters"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="application/xml" part="parameters"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="consultarUltimoComprobante">
+      <http:operation location="consultarUltimoComprobante"/>
+      <wsdl:input>
+        <mime:content type="application/xml" part="parameters"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="application/xml" part="parameters"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DocOnlineServicioWeb">
+    <wsdl:port name="DocOnlineServicioWebHttpSoap11Endpoint" binding="ns:DocOnlineServicioWebSoap11Binding">
+      <soap:address location="http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/"/>
+    </wsdl:port>
+    <wsdl:port name="DocOnlineServicioWebHttpSoap12Endpoint" binding="ns:DocOnlineServicioWebSoap12Binding">
+      <soap12:address location="http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap12Endpoint/"/>
+    </wsdl:port>
+    <wsdl:port name="DocOnlineServicioWebHttpEndpoint" binding="ns:DocOnlineServicioWebHttpBinding">
+      <http:address location="http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpEndpoint/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8282/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/</con:endpoint><con:endpoint>http://localhost:8181/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/</con:endpoint><con:endpoint>http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:autorizarComprobante" name="autorizarComprobante" bindingOperationName="autorizarComprobante" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:impl="http://impl.ws.doconline.coninf.com.ar" xmlns:xsd="http://tx.model.rest.doconline.coninf.com.ar/xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <impl:autorizarComprobante>
+         <!--Optional:-->
+         <impl:ctx>
+            <!--Optional:-->
+            <xsd:idSesion>d3866466de384645bf13c2fbfc54f8a8</xsd:idSesion>
+            <!--Optional:-->
+            <xsd:interfaz>1</xsd:interfaz>
+            <!--Optional:-->
+            <xsd:nroTransaccion>150106002</xsd:nroTransaccion>
+         </impl:ctx>
+         <!--Optional:-->
+         <impl:concepto>1</impl:concepto>
+         <!--Optional:-->
+         <impl:tipoDoc>80</impl:tipoDoc>
+         <!--Optional:-->
+         <impl:nroDoc>30520149909</impl:nroDoc>
+         <!--Optional:-->
+         <impl:tipoCbte>1</impl:tipoCbte>
+         <!--Optional:-->
+         <impl:ptoVta>100</impl:ptoVta>
+         <!--Optional:-->
+         <impl:nroCbte>4</impl:nroCbte>
+         <!--Optional:-->
+         <impl:impTotal>188444</impl:impTotal>
+         <!--Optional:-->
+         <impl:impTotConcNoGrav>0</impl:impTotConcNoGrav>
+         <!--Optional:-->
+         <impl:impNeto>153170</impl:impNeto>
+         <!--Optional:-->
+         <impl:impIva>32165</impl:impIva>
+         <!--Optional:-->
+         <impl:impTrib>3109</impl:impTrib>
+         <!--Optional:-->
+         <impl:impOpEx>0</impl:impOpEx>
+         <!--Optional:-->
+         <impl:fechaCbte>20151026</impl:fechaCbte>
+         <!--Optional:-->
+         <impl:fechaVencPago>20151026</impl:fechaVencPago>
+         <!--Optional:-->
+         <impl:fechaServDesde>20151026</impl:fechaServDesde>
+         <!--Optional:-->
+         <impl:fechaServHasta>20151026</impl:fechaServHasta>
+         <!--Optional:-->
+         <impl:monedaId>PES</impl:monedaId>
+         <!--Optional:-->
+         <impl:monedaCtz>100</impl:monedaCtz>
+         <!--Zero or more repetitions:-->
+         <impl:tributos>
+            <!--Optional:-->
+            <xsd:tributoAlic>500</xsd:tributoAlic>
+            <!--Optional:-->
+            <xsd:tributoBaseImp>153170</xsd:tributoBaseImp>
+            <!--Optional:-->
+            <xsd:tributoDesc>PERCEPCION_IB</xsd:tributoDesc>
+            <!--Optional:-->
+            <xsd:tributoId>2</xsd:tributoId>
+            <!--Optional:-->
+            <xsd:tributoImporte>7658</xsd:tributoImporte>
+         </impl:tributos>
+         <!--Zero or more repetitions:-->
+         <impl:ivas>
+            <!--Optional:-->
+            <xsd:ivaBaseImp>153170</xsd:ivaBaseImp>
+            <!--Optional:-->
+            <xsd:ivaId>5</xsd:ivaId>
+            <!--Optional:-->
+            <xsd:ivaImporte>32165</xsd:ivaImporte>
+         </impl:ivas>
+      </impl:autorizarComprobante>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:autorizarComprobante"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="urn:cerrarSesion" name="cerrarSesion" bindingOperationName="cerrarSesion" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8282/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:impl="http://impl.ws.doconline.coninf.com.ar">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <impl:cerrarSesion>
+         <!--Optional:-->
+         <impl:interfaz>?</impl:interfaz>
+         <!--Optional:-->
+         <impl:idSesion>?</impl:idSesion>
+      </impl:cerrarSesion>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:cerrarSesion"/></con:call></con:operation><con:operation isOneWay="false" action="urn:consultarComprobante" name="consultarComprobante" bindingOperationName="consultarComprobante" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8282/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:impl="http://impl.ws.doconline.coninf.com.ar" xmlns:xsd="http://tx.model.rest.doconline.coninf.com.ar/xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <impl:consultarComprobante>
+         <!--Optional:-->
+         <impl:ctx>
+            <!--Optional:-->
+            <xsd:idSesion>651692f8d89f40fdaef31206f9e404b4</xsd:idSesion>
+            <!--Optional:-->
+            <xsd:interfaz>1</xsd:interfaz>
+            <!--Optional:-->
+            <xsd:nroTransaccion>1501020</xsd:nroTransaccion>
+         </impl:ctx>
+         <!--Optional:-->
+         <impl:tipoCbte>1</impl:tipoCbte>
+         <!--Optional:-->
+         <impl:ptoVta>1</impl:ptoVta>
+         <!--Optional:-->
+         <impl:cbte>1</impl:cbte>
+      </impl:consultarComprobante>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:consultarComprobante"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="urn:consultarUltimoComprobante" name="consultarUltimoComprobante" bindingOperationName="consultarUltimoComprobante" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:impl="http://impl.ws.doconline.coninf.com.ar" xmlns:xsd="http://tx.model.rest.doconline.coninf.com.ar/xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <impl:consultarUltimoComprobante>
+         <!--Optional:-->
+         <impl:ctx>
+            <!--Optional:-->
+            <xsd:idSesion>0afc3986e2bb4a6fa6ecbf8c9e28c12d</xsd:idSesion>
+            <!--Optional:-->
+            <xsd:interfaz>1001</xsd:interfaz>
+            <!--Optional:-->
+            <xsd:nroTransaccion>444</xsd:nroTransaccion>
+         </impl:ctx>
+         <!--Optional:-->
+         <impl:tipoCbte>1</impl:tipoCbte>
+         <!--Optional:-->
+         <impl:ptoVta>107</impl:ptoVta>
+      </impl:consultarUltimoComprobante>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:consultarUltimoComprobante"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="urn:iniciarSesion" name="iniciarSesion" bindingOperationName="iniciarSesion" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:impl="http://impl.ws.doconline.coninf.com.ar">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <impl:iniciarSesion>
+         <!--Optional:-->
+         <impl:interfaz>1001</impl:interfaz>
+         <!--Optional:-->
+         <impl:clave>1234</impl:clave>
+      </impl:iniciarSesion>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:iniciarSesion"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:sensitiveInformation/></con:soapui-project>

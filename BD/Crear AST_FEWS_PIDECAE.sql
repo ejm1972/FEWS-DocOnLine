@@ -1,0 +1,414 @@
+USE [FINN_MACOR2014]
+GO
+
+/****** Object:  StoredProcedure [dbo].[AST_FEWS_PIDECAE]    Script Date: 03/25/2019 07:44:31 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AST_FEWS_PIDECAE]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[AST_FEWS_PIDECAE]
+GO
+
+USE [FINN_MACOR2014]
+GO
+
+/****** Object:  StoredProcedure [dbo].[AST_FEWS_PIDECAE]    Script Date: 03/25/2019 07:44:31 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/*
+
+--- vinculación al servidor de la consola web
+
+USE [master]
+EXEC master.dbo.sp_addlinkedserver @server = N'FINNGS-TEST-01', @srvproduct=N'SQL Server'
+EXEC master.dbo.sp_addlinkedsrvlogin @rmtsrvname = N'FINNGS-TEST-01', @locallogin = 'sa' , @useself = N'True' 
+
+sp_configure 'show advanced option', '1'
+
+RECONFIGURE; 
+EXEC sp_configure;
+
+USE master; 
+GO 
+EXEC sp_configure 'lightweight pooling', '0'; 
+RECONFIGURE WITH OVERRIDE;
+SELECT name FROM [FINNGS-TEST-01].master.sys.databases 
+
+
+-- generador movimientos de prueba
+select 'exec AST_FEWS_PIDECAE', as_id,', true' from Asiento where AS_Fecha>='01-01-2016' and DOC_ID=818
+
+
+exec AST_FEWS_PIDECAE	611144	, true
+
+select * from asientoitem where as_id=611144
+SELECT DBO.AST_FEWS_GET_RESULTADO_CAE (582796)
+SELECT resultado, cae,* FROM AST_FEWS_LOG WHERE AS_ID=582796
+select * from asiento where as_numero=3114
+
+SELECT MIN(NUMERO_COMPROBANTE) FROM AST_FEWS_LOG WHERE TIPO_COMPROBANTE='06'
+
+ SELECT  REPLICATE('0',8-LEN(CAST(CAST(NUMERO_COMPROBANTE AS INT)-1664 AS VARCHAR(8))))+
+  CAST(CAST(NUMERO_COMPROBANTE AS INT)-1664 AS VARCHAR(8)),* FROM AST_FEWS_LOG WHERE TIPO_COMPROBANTE='01'
+  
+  UPDATE AST_FEWS_LOG
+  SET NUMERO_COMPROBANTE=REPLICATE('0',8-LEN(CAST(CAST(NUMERO_COMPROBANTE AS INT)-1262 AS VARCHAR(8))))+
+  CAST(CAST(NUMERO_COMPROBANTE AS INT)-1262 AS VARCHAR(8))
+  FROM AST_FEWS_LOG WHERE TIPO_COMPROBANTE='06'
+  
+    UPDATE AST_FEWS_LOG_IVA
+  SET NUMERO_COMPROBANTE=REPLICATE('0',8-LEN(CAST(CAST(NUMERO_COMPROBANTE AS INT)-1262 AS VARCHAR(8))))+
+  CAST(CAST(NUMERO_COMPROBANTE AS INT)-1262 AS VARCHAR(8))
+  FROM AST_FEWS_LOG_IVA WHERE TIPO_COMPROBANTE='06'
+  
+  
+   SELECT  REPLICATE('0',8-LEN(CAST(CAST(NUMERO_COMPROBANTE AS INT)-1664 AS VARCHAR(8))))+
+  CAST(CAST(NUMERO_COMPROBANTE AS INT)-1664 AS VARCHAR(8)),* FROM AST_FEWS_LOG_IVA WHERE TIPO_COMPROBANTE='01'
+  
+  UPDATE AST_FEWS_LOG_IVA
+  SET CUIT_EMPRESA='30711897581'
+  
+  select * from asiento where as_numero=14
+  
+ exec AST_FEWS_PIDECAE  1489703, true 
+ SELECT resultado, obs, cae,* FROM AST_FEWS_LOG where as_id=1489703
+ SELECT * FROM AST_FEWS_LOG_IVA where as_id=1489703
+  SELECT * FROM AST_FEWS_LOG_TRIBUTOS where as_id=1489703
+ 
+ delete FROM AST_FEWS_LOG where as_id=1489699
+delete FROM AST_FEWS_LOG_IVA where as_id=1489699
+  delete  FROM AST_FEWS_LOG_TRIBUTOS where as_id=1489699
+  
+ 
+  
+ SELECT * FROM ASIENTO WHERE AS_NUMERO=3115
+delete FROM AST_FEWS_LOG
+delete FROM AST_FEWS_LOG_IVA
+delete FROM AST_FEWS_LOG_TRIBUTOS
+
+-- exec AST_FEWS_PIDECAE  1485969, true
+select * from asiento where as_numero=3103
+ */
+
+
+CREATE PROCEDURE [dbo].[AST_FEWS_PIDECAE]  
+ -- Add the parameters for the stored procedure here    
+ @@AS_ID INT  ,   
+ @@FLAG BIT
+AS    
+
+BEGIN    
+DECLARE @R VARCHAR(100)
+SET @R='0'
+DECLARE  @FLAG BIT
+SET @FLAG=@@FLAG
+
+
+IF @FLAG=1 
+BEGIN
+	declare @tiempo datetime
+	set @tiempo=GETDATE()
+	
+-- 	exec AST_FEWS_PIDECAE	582789	, true
+	
+	IF isnull((SELECT ISNULL(cae,'') FROM AST_FEWS_LOG WHERE isnull(AS_ID,-1)=@@AS_ID and isnull(resultado,'')='A'),'')=''
+	
+	  -- (SELECT ISNULL(cae,'') FROM AST_FEWS_LOG WHERE isnull(AS_ID,-1)=611169 and isnull(resultado,'')='A')
+	BEGIN
+ --SELECT * FROM AST_FEWS_LOG
+			--- SI HAY REINTENTO, SE BORRAN LOS REGISTROS ANTERIORIES Y SE VUELVEN A GENERAR
+			---
+
+--------- borra movimientos que no obtuvieron CUIT en tabla intermedia
+			--CREATE TABLE #AST_FEWS_BORRAR ( AS_ID INT)
+			--DELETE FROM #AST_FEWS_BORRAR
+
+			--INSERT INTO #AST_FEWS_BORRAR
+			--select * from AST_FEWS_LOG where isnull(RESULTADO,'')<>'A'
+
+
+			--DELETE FROM AST_FEWS_LOG
+			--WHERE
+			--(SELECT COUNT(*) FROM #AST_FEWS_BORRAR where #AST_FEWS_BORRAR.AS_ID=AST_FEWS_LOG.AS_ID)<>0
+
+			--DELETE FROM AST_FEWS_LOG_iva
+			--WHERE
+			--(SELECT COUNT(*) FROM #AST_FEWS_BORRAR where #AST_FEWS_BORRAR.AS_ID=AST_FEWS_LOG_iva.AS_ID)<>0 
+
+			--DELETE FROM AST_FEWS_LOG_TRIBUTOS
+			--WHERE
+			--(SELECT COUNT(*) FROM #AST_FEWS_BORRAR where #AST_FEWS_BORRAR.AS_ID=AST_FEWS_LOG_TRIBUTOS.AS_ID)<>0 
+			
+			--- OBTIENE EL CUIT DE LA EMPRESA LOGEADA
+			declare @EmpresaCuit varchar(11)
+			
+			SET @EmpresaCuit= (select VALOR from configuracion where aspecto='empresacuit' AND 
+GRUPO ='FAF_'+CAST((select EMPR_ID from CIRCUITOCONTABLE WHERE CC_ID=
+(SELECT CC_ID FROM DocumentoTipoCircuitoContable WHERE DOC_ID=
+((SELECT DOC_ID FROM ASIENTO WHERE AS_ID=@@AS_ID)))) AS VARCHAR(4)))
+			
+			----
+			----	TOMA LOS PARAMETROS DEFINIDOS EN EXPOSICION FISCAL
+			----
+			create  table #EXPOFISCAL (cue_id int, conceptonombre varchar(10))
+			-- DELETE #EXPOFISCAL
+			INSERT INTO #EXPOFISCAL
+			sELECT 
+			CUE_ID,
+			'02'
+			from Cuenta where CUE_nombre like '%percep%'
+			UNION ALL
+			sELECT 
+			CUE_ID,
+			'IVA'
+			from Cuenta where CUE_nombre like '%IVA%'
+			--SELECT * FROM #EXPOFISCAL
+
+
+			---		
+			---   RECOPILA INFORMACIÓN DE ITEMS DE LA FACTURA
+			---
+			CREATE TABLE #ITEMS(
+			PR_ID INT,
+			PR_LEVASTOCK INT,
+			TI_ID INT,
+			TI_PORCENTAJE REAL,
+			PRECIO MONEY,
+			CANTIDAD REAL,
+			IMPORTE MONEY,
+			GRAVADO MONEY,
+			NO_GRAVADO MONEY,
+			CUE_ID INT,
+			EXFISC_CONCEPTONOMBRE VARCHAR(200),
+			CONC_ID INT
+			)
+
+
+			INSERT INTO #ITEMS (PR_ID, PR_LEVASTOCK, TI_ID, TI_PORCENTAJE, PRECIO, CANTIDAD, IMPORTE, GRAVADO, NO_GRAVADO,
+								CUE_ID,EXFISC_CONCEPTONOMBRE, CONC_ID)
+			SELECT 
+			PR_ID=PV_ID,
+			(SELECT Pv_LLEVASTOCK FROM ProductoVenta WHERE PRODUCTOVENTA.PV_ID=VENTAITEM.Pv_ID),
+			(SELECT TI_ID_RI FROM ProductoVENTA WHERE PRODUCTOVENTA.PV_ID=VENTAITEM.PV_ID),
+			PORCE=ia_porcivari,
+			--(SELECT TOP 1 TI_PORCENTAJE FROM TasaImpositiva WHERE TI_ID=(SELECT TI_ID FROM ProductoVENTA WHERE PRODUCTOVENTA.PV_ID=VENTAITEM.PV_ID)),
+				
+				--CASE ISNULL(VENTAITEM.PR_ID,0)
+				--	WHEN 0 THEN VENTAITEM.VTAI_AUX1
+				--	ELSE  (SELECT TI_PORCENTAJE FROM TasaImpositiva WHERE TI_ID=(SELECT TI_ID FROM Producto WHERE PRODUCTO.PR_ID=VENTAITEM.PR_ID))
+				--	END,
+			ia_precio,
+			VTAI_Cantidad=IA_CantVenta,
+			VTAI_Importe=IA_Importe,
+			GRAVADO= CASE ISNULL((SELECT TI_PORCENTAJE FROM TasaImpositiva WHERE TI_ID=(SELECT TI_ID FROM Producto WHERE PRODUCTO.PR_ID=VENTAITEM.PR_ID)),-1)
+						WHEN 0 THEN 0
+						WHEN -1 THEN 0
+						ELSE ia_Importe
+					END,
+			NO_GRAVADO= CASE (SELECT TI_PORCENTAJE FROM TasaImpositiva WHERE TI_ID=(SELECT TI_ID FROM Producto WHERE PRODUCTO.PR_ID=VENTAITEM.PR_ID))
+						WHEN 0 THEN ia_Importe
+						ELSE 0
+						
+							
+					END,
+			CUE_id=VentaItem.CUE_id,
+			EXFISC_CONCEPTONOMBRE= ISNULL((sELECT #EXPOFISCAL.conceptonombre FROM #EXPOFISCAL WHERE #EXPOFISCAL.cue_id=VentaItem.CUE_id),99),
+			
+			---(select EXPOSICIONFISCALCUENTA.EXFISCCUE_ConceptoNombre FROM  exposicionfiscalCUENTA WHERE exposicionfiscalCUENTA.CUE_id=VENTAITEM.CUE_id AND EXFISC_ID=@EXPOFISCAL),
+			CONC_ID=cue_id
+
+
+			FROM asientoitem as VentaItem
+			WHERE
+			--VENTAITEM.PR_ID IS NOT NULL AND
+			 AS_ID=@@AS_ID
+
+			---SELECT * FROM #ITEMS
+			
+			
+			--- 
+			--- ESTABLECE SI LA FACTURA ES DE PRODUCTO O SERVICIO
+			---
+			DECLARE @PRODUCTOS INT
+
+			DECLARE @SERVICIOS INT
+
+			SET @PRODUCTOS=(SELECT COUNT(*) FROM #ITEMS WHERE PR_LEVASTOCK=1)
+			SET @SERVICIOS=(SELECT COUNT(*) FROM #ITEMS WHERE PR_LEVASTOCK=0)
+
+			--SELECT @PRODUCTOS, @SERVICIOS
+
+			---
+			--- INSERTA EN 	AST_FEWS_LOG
+			---
+						
+			INSERT INTO AST_FEWS_LOG(
+				CUIT_EMPRESA,
+				TIPODOC_CLIENTE,
+				NRODOC_CLIENTE,
+				AS_ID,
+				TIPO_COMPROBANTE,
+				PUNTO_VENTA,
+				NUMERO_COMPROBANTE,
+				FECHA_COMPROBANTE,
+				CONCEPTO_FACTURA,
+				MONEDA,
+				MONEDA_CTZ,
+				IMPORTE_TOTAL,
+				NETO_NOGRAVADO,
+				NETO_GRAVADO,
+				NETO_EXENTO,
+				IVA_TOTAL,
+				TRIBUTOS_TOTAL,
+				resultado)
+
+			 SELECT 
+				CUIT_EMPRESA= @EmpresaCuit,
+				TIPODOC_CLIENTE=(select te_TIPODOC from Tercero where tercero.te_id=asiento.te_id),
+				NRODOC_CLIENTE=(select te_cuit from Tercero where tercero.te_id=asiento.te_id),
+				AS_ID=ASIENTO.AS_ID,
+				
+				TIPO_COMPROBANTE=(select comprt_codigo from  Talonario,documentotipo
+									where 
+									ISNULL(talonario.comprt_codigo,0)<>0
+									and left(asiento.as_numerodoc,5)=talonario.tal_prefijo
+									and Documentotipo.DOC_ID=asiento.doc_id
+									and asiento.DOC_ID>=278 and asiento.DOC_ID<=292
+									and (documentotipo.TAL_ID_A=talonario.TAL_ID
+									OR
+											documentotipo.TAL_ID_B=talonario.TAL_ID
+											or
+										documentotipo.TAL_ID_E=talonario.TAL_ID
+										)),
+				--select * from documentotipo where DOC_ID>=278
+				PUNTO_VENTA=substring(ASIENTO.AS_NUMERODOC,2,4),
+				
+				NUMERO_COMPROBANTE=RIGHT(ASIENTO.AS_NUMERODOC,8),
+				FECHA_COMPROBANTE=CONVERT(VARCHAR(8),Asiento.as_FECHA,112),
+				CONCEPTO_FACTURA=CASE
+								WHEN  @PRODUCTOS>0 AND @SERVICIOS=0 THEN 1
+								WHEN  @PRODUCTOS=0 AND @SERVICIOS>0 THEN 2
+								ELSE 3
+								END,
+					--SI TODOS LOS ITEMS SON STOKEABLES = 1
+					--SI TODOS LOS ITEMS NO SON STOCKEABLES =2
+					--SI ES UN MIX=3
+				MONEDA=(SELECT MON_CODIGOAFIP FROM MONEDA WHERE MONEDA.MON_ID=ASIENTO.MON_ID),
+						-- SELECT * FROM MONEDA
+				MONEDA_CTZ=CASE (SELECT MON_CODIGOAFIP FROM MONEDA WHERE MONEDA.MON_ID=ASIENTO.MON_ID)
+								WHEN 'PES' THEN 1
+								ELSE ISNULL(ASIENTO.AS_MonedaCambio,1)
+							END,
+				IMPORTE_TOTAL=case mon_id
+								when -1 then round(ISNULL((select SUM(ia_importe) from AsientoItem where AS_ID=@@AS_ID and CUE_id<>25),0),2)
+								else round(ISNULL((select SUM(ia_importe) from AsientoItem where AS_ID=@@AS_ID and CUE_id<>25),0)/ISNULL(asiento.AS_MonedaCambio,1),2)
+								end,
+				NETO_NOGRAVADO=ISNULL((SELECT SUM(importe) FROM #ITEMS where PR_ID is not null and ISNULL(ti_porcentaje,0)=0),0),
+				NETO_GRAVADO=ISNULL((SELECT SUM(importe) FROM #ITEMS where PR_ID is not null and ISNULL(ti_porcentaje,0)<>0),0),
+				NETO_EXENTO=0,
+				--(case asiento.mon_id
+				--				when -1 then ISNULL(ASIENTO.AS_TOTAL,0)
+				--				else ISNULL(ASIENTO.AS_TOTAL,0)/ISNULL(asiento.AS_MonedaCambio,1)
+				--				end)-ISNULL((SELECT SUM(NO_GRAVADO) FROM #ITEMS),0)-ISNULL((SELECT SUM(GRAVADO) FROM #ITEMS),0),
+				IVA_TOTAL=ISNULL((SELECT SUM(IMPORTE) FROM #ITEMS WHERE EXFISC_CONCEPTONOMBRE='IVA'),0),
+				TRIBUTOS_TOTAL=ISNULL((SELECT SUM(IMPORTE) FROM #ITEMS WHERE EXFISC_CONCEPTONOMBRE='02' AND PR_ID IS NULL),0),
+				RESULTADO='0'
+
+			 FROM Asiento 
+			 WHERE 
+			 ASIENTO.AS_ID=@@AS_ID  
+			 
+			 
+			--- 
+			--- INSERTA EN AST_FEWS_LOG_IVA 
+			---
+
+			 INSERT INTO AST_FEWS_LOG_IVA(
+					AS_ID,
+					CUIT_EMPRESA,
+					TIPO_COMPROBANTE,
+					PUNTO_VENTA,
+					NUMERO_COMPROBANTE,
+					PORCENTAJE,
+					NETO_GRAVADO,
+					IMPORTE)
+					
+			SELECT 
+					AS_ID=@@AS_ID,
+					CUIT_EMPRESA= @EmpresaCuit,
+					TIPO_COMPROBANTE=AST_FEWS_LOG.TIPO_COMPROBANTE,
+					PUNTO_VENTA=AST_FEWS_LOG.PUNTO_VENTA,
+					NUMERO_COMPROBANTE=AST_FEWS_LOG.NUMERO_COMPROBANTE,
+					PORCENTAJE=#ITEMS.TI_PORCENTAJE,
+					NETO_GRAVADO=ISNULL((SELECT SUM(a.importe) FROM #ITEMS  as a where a.PR_ID is not null and ISNULL(a.ti_porcentaje,0)<>0 and ISNULL(a.ti_porcentaje,0)=#ITEMS.TI_PORCENTAJE),0),
+					--ISNULL((SELECT SUM(GRAVADO) FROM #ITEMS),0),
+					IMPORTE=sum(#ITEMS.IMPORTE)
+					
+			FROM #ITEMS, AST_FEWS_LOG WHERE
+			AST_FEWS_LOG.AS_ID=@@AS_ID AND 
+			#ITEMS.EXFISC_CONCEPTONOMBRE='IVA' AND
+			#ITEMS.TI_PORCENTAJE<>0-- AND
+			--#ITEMS.IMPORTE<>0
+			GROUP BY	AST_FEWS_LOG.TIPO_COMPROBANTE, 
+						AST_FEWS_LOG.PUNTO_VENTA,
+						AST_FEWS_LOG.NUMERO_COMPROBANTE,
+						#ITEMS.TI_PORCENTAJE
+			
+			
+			INSERT INTO AST_FEWS_LOG_TRIBUTOS(
+						AS_ID,
+						CUIT_EMPRESA,
+						TIPO_COMPROBANTE,
+						PUNTO_VENTA,
+						NUMERO_COMPROBANTE,
+						TRIBUTO_ID,
+						DESCRPTION, --ALIAS DE IMPUESTO
+						PORCENTAJE, -- FORMATO 0.2100
+						NETO_GRAVADO,
+						IMPORTE)
+						
+						-- 	exec AST_FEWS_PIDECAE	1485969, true
+						-- select * from ast_fews_log
+			SELECT 
+					AS_ID=@@AS_ID,
+					CUIT_EMPRESA= @EmpresaCuit,
+					TIPO_COMPROBANTE=AST_FEWS_LOG.TIPO_COMPROBANTE,
+					PUNTO_VENTA=AST_FEWS_LOG.PUNTO_VENTA,
+					NUMERO_COMPROBANTE=AST_FEWS_LOG.NUMERO_COMPROBANTE,
+					TRIBUTO_ID=ISNULL(#ITEMS.EXFISC_CONCEPTONOMBRE,0),
+					DESCRPTION=(SELECT cue_alias FROM cuenta WHERE cuenta.cue_id=#ITEMS.CONC_ID), --ALIAS DE IMPUESTO
+					PORCENTAJE= 
+					case
+					when ISNULL((SELECT SUM(importe) FROM #ITEMS where PR_ID is not null and ISNULL(ti_porcentaje,0)<>0),0)<>0
+					then 
+						ROUND(#ITEMS.IMPORTE/ISNULL((SELECT SUM(importe) FROM #ITEMS where PR_ID is not null and ISNULL(ti_porcentaje,0)<>0),0)*100,2)
+					else 0
+					end,
+					--#ITEMS.TI_PORCENTAJE,
+					NETO_GRAVADO=0,--ISNULL((SELECT SUM(GRAVADO) FROM #ITEMS),0),
+					IMPORTE=#ITEMS.IMPORTE
+				FROM #ITEMS, AST_FEWS_LOG WHERE
+			AST_FEWS_LOG.AS_ID=@@AS_ID AND 
+				#ITEMS.PR_ID IS NULL AND
+				ISNULL(#ITEMS.EXFISC_CONCEPTONOMBRE,0)<>'IVA' AND
+				ISNULL(#ITEMS.EXFISC_CONCEPTONOMBRE,0)<>'99' AND
+				ISNULL(#ITEMS.EXFISC_CONCEPTONOMBRE,0)<>0 
+				
+				--AND
+				--#ITEMS.TI_PORCENTAJE<>0
+				
+						
+	END
+
+
+END
+--ELSE 
+select 0
+end
+
+
+GO
+
+

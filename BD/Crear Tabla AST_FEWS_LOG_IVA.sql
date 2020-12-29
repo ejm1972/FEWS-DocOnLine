@@ -1,0 +1,38 @@
+USE [FINN_MACOR_TMP] 
+GO
+
+/****** Object:  Table [dbo].[AST_FEWS_LOG_IVA]    Script Date: 03/25/2019 08:02:52 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AST_FEWS_LOG_IVA]') AND type in (N'U'))
+DROP TABLE [dbo].[AST_FEWS_LOG_IVA]
+GO
+
+USE [FINN_MACOR_TMP]
+GO
+
+/****** Object:  Table [dbo].[AST_FEWS_LOG_IVA]    Script Date: 03/25/2019 08:02:52 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[AST_FEWS_LOG_IVA](
+	[AS_ID] [varchar](20) NULL,
+	[CUIT_EMPRESA] [varchar](20) NULL,
+	[TIPO_COMPROBANTE] [varchar](3) NULL,
+	[PUNTO_VENTA] [varchar](10) NULL,
+	[NUMERO_COMPROBANTE] [varchar](20) NULL,
+	[PORCENTAJE] [numeric](12, 4) NULL,
+	[NETO_GRAVADO] [varchar](20) NULL,
+	[IMPORTE] [varchar](20) NULL
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+

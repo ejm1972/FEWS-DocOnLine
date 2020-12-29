@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       ">
+
+	<!-- the transactional advice (what 'happens'; see the <aop:advisor/> bean 
+		below) -->
+	<tx:advice id="txAdvice" transaction-manager="txManagerDOL">
+		<!-- the transactional semantics... -->
+		<tx:attributes>
+			<tx:method name="listar*" read-only="true" />
+			<tx:method name="buscar*" read-only="true" />
+			<tx:method name="cargar*" read-only="true" />
+			<tx:method name="obtener*" read-only="true" />
+			<tx:method name="consultar*" read-only="true" />
+			<tx:method name="*" read-only="true" />
+						
+			<!-- other methods use the default transaction settings (see below) -->
+			<tx:method name="procesar*" />
+			<tx:method name="crear*" />
+			<tx:method name="actualizar*" />
+			<tx:method name="eliminar*" />
+			<tx:method name="guardar*" />
+			<tx:method name="agregar*" />
+			<tx:method name="registrar*" />
+			<tx:method name="debitar*" />
+			<tx:method name="acreditar*" />
+			<tx:method name="autorizar*" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- ensure that the above transactional advice runs for any execution of 
+		an operation defined by the FooService interface -->
+	<aop:config>
+		<aop:pointcut id="bosPointcut" expression="execution(* ar.com.coninf.doconline.business.negocio.*.*(..))" />
+		<aop:advisor order="1" advice-ref="txAdvice" pointcut-ref="bosPointcut" />
+	</aop:config>
+
+	<!-- Interceptors -->
+	<aop:config>
+		<aop:pointcut id="webServiceOperation" expression="execution(* ar.com.coninf.doconline.ws.impl.*.*(..))"/>
+		<aop:advisor order="1" advice-ref="interceptor.RetryTransactionHandler" pointcut-ref="webServiceOperation"/>
+	</aop:config>
+	
+	<bean id="interceptor.RetryTransactionHandler" class="ar.com.coninf.doconline.ws.interceptores.ServicioWebInterceptor"/>
+</beans>

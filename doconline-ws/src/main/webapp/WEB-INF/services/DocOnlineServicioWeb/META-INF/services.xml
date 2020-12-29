@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceGroup>
+<service name="DocOnlineServicioWeb">
+	<description>Web Service - DocOnline</description>
+	<module ref="logging"/>
+	<parameter name="ServiceObjectSupplier" locked="false">org.apache.axis2.extensions.spring.receivers.SpringServletContextObjectSupplier</parameter>
+	<parameter name="SpringBeanName" locked="false">webservice.DocOnlineServicioWeb</parameter>
+	<parameter name="ServiceClass" locked="false">ar.com.coninf.doconline.ws.impl.DocOnlineServicioWebImpl</parameter>   
+	<operation name="iniciarSesion">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+	<operation name="cerrarSesion">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+	<operation name="autorizarComprobante">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+	<operation name="consultarUltimoComprobante">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+	<operation name="consultarComprobante">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+	<operation name="scheduleTimerSql">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+	<operation name="scheduleTimerFews">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+	<operation name="actualizarItemComprobante">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+	<operation name="consultarPadronLocal">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+	<operation name="consultarPadronOnline">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+</service>
+</serviceGroup>

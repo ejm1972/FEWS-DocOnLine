@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+
+	<bean id="connectionTaskFews" class="ar.com.coninf.doconline.ws.timer.ConnectionTaskFews" />
+	<bean id="scheduledTaskFews" class="ar.com.coninf.doconline.ws.timer.ScheduledTaskFews" />
+
+	<task:scheduler id="poolSchedulerFews" pool-size="2"/>
+	<task:scheduled-tasks scheduler="poolSchedulerFews" >
+		<task:scheduled ref="scheduledTaskFews" method="run" fixed-delay="1000"  initial-delay="60000"/>
+		<task:scheduled ref="connectionTaskFews" method="run" fixed-delay="60000"  initial-delay="120000"/>
+	</task:scheduled-tasks>
+
+</beans>
