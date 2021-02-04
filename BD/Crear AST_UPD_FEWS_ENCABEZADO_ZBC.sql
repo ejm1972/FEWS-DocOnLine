@@ -1,22 +1,22 @@
 USE [fews]
 GO
 
-/****** Object:  StoredProcedure [dbo].[AST_UPD_FEWS_ENCABEZADO]    Script Date: 12/05/2018 13:04:30 ******/
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AST_UPD_FEWS_ENCABEZADO]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[AST_UPD_FEWS_ENCABEZADO]
+/****** Object:  StoredProcedure [dbo].[AST_UPD_FEWS_ENCABEZADO_ZBC]    Script Date: 12/05/2018 13:04:30 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AST_UPD_FEWS_ENCABEZADO_ZBC]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[AST_UPD_FEWS_ENCABEZADO_ZBC]
 GO
 
 USE [fews]
 GO
 
-/****** Object:  StoredProcedure [dbo].[AST_UPD_FEWS_ENCABEZADO]    Script Date: 12/05/2018 13:04:30 ******/
+/****** Object:  StoredProcedure [dbo].[AST_UPD_FEWS_ENCABEZADO_ZBC]    Script Date: 12/05/2018 13:04:30 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE  PROCEDURE [dbo].[AST_UPD_FEWS_ENCABEZADO]  
+CREATE  PROCEDURE [dbo].[AST_UPD_FEWS_ENCABEZADO_ZBC]  
  -- Add the parameters for the stored procedure here    
 
 AS    

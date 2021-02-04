@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>ar.com.coninf</groupId>
 			<artifactId>interfaz-webservices</artifactId>
-			<version>3.0.0</version>
+			<version>3.0.1</version>
 		</dependency>
 
 		<dependency>
@@ -67,5 +67,20 @@
 			<artifactId>jacob</artifactId>
 			<version>1.18-M2</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.12</version>
+			<scope>provided</scope>
+		</dependency>
+				
+				<!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
+<dependency>
+    <groupId>com.google.zxing</groupId>
+    <artifactId>core</artifactId>
+    <version>3.4.1</version>
+</dependency>
+		
 	</dependencies>
 </project>

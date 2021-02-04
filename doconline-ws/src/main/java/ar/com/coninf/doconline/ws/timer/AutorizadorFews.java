@@ -6,11 +6,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.Gson;
+
+import ar.com.boldt.monedero.shared.constant.MonederoParametros;
 import ar.com.coninf.doconline.business.enums.TipoComprobanteAFIP;
 import ar.com.coninf.doconline.business.facade.LogTransaccionFacade;
 import ar.com.coninf.doconline.business.log.LogTransaccionContenido;
@@ -18,19 +22,25 @@ import ar.com.coninf.doconline.model.dao.FewsComprobanteAsociadoDao;
 import ar.com.coninf.doconline.model.dao.FewsDatoOpcionalDao;
 import ar.com.coninf.doconline.model.dao.FewsEncabezadoDao;
 import ar.com.coninf.doconline.model.dao.FewsIvaDao;
+import ar.com.coninf.doconline.model.dao.FewsQrDao;
 import ar.com.coninf.doconline.model.dao.FewsTributoDao;
 import ar.com.coninf.doconline.model.dao.FewsXmlDao;
+import ar.com.coninf.doconline.model.dao.ParametroDao;
+import ar.com.coninf.doconline.rest.model.request.RequestGenerarQr;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutenticacion;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutorizarComprobante;
+import ar.com.coninf.doconline.rest.model.response.ResponseGenerarQr;
 import ar.com.coninf.doconline.rest.model.tx.ComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.ControlTransaccion;
 import ar.com.coninf.doconline.rest.model.tx.DatoOpcional;
+import ar.com.coninf.doconline.rest.model.tx.DatoQr;
 import ar.com.coninf.doconline.rest.model.tx.Iva;
 import ar.com.coninf.doconline.rest.model.tx.Tributo;
 import ar.com.coninf.doconline.shared.dto.FewsComprobanteAsociado;
 import ar.com.coninf.doconline.shared.dto.FewsDatoOpcional;
 import ar.com.coninf.doconline.shared.dto.FewsEncabezado;
 import ar.com.coninf.doconline.shared.dto.FewsIva;
+import ar.com.coninf.doconline.shared.dto.FewsQr;
 import ar.com.coninf.doconline.shared.dto.FewsResultado;
 import ar.com.coninf.doconline.shared.dto.FewsTributo;
 import ar.com.coninf.doconline.shared.dto.FewsXml;
@@ -67,6 +77,10 @@ public class AutorizadorFews {
 	private FewsXmlDao fewsXmlDao;
 
 	@Autowired
+	@Qualifier("fewsQrDao")
+	private FewsQrDao fewsQrDao;
+	
+	@Autowired
 	@Qualifier("dolProperties")
 	protected Properties dolProperties;
 
@@ -77,11 +91,17 @@ public class AutorizadorFews {
 	@Autowired
 	@Qualifier("facade.logTransaccionFacade")
 	protected LogTransaccionFacade logTransaccionFacade;
+	
+	@Autowired
+	@Qualifier("parametroDao")
+	private ParametroDao parametroDao;
 
 	private Integer interfaz;
 	private String  clave;
 	private LogTransaccionContenido log;
-
+	
+	private Gson gson = new Gson();
+	
 	public AutorizadorFews() {
 
 		this.interfaz = 9901;
@@ -220,12 +240,8 @@ public class AutorizadorFews {
 			if (lista==null)
 				logger.debug("Lista de Resultado NULL");
 			else
-				logger.debug("Lista de Resultado "+String.valueOf(lista.size()));
+				logger.debug("Lista de Resultado "+lista.size());
 
-		} catch (SQLException e) {
-			logger.error(e);
-		} catch (ApplicationException e) {
-			logger.error(e);
 		} catch (Exception e) {
 			logger.error(e);
 		}
@@ -275,6 +291,7 @@ public class AutorizadorFews {
 			List<FewsComprobanteAsociado> listFewsComprobanteAsociado = fewsComprobanteAsociadoDao.getListById(selected.getId());
 
 			FewsXml fewsXml = fewsXmlDao.getById(selected.getId());
+			FewsQr fewsQr = fewsQrDao.getById(selected.getId());
 
 			interfaz = selected.getIdInterfaz().intValue();
 			clave = dolProperties.getProperty("interfaz_"+interfaz); 
@@ -481,10 +498,36 @@ public class AutorizadorFews {
 						fewsXml.setObservacion(observacion);
 						fewsXml.setExcepcionWsaa(excepcionWsaa==null?descripcion:excepcionWsaa);
 						fewsXml.setExcepcionWsfev1(excepcionWsfev1==null?descripcion:excepcionWsfev1);
+						
+						DatoQr datoQr = new DatoQr();
+						datoQr.setVer(1);
+						datoQr.setFecha(fechaCbte);
+						datoQr.setCuit(Integer.valueOf(selected.getCuit()));
+						datoQr.setPtoVta(ptoVta);
+						datoQr.setTipoCmp(tipoCbte);
+						datoQr.setNroCmp(nroCbte.intValue());
+						datoQr.setImporte(impTotal.movePointRight(2).intValue());
+						datoQr.setMoneda(monedaId);
+						datoQr.setCtz(monedaCtz.movePointRight(2).intValue());
+						datoQr.setTipoDocRc(tipoDoc);
+						datoQr.setNroDocRe(nroDoc.intValue());
+						datoQr.setTipoCodAt("E"); 				//E-> CAE o A->CAEA
+						datoQr.setCodAut(cae);
+						
+						RequestGenerarQr req = new RequestGenerarQr();
+						req.setControlTransaccion(ctx);
+						req.setDatoQr(datoQr);
+						ResponseGenerarQr respG = dolsw.generarQr(ctx, req);
+						if (respG.getCodigo().equals(0)) {
+							fewsQr.setTextoQr(respG.getTextoQr());
+							fewsQr.setImagenQr(respG.getImagenQr());
+						}
 
 						try {
 							
 							fewsXmlDao.update(fewsXml);
+							
+							fewsQrDao.update(fewsQr);
 							
 							fewsEncabezadoDao.update(selected);
 

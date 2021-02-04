@@ -1,29 +1,16 @@
-USE [fews]
-GO
+use fews
+go
 
-/****** Object:  StoredProcedure [dbo].[FEWS_UPD_AST_FEWS_LOG_MACOR]    Script Date: 12/05/2018 13:04:36 ******/
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FEWS_UPD_AST_FEWS_LOG_MACOR]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[FEWS_UPD_AST_FEWS_LOG_MACOR]
-GO
+drop procedure FEWS_UPD_AST_FEWS_LOG_ZBC
+go
 
-USE [fews]
-GO
-
-/****** Object:  StoredProcedure [dbo].[FEWS_UPD_AST_FEWS_LOG_MACOR]    Script Date: 12/05/2018 13:04:36 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[FEWS_UPD_AST_FEWS_LOG_MACOR]
+CREATE PROCEDURE [FEWS_UPD_AST_FEWS_LOG_ZBC]
 	@id int
 AS
 BEGIN 
 SET NOCOUNT ON
 	
-	update SERVER1.FINN_MACOR2014.dbo.AST_FEWS_LOG
+	update DRGFINNEGANS.FINN_ZBC.dbo.AST_FEWS_LOG
 	set resultado=fenc.resultado,
 		cae=fenc.cae,
 		fecha_vencimiento=fenc.fecha_vto,
@@ -35,11 +22,13 @@ SET NOCOUNT ON
 		excepcion_wsaa=fxml.excepcion_wsaa,
 		excepcion_wsfev1=fxml.excepcion_wsfev1,
 		xml_request_afip=fxml.xml_request,
-		xml_response_afip=fxml.xml_response
+		xml_response_afip=fxml.xml_response,
+		qr=fqr.imagen_qr
 	
 	from fews_encabezado fenc
 		, fews_xml fxml
-		, SERVER1.FINN_MACOR2014.dbo.ast_fews_log astl
+		, fews_qr fqr
+		, DRGFINNEGANS.FINN_ZBC.dbo.ast_fews_log astl
 
 	where 1=1
 		and fenc.id=@id
@@ -56,7 +45,9 @@ SET NOCOUNT ON
 	RETURN 0	
 SET NOCOUNT OFF
 END
-
 GO
 
+--exec FEWS_UPD_AST_FEWS_LOG_ZBC 1
+
+--select * from DRGFINNEGANS.FINN_ZBC.dbo.ast_fews_log where cuit_empresa='30711897581' and tipo_comprobante='01' and PUNTO_VENTA='0002' and numero_comprobante='00000003'
 

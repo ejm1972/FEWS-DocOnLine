@@ -38,7 +38,7 @@ public class ConsultarComprobanteBusiness extends AbstractBusiness {
 		userDir = paramUserDir;
 
 		ResponseConsultarComprobante resp = new ResponseConsultarComprobante();
-		resp.esReintento = false;
+		resp.setEsReintento(false);
 		resp.cargarError(new Response(ErrorEnum.SIN_ERROR));
 		
 		try {

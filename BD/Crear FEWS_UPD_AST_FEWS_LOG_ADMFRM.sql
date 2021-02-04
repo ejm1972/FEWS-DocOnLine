@@ -1,15 +1,12 @@
-USE [FEWS_ADMFRM]
+use fews
+go
+
+/****** Object:  StoredProcedure [dbo].[FEWS_UPD_AST_FEWS_LOG_ADMFRM]    Script Date: 08/22/2019 11:02:31 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FEWS_UPD_AST_FEWS_LOG_ADMFRM]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[FEWS_UPD_AST_FEWS_LOG_ADMFRM]
 GO
 
-/****** Object:  StoredProcedure [dbo].[FEWS_UPD_AST_FEWS_LOG]    Script Date: 08/22/2019 11:02:31 ******/
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FEWS_UPD_AST_FEWS_LOG]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[FEWS_UPD_AST_FEWS_LOG]
-GO
-
-USE [FEWS_ADMFRM]
-GO
-
-/****** Object:  StoredProcedure [dbo].[FEWS_UPD_AST_FEWS_LOG]    Script Date: 08/22/2019 11:02:31 ******/
+/****** Object:  StoredProcedure [dbo].[FEWS_UPD_AST_FEWS_LOG_ADMFRM]    Script Date: 08/22/2019 11:02:31 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -17,8 +14,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
---exec FEWS_UPD_AST_FEWS_LOG 15820
-CREATE PROCEDURE [dbo].[FEWS_UPD_AST_FEWS_LOG]
+--exec FEWS_UPD_AST_FEWS_LOG_ADMFRM 15820
+CREATE PROCEDURE [dbo].[FEWS_UPD_AST_FEWS_LOG_ADMFRM]
 	@id int
 AS
 BEGIN 

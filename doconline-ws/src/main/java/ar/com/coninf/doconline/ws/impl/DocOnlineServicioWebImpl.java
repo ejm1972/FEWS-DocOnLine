@@ -1,11 +1,14 @@
 package ar.com.coninf.doconline.ws.impl;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import com.google.zxing.WriterException;
 
 import ar.com.coninf.doconline.model.dao.InterfazDao;
 import ar.com.coninf.doconline.rest.model.enums.ErrorEnum;
@@ -15,6 +18,7 @@ import ar.com.coninf.doconline.rest.model.request.RequestConsultarComprobante;
 import ar.com.coninf.doconline.rest.model.request.RequestConsultarPadronLocal;
 import ar.com.coninf.doconline.rest.model.request.RequestConsultarPadronOnline;
 import ar.com.coninf.doconline.rest.model.request.RequestConsultarUltimoComprobante;
+import ar.com.coninf.doconline.rest.model.request.RequestGenerarQr;
 import ar.com.coninf.doconline.rest.model.response.Response;
 import ar.com.coninf.doconline.rest.model.response.ResponseActualizarItemComprobante;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutenticacion;
@@ -23,6 +27,7 @@ import ar.com.coninf.doconline.rest.model.response.ResponseConsultarComprobante;
 import ar.com.coninf.doconline.rest.model.response.ResponseConsultarPadronLocal;
 import ar.com.coninf.doconline.rest.model.response.ResponseConsultarPadronOnline;
 import ar.com.coninf.doconline.rest.model.response.ResponseConsultarUltimoComprobante;
+import ar.com.coninf.doconline.rest.model.response.ResponseGenerarQr;
 import ar.com.coninf.doconline.rest.model.tx.ComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.ControlTransaccion;
 import ar.com.coninf.doconline.rest.model.tx.DatoOpcional;
@@ -36,11 +41,11 @@ import ar.com.coninf.doconline.ws.ayudante.AutenticacionDatos;
 import ar.com.coninf.doconline.ws.ayudante.AutorizarComprobanteAyudante;
 import ar.com.coninf.doconline.ws.ayudante.ConsultarComprobanteAyudante;
 import ar.com.coninf.doconline.ws.ayudante.ConsultarUltimoComprobanteAyudante;
+import ar.com.coninf.doconline.ws.ayudante.GenerarQrAyudante;
 import ar.com.coninf.doconline.ws.ayudante.SesionDatos;
 
 @Service(value = "webservice.DocOnlineServicioWeb")
 public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
-	//private Logger logger = Logger.getLogger(this.getClass());
 	
 	@Autowired
 	@Qualifier("ayudante.autenticacionAyudante")
@@ -62,6 +67,10 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 	@Qualifier("interfazDao")
 	private InterfazDao interfazDao;
 
+	@Autowired
+	@Qualifier("ayudante.generarQrAyudante")
+	private GenerarQrAyudante generarQrAyudante;
+	
 	public ResponseAutenticacion iniciarSesion(Integer interfaz, String clave) {
 		AutenticacionDatos datos = new AutenticacionDatos();
 		
@@ -321,24 +330,13 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		return consultarComprobanteAyudante.hacer(ctx, datos);
 	}
 
-//	@Override
-//	public ResponseAutorizarComprobante autorizarComprobante(RequestAutorizarComprobante request) {
-//
-//		// TODO Auto-generated method stub
-//		
-//		ResponseAutorizarComprobante resp = new ResponseAutorizarComprobante();
-//		resp.esReintento = false;
-//		resp.cargarError(new Response(ErrorEnum.SIN_ERROR));
-//		return resp;
-//	}
-
 	@Override
 	public ResponseActualizarItemComprobante actualizarItemComprobante(RequestActualizarItemComprobante request) {
 
 		// TODO Auto-generated method stub
 
 		ResponseActualizarItemComprobante resp = new ResponseActualizarItemComprobante();
-		resp.esReintento = false;
+		resp.setEsReintento(false);
 		resp.cargarError(new Response(ErrorEnum.SIN_ERROR));
 		return resp;
 	}
@@ -349,7 +347,7 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		// TODO Auto-generated method stub
 
 		ResponseConsultarPadronLocal resp = new ResponseConsultarPadronLocal();
-		resp.esReintento = false;
+		resp.setEsReintento(false);
 		resp.cargarError(new Response(ErrorEnum.SIN_ERROR));
 		return resp;
 	}
@@ -360,8 +358,15 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		// TODO Auto-generated method stub
 
 		ResponseConsultarPadronOnline resp = new ResponseConsultarPadronOnline();
-		resp.esReintento = false;
+		resp.setEsReintento(false);
 		resp.cargarError(new Response(ErrorEnum.SIN_ERROR));
 		return resp;
 	}
+	
+	@Override
+	public ResponseGenerarQr generarQr(ControlTransaccion ctx, RequestGenerarQr req) throws IOException, WriterException {
+		
+		return generarQrAyudante.hacer(ctx, req);
+	}
+
 }

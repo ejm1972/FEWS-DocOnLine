@@ -101,7 +101,7 @@ public class ServicioWebInterceptor implements MethodInterceptor {
 	private Object registrarTx(Object proceed, ControlTransaccion ct,
 			String servicio, Date date) {
 		
-		if (ct != null && !((Response)proceed).esReintento) {
+		if (ct != null && !((Response)proceed).getEsReintento()) {
 			try {
 				RegistroTransaccionDto registro = new RegistroTransaccionDto();
 				registro.setCodigoTransaccion(ct.getNroTransaccion());

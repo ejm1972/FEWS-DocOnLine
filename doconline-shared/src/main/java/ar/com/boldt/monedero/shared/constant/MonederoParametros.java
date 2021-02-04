@@ -15,6 +15,11 @@ public class MonederoParametros {
 	public static String _TIMEOUT_ = "_TIMEOUT_";
 	public static String _USERDIR_ = "_USERDIR_";
 	
+	public static String QR_IMAGE_HEIGHT = "QR_IMAGE_HEIGHT";
+	public static String QR_IMAGE_WIDTH = "QR_IMAGE_WIDTH";
+	public static String QR_IMAGE_FORMAT = "QR_IMAGE_FORMAT";
+	public static String QR_URL = "QR_URL";
+	
 	public static String DIAS_VEN_RES = "DIAS_VEN_RES";
 	public static String CANT_ULT_MOVS = "CANT_ULT_MOVS";
 	public static String VENC_PIN_GENERADO = "VENC_PIN_GENERADO";

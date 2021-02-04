@@ -29,7 +29,7 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 		logger.debug("Ejecucion autorizarComprobante() de WS");
 		
 		ResponseAutorizarComprobante resp = new ResponseAutorizarComprobante();
-		resp.esReintento = false;
+		resp.setEsReintento(false);
 		resp.cargarError(new Response(ErrorEnum.SIN_ERROR));
 
 		try {
@@ -47,8 +47,7 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 			String proxy = urlProxy;
 			String wsdl = "";
 			String timeout = paramTimeout;			
-			String userDir = System.getProperty("user.dir");
-			userDir = paramUserDir;
+			String userDir = paramUserDir;
 	
 			String libFile = System.getProperty("os.arch").equals("amd64") ? "jacob-1.18-M2-x64.dll" : "jacob-1.18-M2-x86.dll";
 
