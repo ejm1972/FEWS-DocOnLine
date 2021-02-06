@@ -44,6 +44,7 @@ public class ConsultarUltimoComprobanteBusiness extends AbstractBusiness {
 		try {
 			String libFile = System.getProperty("os.arch").equals("amd64") ? "jacob-1.18-M2-x64.dll" : "jacob-1.18-M2-x86.dll";
 			
+			System.setProperty("com.jacob.debug", "false");
 			System.setProperty(LibraryLoader.JACOB_DLL_PATH, userDir+libFile);
 			logger.info(userDir+libFile);
             

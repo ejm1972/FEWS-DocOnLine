@@ -4,7 +4,8 @@ public enum TipoTransaccionEnum {
 
 	autorizarComprobante(1001L),
 	consultarUltimoComprobante(1002L),
-	consultarComprobante(1003L);
+	consultarComprobante(1003L),
+	generarQr(2001L);
 	
 	private Long idTransaccion;
 	

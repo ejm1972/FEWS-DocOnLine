@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 
+import org.apache.commons.codec.EncoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ import ar.com.coninf.doconline.rest.model.response.ResponseGenerarQr;
 import ar.com.coninf.doconline.rest.model.tx.ComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.ControlTransaccion;
 import ar.com.coninf.doconline.rest.model.tx.DatoOpcional;
+import ar.com.coninf.doconline.rest.model.tx.DatoQr;
 import ar.com.coninf.doconline.rest.model.tx.Iva;
 import ar.com.coninf.doconline.rest.model.tx.Tributo;
 import ar.com.coninf.doconline.shared.dto.InterfazDto;
@@ -98,46 +100,39 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		RequestAutorizarComprobante datos = new RequestAutorizarComprobante();
 		
 		datos.setControlTransaccion(ctx);
-		if (ctx.getInterfaz().equals(9902)) {
-			datos.setCuit("30710092792"); //Astrasud HOMO
-		} else if (ctx.getInterfaz().equals(9901)) {
-			datos.setCuit("20225925055"); //DEMO HOMO
-		} else if (ctx.getInterfaz().equals(1003)) {
-			datos.setCuit("30641803681"); //Panamer PROD
-		} else {
-			
-			//ACA SE TIENE QUE RECUPERAR EL CUIT DE LA SUSCRIPCION
-			InterfazDto interfaz = null;
-			try {
 
-				interfaz = interfazDao.getById(ctx.getInterfaz());
-				if(interfaz == null){					
-					throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
+		//ACA SE TIENE QUE RECUPERAR EL CUIT DE LA SUSCRIPCION
+		InterfazDto interfaz = null;
+		try {
+
+			interfaz = interfazDao.getById(ctx.getInterfaz());
+			if(interfaz == null){					
+				throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
+			} else {
+				
+				if (ctx.getInterfaz().equals(9901)
+						|| ctx.getInterfaz().equals(9902) 
+						|| ctx.getInterfaz().equals(2001)
+						|| ctx.getInterfaz().equals(2002) 
+						|| ctx.getInterfaz().equals(2003)
+						|| ctx.getInterfaz().equals(2009)
+						|| ctx.getInterfaz().equals(2005)
+						|| ctx.getInterfaz().equals(2006)
+						|| ctx.getInterfaz().equals(2007)
+						|| ctx.getInterfaz().equals(2008)
+						|| ctx.getInterfaz().equals(3001)
+						|| ctx.getInterfaz().equals(4001)) {
+					datos.setCuit(interfaz.getCuitSuscripcion());
 				} else {
-					
-					if (ctx.getInterfaz().equals(2001)
-							|| ctx.getInterfaz().equals(2002) 
-							|| ctx.getInterfaz().equals(2003)
-							|| ctx.getInterfaz().equals(2009)
-							|| ctx.getInterfaz().equals(2005)
-							|| ctx.getInterfaz().equals(2006)
-							|| ctx.getInterfaz().equals(2007)
-							|| ctx.getInterfaz().equals(2008)
-							|| ctx.getInterfaz().equals(3001)
-							|| ctx.getInterfaz().equals(4001)) {
-						datos.setCuit(interfaz.getCuitSuscripcion());
-					} else {
-						throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
-					}
+					throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
 				}
-			
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw new ApplicationException(e);
 			}
-
-		}
 		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new ApplicationException(e);
+		}
+
 		BigDecimal big100 = new BigDecimal("100");
 		
 		datos.setConcepto(concepto);
@@ -364,9 +359,11 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 	}
 	
 	@Override
-	public ResponseGenerarQr generarQr(ControlTransaccion ctx, RequestGenerarQr req) throws IOException, WriterException {
-		
-		return generarQrAyudante.hacer(ctx, req);
+	public ResponseGenerarQr generarQr(ControlTransaccion ctx, DatoQr datoQr) throws IOException, WriterException, EncoderException {
+		RequestGenerarQr datos = new RequestGenerarQr();
+		datos.setControlTransaccion(ctx);
+		datos.setDatoQr(datoQr);
+		return generarQrAyudante.hacer(ctx, datos);
 	}
 
 }

@@ -23,10 +23,12 @@ ALTER TABLE [dbo].[FEWS_QR] CHECK CONSTRAINT [FK_FEWS_ENCABEZADO_FEWS_QR]
 end
 
 begin tran
+
 declare @Param bigint
 declare @Param_valor bigint
 declare @CodigoParam varchar(100)
 
+select @Param = null
 select @CodigoParam = 'QR_IMAGE_WIDTH'
 select @Param=ID_PARAMETRO from PARAMETROS where PARAMETRO=@CodigoParam
 if @Param is null
@@ -37,6 +39,7 @@ begin
 	VALUES (@Param,@CodigoParam,'Ancho Imagen QR','Ancho Imagen QR')
 end
 
+select @Param_valor = null
 select @Param_valor = ID_PARAMETRO_VALOR from PARAMETROS_VALOR where ID_PARAMETRO=@Param
 if @Param_valor is null
 begin
@@ -46,6 +49,7 @@ begin
 	VALUES(@Param_valor,@Param,'300','2021-01-01 00:00:00.000','9999-09-09 00:00:00.000')
 end
 
+select @Param = null
 select @CodigoParam = 'QR_IMAGE_HEIGHT'
 select @Param=ID_PARAMETRO from PARAMETROS where PARAMETRO=@CodigoParam
 if @Param is null
@@ -56,6 +60,7 @@ begin
 	VALUES (@Param,@CodigoParam,'Alto Imagen QR','Alto Imagen QR')
 end
 
+select @Param_valor = null
 select @Param_valor = ID_PARAMETRO_VALOR from PARAMETROS_VALOR where ID_PARAMETRO=@Param
 if @Param_valor is null
 begin
@@ -65,6 +70,7 @@ begin
 	VALUES(@Param_valor,@Param,'300','2021-01-01 00:00:00.000','9999-09-09 00:00:00.000')
 end
 
+select @Param = null
 select @CodigoParam = 'QR_IMAGE_FORMAT'
 select @Param=ID_PARAMETRO from PARAMETROS where PARAMETRO=@CodigoParam
 if @Param is null
@@ -75,6 +81,7 @@ begin
 	VALUES (@Param,@CodigoParam,'Formato de Imagen QR','Formato de Imagen QR')
 end
 
+select @Param_valor = null
 select @Param_valor = ID_PARAMETRO_VALOR from PARAMETROS_VALOR where ID_PARAMETRO=@Param
 if @Param_valor is null
 begin
@@ -84,6 +91,7 @@ begin
 	VALUES(@Param_valor,@Param,'JPG','2021-01-01 00:00:00.000','9999-09-09 00:00:00.000')
 end
 
+select @Param = null
 select @CodigoParam = 'QR_URL'
 select @Param=ID_PARAMETRO from PARAMETROS where PARAMETRO=@CodigoParam
 if @Param is null
@@ -94,15 +102,30 @@ begin
 	VALUES (@Param,@CodigoParam,'URL para generacion de QR','URL para generacion de QR')
 end
 
+select @Param_valor = null
 select @Param_valor = ID_PARAMETRO_VALOR from PARAMETROS_VALOR where ID_PARAMETRO=@Param
 if @Param_valor is null
 begin
 	select @Param_valor = isnull(MAX(ID_PARAMETRO_VALOR),0)+1 from PARAMETROS_VALOR
 
 	INSERT INTO [PARAMETROS_VALOR]([ID_PARAMETRO_VALOR],[ID_PARAMETRO],[VALOR],[F_VIGENCIA_DESDE],[F_VIGENCIA_HASTA])
-	VALUES(@Param_valor,@Param,'https:////www.afip.gob.ar//fe//qr//','2021-01-01 00:00:00.000','9999-09-09 00:00:00.000')
+	VALUES(@Param_valor,@Param,'https://www.afip.gob.ar/fe/qr/','2021-01-01 00:00:00.000','9999-09-09 00:00:00.000')
 end
 
 commit tran
 
+begin tran
 
+declare @Transac bigint
+select @Transac = 2001
+if not exists(select top 1 ID_TIPO_TRANSACCION from TIPOS_TRANSACCIONES where ID_TIPO_TRANSACCION=2001)
+begin
+	
+	insert [TIPOS_TRANSACCIONES] ([ID_TIPO_TRANSACCION], [TRANSACCION], [TIPO_TRANSACCION], [TRANSACCION_REST], [URL_REST]) 
+	VALUES (2001, N'generarQr', N'Generar QR', N'generarQr', N'/generar/qr')
+
+end
+
+commit tran
+
+--rollback tran

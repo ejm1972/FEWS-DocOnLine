@@ -6,15 +6,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.google.gson.Gson;
-
-import ar.com.boldt.monedero.shared.constant.MonederoParametros;
 import ar.com.coninf.doconline.business.enums.TipoComprobanteAFIP;
 import ar.com.coninf.doconline.business.facade.LogTransaccionFacade;
 import ar.com.coninf.doconline.business.log.LogTransaccionContenido;
@@ -26,7 +22,6 @@ import ar.com.coninf.doconline.model.dao.FewsQrDao;
 import ar.com.coninf.doconline.model.dao.FewsTributoDao;
 import ar.com.coninf.doconline.model.dao.FewsXmlDao;
 import ar.com.coninf.doconline.model.dao.ParametroDao;
-import ar.com.coninf.doconline.rest.model.request.RequestGenerarQr;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutenticacion;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutorizarComprobante;
 import ar.com.coninf.doconline.rest.model.response.ResponseGenerarQr;
@@ -99,8 +94,6 @@ public class AutorizadorFews {
 	private Integer interfaz;
 	private String  clave;
 	private LogTransaccionContenido log;
-	
-	private Gson gson = new Gson();
 	
 	public AutorizadorFews() {
 
@@ -502,22 +495,19 @@ public class AutorizadorFews {
 						DatoQr datoQr = new DatoQr();
 						datoQr.setVer(1);
 						datoQr.setFecha(fechaCbte);
-						datoQr.setCuit(Integer.valueOf(selected.getCuit()));
+						datoQr.setCuit(Long.valueOf(selected.getCuit()));
 						datoQr.setPtoVta(ptoVta);
 						datoQr.setTipoCmp(tipoCbte);
-						datoQr.setNroCmp(nroCbte.intValue());
-						datoQr.setImporte(impTotal.movePointRight(2).intValue());
+						datoQr.setNroCmp(nroCbte);
+						datoQr.setImporte(impTotal.movePointRight(2).longValue());
 						datoQr.setMoneda(monedaId);
-						datoQr.setCtz(monedaCtz.movePointRight(2).intValue());
+						datoQr.setCtz(monedaCtz.movePointRight(2).longValue());
 						datoQr.setTipoDocRc(tipoDoc);
-						datoQr.setNroDocRe(nroDoc.intValue());
+						datoQr.setNroDocRe(nroDoc);
 						datoQr.setTipoCodAt("E"); 				//E-> CAE o A->CAEA
 						datoQr.setCodAut(cae);
 						
-						RequestGenerarQr req = new RequestGenerarQr();
-						req.setControlTransaccion(ctx);
-						req.setDatoQr(datoQr);
-						ResponseGenerarQr respG = dolsw.generarQr(ctx, req);
+						ResponseGenerarQr respG = dolsw.generarQr(ctx, datoQr);
 						if (respG.getCodigo().equals(0)) {
 							fewsQr.setTextoQr(respG.getTextoQr());
 							fewsQr.setImagenQr(respG.getImagenQr());

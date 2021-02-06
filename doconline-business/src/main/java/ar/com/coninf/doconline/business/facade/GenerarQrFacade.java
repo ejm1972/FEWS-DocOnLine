@@ -2,6 +2,7 @@ package ar.com.coninf.doconline.business.facade;
 
 import java.io.IOException;
 
+import org.apache.commons.codec.EncoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class GenerarQrFacade {
 	@Qualifier("business.generarQrBusiness")
 	private GenerarQrBusiness generarQrBusiness;
 	
-	public ResponseGenerarQr generarQr(RequestGenerarQr datos) throws IOException, WriterException {
+	public ResponseGenerarQr generarQr(RequestGenerarQr datos) throws IOException, WriterException, EncoderException {
 		
 		return generarQrBusiness.generarQr(datos);
 	}

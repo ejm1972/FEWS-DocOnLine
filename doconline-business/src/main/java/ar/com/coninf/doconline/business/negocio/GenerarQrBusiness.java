@@ -7,11 +7,14 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
@@ -29,22 +32,34 @@ import ar.com.coninf.doconline.rest.model.response.ResponseGenerarQr;
 public class GenerarQrBusiness extends AbstractBusiness {
 
 	Logger logger = Logger.getLogger(this.getClass());
+	
+	Gson gson = new Gson();
+	Base64 base64 = new Base64();
 
 	@Autowired
 	@Qualifier("parametroDao")
 	private ParametroDao parametroDao;
 	
-	public ResponseGenerarQr generarQr(RequestGenerarQr req) throws IOException, WriterException {
+	public ResponseGenerarQr generarQr(RequestGenerarQr req) throws IOException, WriterException, EncoderException {
 		
 		logger.debug("Ejecucion generarQr() para FE");
+		
+		validarUserDir();
 		
 		// Image properties
 		int qrImageWith = Integer.parseInt(parametroDao.getValorVigente(MonederoParametros.QR_IMAGE_WIDTH));
 		int qrImageHeight = Integer.parseInt(parametroDao.getValorVigente(MonederoParametros.QR_IMAGE_HEIGHT));
 		String imageFormat = parametroDao.getValorVigente(MonederoParametros.QR_IMAGE_FORMAT);
 		String imagePathFile = paramUserDir+"qrcode.";
+		String qrUrl = parametroDao.getValorVigente(MonederoParametros.QR_URL);
 		
-		BufferedImage image = crearQR(req.getTextoQr(), qrImageWith, qrImageHeight);
+		String datoQrJson = gson.toJson(req.getDatoQr());
+		byte[] datoQrJsonByteArray = datoQrJson.getBytes();
+		byte[] datoQrJsonBase64 = Base64.encodeBase64(datoQrJsonByteArray);
+		String datoQrJsonBase64String = new String(datoQrJsonBase64);
+		String textoQr = qrUrl.concat("?p=").concat(datoQrJsonBase64String);
+		
+		BufferedImage image = crearQR(textoQr, qrImageWith, qrImageHeight);
 		
 		// Write the image to a file
 		FileOutputStream qrFile = null;
@@ -63,6 +78,7 @@ public class GenerarQrBusiness extends AbstractBusiness {
 		resp.cargarError(new Response(ErrorEnum.SIN_ERROR));
 		
 		resp.setImagenQr(imageAsBytes);
+		resp.setTextoQr(textoQr);
 		
 		return resp;
 	}

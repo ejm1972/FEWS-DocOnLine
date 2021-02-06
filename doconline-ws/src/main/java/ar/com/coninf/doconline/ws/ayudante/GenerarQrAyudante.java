@@ -2,6 +2,7 @@ package ar.com.coninf.doconline.ws.ayudante;
 
 import java.io.IOException;
 
+import org.apache.commons.codec.EncoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ public class GenerarQrAyudante implements AyudanteWS<RequestGenerarQr> {
 	private GenerarQrFacade facade;
 
 	@Override
-	public ResponseGenerarQr hacer(ControlTransaccion ctx, RequestGenerarQr datos) throws IOException, WriterException {
+	public ResponseGenerarQr hacer(ControlTransaccion ctx, RequestGenerarQr datos) throws IOException, WriterException, EncoderException {
 		ResponseGenerarQr resp = new ResponseGenerarQr();
 		Response respuesta = validarDatos(datos);
 
