@@ -25,4 +25,8 @@ public class FewsQr implements Serializable {
 	@Column(name = "imagen_qr")
 	private byte[] imagenQr;
 	
+	public void setId(Integer id) {
+		this.id = id.longValue();
+	}
+	
 }

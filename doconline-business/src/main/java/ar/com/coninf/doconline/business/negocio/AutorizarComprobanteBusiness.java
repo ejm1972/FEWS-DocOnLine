@@ -46,7 +46,7 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 			String cache = "";
 			String proxy = urlProxy;
 			String wsdl = "";
-			String timeout = paramTimeout;			
+			float timeout = Float.parseFloat(paramTimeout);			
 			String userDir = paramUserDir;
 	
 			String libFile = System.getProperty("os.arch").equals("amd64") ? "jacob-1.18-M2-x64.dll" : "jacob-1.18-M2-x86.dll";

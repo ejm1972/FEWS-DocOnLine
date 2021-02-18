@@ -25,6 +25,11 @@ SET NOCOUNT ON
 
 begin tran
 --Borro todos los comprobantes pendientes
+delete FEWS_QR
+from FEWS_QR x, FEWS_ENCABEZADO e
+where (e.resultado is null or e.resultado <> 'A')
+	and e.id=x.id
+
 delete FEWS_XML
 from FEWS_XML x, FEWS_ENCABEZADO e
 where (e.resultado is null or e.resultado <> 'A')
@@ -230,6 +235,14 @@ begin
 		and PUNTO_VENTA=PV
 		and NUMERO_COMPROBANTE=NC
 		and (e.resultado is null or e.resultado <> 'A')
+
+	--INSERTA EN FEWS_QR
+	INSERT INTO FEWS_QR(
+		ID)
+	SELECT
+		ID=IDC
+	FROM #pen p left outer join FEWS_ENCABEZADO e on e.cuit=p.CE COLLATE DATABASE_DEFAULT and e.tipo_cbte=p.NTC and e.punto_vta=p.NPV and e.cbte_nro=p.NNC
+	WHERE (e.resultado is null or e.resultado <> 'A')
 	commit tran
 end 
 
