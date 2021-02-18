@@ -120,7 +120,7 @@ begin
 end
 go
 
-if 1=1
+if 1=2
 begin
 	declare @NroCbte varchar(8)
 	declare @AsId varchar(8)
@@ -131,7 +131,7 @@ begin
 
 	select @Fec = convert(varchar(8), GETDATE()-5, 112)
 	select @DocCliente = '30708074949' --'30708074949'
-	select @NroCbte = right('00000000'+convert(varchar(8), 1),8)
+	select @NroCbte = right('00000000'+convert(varchar(8), 62),8)
 	select @FecActual = convert(varchar(8), GETDATE(), 112)
 	
 	select @AsId = right('00000000'+convert(varchar(8), 1),8)
