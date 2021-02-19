@@ -47,11 +47,15 @@ where fenc.id=@id
 		xml_request_afip=fxml.xml_request,
 		xml_response_afip=fxml.xml_response
 		
+		,qr=fqr.imagen_qr
+
 	from fews_encabezado fenc
 		, fews_xml fxml
+		, fews_qr fqr
 		, [afgpm-finnegans].FINN_Admifarm.dbo.ast_fews_log astl
 	where fenc.id=@id
 		and fenc.id=fxml.id
+		and fenc.id=fqr.id
 		and cuit_empresa=fenc.cuit collate database_default
 		and convert(int, tipo_comprobante)=fenc.tipo_cbte
 		and convert(int, punto_venta)=fenc.punto_vta

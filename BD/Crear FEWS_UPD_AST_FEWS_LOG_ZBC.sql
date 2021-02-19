@@ -33,6 +33,7 @@ SET NOCOUNT ON
 	where 1=1
 		and fenc.id=@id
 		and fenc.id=fxml.id
+		and fenc.id=fqr.id
 		and cuit_empresa=fenc.cuit collate database_default
 		and convert(int, tipo_comprobante)=fenc.tipo_cbte
 		and convert(int, punto_venta)=fenc.punto_vta
