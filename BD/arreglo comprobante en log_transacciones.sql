@@ -8,5 +8,5 @@ go
 
 update LOG_TRANSACCIONES
 set COMPROBANTE = NUMERO_COMPROBANTE
-where COMPROBANTE is null
+where COMPROBANTE is null and NUMERO_COMPROBANTE is not null
 go

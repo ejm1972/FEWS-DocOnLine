@@ -40,7 +40,7 @@ public class GenerarQrBusiness extends AbstractBusiness {
 	@Qualifier("parametroDao")
 	private ParametroDao parametroDao;
 	
-	public ResponseGenerarQr generarQr(RequestGenerarQr req) throws IOException, WriterException, EncoderException {
+	public ResponseGenerarQr generarQr(RequestGenerarQr req) throws IOException, WriterException {
 		
 		logger.debug("Ejecucion generarQr() para FE");
 		

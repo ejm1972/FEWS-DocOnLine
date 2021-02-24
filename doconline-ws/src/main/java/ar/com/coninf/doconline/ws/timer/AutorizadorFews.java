@@ -1,7 +1,6 @@
 package ar.com.coninf.doconline.ws.timer;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -39,7 +38,6 @@ import ar.com.coninf.doconline.shared.dto.FewsQr;
 import ar.com.coninf.doconline.shared.dto.FewsResultado;
 import ar.com.coninf.doconline.shared.dto.FewsTributo;
 import ar.com.coninf.doconline.shared.dto.FewsXml;
-import ar.com.coninf.doconline.shared.excepcion.ApplicationException;
 import ar.com.coninf.doconline.ws.DocOnlineServicioWeb;
 
 
@@ -478,27 +476,38 @@ public class AutorizadorFews {
 					fewsXml.setExcepcionWsfev1(excepcionWsfev1==null?descripcion:excepcionWsfev1);
 
 					if (respA.getCodigo().equals(0)) {
-						DatoQr datoQr = new DatoQr();
-						datoQr.setVer(1);
-						datoQr.setFecha(fechaCbte);
-						datoQr.setCuit(Long.valueOf(selected.getCuit()));
-						datoQr.setPtoVta(ptoVta);
-						datoQr.setTipoCmp(tipoCbte);
-						datoQr.setNroCmp(nroCbte);
-						datoQr.setImporte(impTotal.movePointRight(2).longValue());
-						datoQr.setMoneda(monedaId);
-						datoQr.setCtz(monedaCtz.movePointRight(2).longValue());
-						datoQr.setTipoDocRc(tipoDoc);
-						datoQr.setNroDocRe(nroDoc);
-						datoQr.setTipoCodAt("E"); 				//E-> CAE o A->CAEA
-						datoQr.setCodAut(cae);
+						respI = dolsw.iniciarSesion(interfaz, clave);
+						logger.debug("Fin Ejecucion dolsw.iniciarSesion() de WS para QR");
 
-						ResponseGenerarQr respG = dolsw.generarQr(ctx, datoQr);
-						if (respG.getCodigo().equals(0)) {
-							fewsQr.setTextoQr(respG.getTextoQr());
-							fewsQr.setImagenQr(respG.getImagenQr());
-							
-							fewsQrDao.update(fewsQr);
+						logger.debug("Codigo:"+respI.getCodigo());
+						logger.debug("Descripcion:"+respI.getDescripcion());
+						logger.debug("Observacion:"+respI.getObservacion());
+						logger.debug("EsReintento:"+respI.getEsReintento());
+						logger.debug("IdSesion:"+respI.getIdSesion());
+
+						if (respI.getCodigo().equals(0)) {
+							DatoQr datoQr = new DatoQr();
+							datoQr.setVer(1);
+							datoQr.setFecha(fechaCbte);
+							datoQr.setCuit(Long.valueOf(selected.getCuit()));
+							datoQr.setPtoVta(ptoVta);
+							datoQr.setTipoCmp(tipoCbte);
+							datoQr.setNroCmp(nroCbte);
+							datoQr.setImporte(impTotal.longValue());
+							datoQr.setMoneda(monedaId);
+							datoQr.setCtz(monedaCtz.longValue());
+							datoQr.setTipoDocRc(tipoDoc);
+							datoQr.setNroDocRe(nroDoc);
+							datoQr.setTipoCodAt("E"); 				//E-> CAE o A->CAEA
+							datoQr.setCodAut(cae);
+	
+							ResponseGenerarQr respG = dolsw.generarQr(ctx, datoQr);
+							if (respG.getCodigo().equals(0)) {
+								fewsQr.setTextoQr(respG.getTextoQr());
+								fewsQr.setImagenQr(respG.getImagenQr());
+								
+								fewsQrDao.update(fewsQr);
+							}
 						}
 					}
 

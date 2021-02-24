@@ -303,7 +303,6 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 							|| ctx.getInterfaz().equals(2006)
 							|| ctx.getInterfaz().equals(2007)
 							|| ctx.getInterfaz().equals(2008)
-							|| ctx.getInterfaz().equals(3001)
 							|| ctx.getInterfaz().equals(4001)) {
 						datos.setCuit(interfaz.getCuitSuscripcion());
 					} else {
