@@ -4,7 +4,7 @@ GO
 declare @NroCbte varchar(8)
 declare @AsId varchar(8)
 declare @Fec varchar(8)
-select @NroCbte = right('00000000'+convert(varchar(8), 62),8)
+select @NroCbte = right('00000000'+convert(varchar(8), 66),8)
 select @AsId = right('00000000'+convert(varchar(8), 1),8)
 select @Fec = convert(varchar(8), GETDATE()-10, 112)
 
@@ -46,3 +46,5 @@ begin
 	commit tran
 end
 go
+
+--rollback tran

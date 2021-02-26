@@ -496,9 +496,9 @@ public class AutorizadorFews {
 							datoQr.setImporte(impTotal.longValue());
 							datoQr.setMoneda(monedaId);
 							datoQr.setCtz(monedaCtz.longValue());
-							datoQr.setTipoDocRc(tipoDoc);
-							datoQr.setNroDocRe(nroDoc);
-							datoQr.setTipoCodAt("E"); 				//E-> CAE o A->CAEA
+							datoQr.setTipoDocRec(tipoDoc);
+							datoQr.setNroDocRec(nroDoc);
+							datoQr.setTipoCodAut("E"); 				//E-> CAE o A->CAEA
 							datoQr.setCodAut(cae);
 	
 							ResponseGenerarQr respG = dolsw.generarQr(ctx, datoQr);
