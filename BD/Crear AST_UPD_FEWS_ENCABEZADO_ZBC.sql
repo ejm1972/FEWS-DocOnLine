@@ -65,7 +65,7 @@ select CUIT_EMPRESA CE, TIPO_COMPROBANTE TC, PUNTO_VENTA PV, min(NUMERO_COMPROBA
 , (select top 1 id_interfaz from INTERFACES where CUIT_SUSCRIPCION=CUIT_EMPRESA COLLATE DATABASE_DEFAULT) ID_INTERFAZ
 into #pen
 from DRGFINNEGANS.FINN_ZBC.dbo.AST_FEWS_LOG
-where RESULTADO is null or RESULTADO <> 'A'
+where RESULTADO is null or RESULTADO not in ('A','D')
 group by CUIT_EMPRESA, TIPO_COMPROBANTE, PUNTO_VENTA
 
 --Verifica que todos los CUIT EMPRESA tengan ID_INTERFAZ
@@ -251,16 +251,19 @@ end
 --Actualizo los encabezados que existen
 UPDATE DRGFINNEGANS.FINN_ZBC.dbo.AST_FEWS_LOG
 SET resultado='D',
-	cae=0,
+	cae=e.cae,
+	qr=fqr.imagen_qr,
 	err_msg='ERROR - COMPROBANTE PENDIENTE YA EXISTE AUTORIZADO - VERIFIQUE LA CONSOLA',
 	obs='CAE: '+ CONVERT(varchar(20), e.cae) + ' VEN: '+ e.fecha_vto + ' TOTAL: ' + convert(varchar(20), e.imp_total),
 	codigo='14002',
 	descripcion='ERROR - COMPROBANTE PENDIENTE YA EXISTE AUTORIZADO - VERIFIQUE LA CONSOLA'
 FROM FEWS_ENCABEZADO e
 	, FEWS_XML x
+	, fews_qr fqr
 	, DRGFINNEGANS.FINN_ZBC.dbo.AST_FEWS_LOG l
 	, #pen p
 WHERE e.id=x.id
+	and e.id=fqr.id
 	and CUIT_EMPRESA=CE
 	and TIPO_COMPROBANTE=TC
 	and PUNTO_VENTA=PV
