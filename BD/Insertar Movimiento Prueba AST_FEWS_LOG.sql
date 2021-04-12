@@ -120,7 +120,7 @@ begin
 end
 go
 
-if 1=2
+if 1=1
 begin
 	declare @NroCbte varchar(8)
 	declare @AsId varchar(8)
@@ -131,7 +131,7 @@ begin
 
 	select @Fec = convert(varchar(8), GETDATE()-5, 112)
 	select @DocCliente = '30708074949' --'30708074949'
-	select @NroCbte = right('00000000'+convert(varchar(8), 62),8)
+	select @NroCbte = right('00000000'+convert(varchar(8), 1),8)
 	select @FecActual = convert(varchar(8), GETDATE(), 112)
 	
 	select @AsId = right('00000000'+convert(varchar(8), 1),8)
@@ -144,6 +144,9 @@ begin
 		INSERT [dbo].[AST_FEWS_LOG_DATOS_OPC]  
 		([AS_ID], [CUIT_EMPRESA], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [ID_OPCIONAL], [VALOR]) VALUES 
 		(@AsId,   N'20225925055', @TipoCbte,          N'00004',      @NroCbte,             '2101',        N'1234567890123456789012')
+		INSERT [dbo].[AST_FEWS_LOG_DATOS_OPC]  
+		([AS_ID], [CUIT_EMPRESA], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [ID_OPCIONAL], [VALOR]) VALUES 
+		(@AsId,   N'20225925055', @TipoCbte,          N'00004',      @NroCbte,             '27',          N'ADC')
 
 		INSERT [dbo].[AST_FEWS_LOG] 
 		([CUIT_EMPRESA], [TIPODOC_CLIENTE], [NRODOC_CLIENTE], [AS_ID], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [FECHA_COMPROBANTE], [CONCEPTO_FACTURA], [MONEDA], [MONEDA_CTZ], [IMPORTE_TOTAL], [NETO_NOGRAVADO], [NETO_GRAVADO], [NETO_EXENTO], [IVA_TOTAL], [TRIBUTOS_TOTAL], [CAE], [FECHA_VENCIMIENTO], [CODIGO], [DESCRIPCION], [OBSERVACION], [EXCEPCION_WSAA], [EXCEPCION_WSFEV1], [RESULTADO], [ERR_MSG], [OBS], [XML_REQUEST_AFIP], [XML_RESPONSE_AFIP]) VALUES 
@@ -163,11 +166,11 @@ begin
 
 		INSERT [dbo].[AST_FEWS_LOG_DATOS_OPC]  
 		([AS_ID], [CUIT_EMPRESA], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [ID_OPCIONAL], [VALOR]) VALUES 
-		(@AsId,   N'20225925055', @TipoCbte,          N'00004',      @NroCbte,             '2101',        N'1234567890123456789012')
+		(@AsId,   N'20225925055', @TipoCbte,          N'00004',      @NroCbte,             '22',          N'N')
 
 		INSERT [dbo].[AST_FEWS_LOG] 
 		([CUIT_EMPRESA], [TIPODOC_CLIENTE], [NRODOC_CLIENTE], [AS_ID], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [FECHA_COMPROBANTE], [CONCEPTO_FACTURA], [MONEDA], [MONEDA_CTZ], [IMPORTE_TOTAL], [NETO_NOGRAVADO], [NETO_GRAVADO], [NETO_EXENTO], [IVA_TOTAL], [TRIBUTOS_TOTAL], [CAE], [FECHA_VENCIMIENTO], [CODIGO], [DESCRIPCION], [OBSERVACION], [EXCEPCION_WSAA], [EXCEPCION_WSFEV1], [RESULTADO], [ERR_MSG], [OBS], [XML_REQUEST_AFIP], [XML_RESPONSE_AFIP]) VALUES 
-		(N'20225925055', N'80',             @DocCliente,      @AsId,   @TipoCbte,          N'00004',      @NroCbte,             @Fec,                N'2',               N'PES',   N'1.00',      N'111.00',       N'0.00',          N'100.00',      N'0.00',       N'21.00',    N'0.00',          NULL,  NULL,                NULL,     NULL,          NULL,          NULL,             NULL,               NULL,        NULL,      NULL,  NULL,               NULL)
+		(N'20225925055', N'80',             @DocCliente,      @AsId,   @TipoCbte,          N'00004',      @NroCbte,             @Fec,                N'2',               N'PES',   N'1.00',      N'121.00',       N'0.00',          N'100.00',      N'0.00',       N'21.00',    N'0.00',          NULL,  NULL,                NULL,     NULL,          NULL,          NULL,             NULL,               NULL,        NULL,      NULL,  NULL,               NULL)
 	commit tran
 
 	select @AsId = right('00000000'+convert(varchar(8), 3),8)
@@ -180,10 +183,10 @@ begin
 		INSERT [dbo].[AST_FEWS_LOG_CBTE_ASOC]  
 		([AS_ID], [CUIT_EMPRESA], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [TIPO_COMPROBANTE_ASOC], [PUNTO_VENTA_ASOC], [NUMERO_COMPROBANTE_ASOC], [CUIT_ASOC],    [FECHA_COMPROBANTE_ASOC]) VALUES 
 		(@AsId,   N'20225925055', @TipoCbte,          N'00004',      @NroCbte,             N'201',                  N'00004',           N'00000001',               N'20225925055', @Fec)
-
+		
 		INSERT [dbo].[AST_FEWS_LOG_DATOS_OPC]  
 		([AS_ID], [CUIT_EMPRESA], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [ID_OPCIONAL], [VALOR]) VALUES 
-		(@AsId,   N'20225925055', @TipoCbte,          N'00004',      @NroCbte,             '2101',        N'1234567890123456789012')
+		(@AsId,   N'20225925055', @TipoCbte,          N'00004',      @NroCbte,             '22',          N'N')
 
 		INSERT [dbo].[AST_FEWS_LOG] 
 		([CUIT_EMPRESA], [TIPODOC_CLIENTE], [NRODOC_CLIENTE], [AS_ID], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [FECHA_COMPROBANTE], [CONCEPTO_FACTURA], [MONEDA], [MONEDA_CTZ], [IMPORTE_TOTAL], [NETO_NOGRAVADO], [NETO_GRAVADO], [NETO_EXENTO], [IVA_TOTAL], [TRIBUTOS_TOTAL], [CAE], [FECHA_VENCIMIENTO], [CODIGO], [DESCRIPCION], [OBSERVACION], [EXCEPCION_WSAA], [EXCEPCION_WSFEV1], [RESULTADO], [ERR_MSG], [OBS], [XML_REQUEST_AFIP], [XML_RESPONSE_AFIP]) VALUES 
@@ -192,7 +195,9 @@ begin
 end
 go
 
-if 1=2
+use fews
+go
+
 begin
 	declare @id int
 	select @id = -1
@@ -230,7 +235,7 @@ begin
 		@tipo_comprobante=tipo_comprobante,
 		@punto_venta=punto_venta,
 		@numero_comprobante=numero_comprobante
-	from fews_encabezado fenc, fews_xml fxml, MACOR_SERVER.TMP_FINN.dbo.AST_FEWS_LOG astl
+	from fews_encabezado fenc, fews_xml fxml, [LQ5\LQ5].FAF_HIDROTERMIA.dbo.AST_FEWS_LOG astl
 	where fenc.id=@id
 		and fenc.id=fxml.id
 		and cuit_empresa=fenc.cuit
