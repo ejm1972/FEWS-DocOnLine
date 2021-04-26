@@ -3,6 +3,12 @@ package ar.com.coninf.doconline.business.negocio;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import com.jacob.activeX.ActiveXComponent;
+import com.jacob.com.ComFailException;
+import com.jacob.com.Dispatch;
+import com.jacob.com.LibraryLoader;
+import com.jacob.com.Variant;
+
 import ar.com.coninf.doconline.rest.model.enums.ErrorEnum;
 import ar.com.coninf.doconline.rest.model.request.RequestAutorizarComprobante;
 import ar.com.coninf.doconline.rest.model.response.Response;
@@ -10,14 +16,9 @@ import ar.com.coninf.doconline.rest.model.response.ResponseAutorizarComprobante;
 import ar.com.coninf.doconline.rest.model.tx.ComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.DatoOpcional;
 import ar.com.coninf.doconline.rest.model.tx.Iva;
+import ar.com.coninf.doconline.rest.model.tx.PeriodoComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.Tributo;
 import ar.com.coninf.doconline.shared.excepcion.ApplicationException;
-
-import com.jacob.activeX.ActiveXComponent;
-import com.jacob.com.ComFailException;
-import com.jacob.com.Dispatch;
-import com.jacob.com.LibraryLoader;
-import com.jacob.com.Variant;
 
 @Component("business.autorizarComprobanteBusiness")
 public class AutorizarComprobanteBusiness extends AbstractBusiness {
@@ -118,19 +119,26 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 
 					/* PROCESO DE CAE */             
 					String concepto = datos.getConcepto().toString();
-					String tipo_doc = datos.getTipoDoc().toString(), nro_doc = datos.getNroDoc().toString();
+					String tipo_doc = datos.getTipoDoc().toString();
+					String nro_doc = datos.getNroDoc().toString();
 
 					String tipo_cbte = datos.getTipoCbte().toString();
 					String pto_vta = datos.getPtoVta().toString();
-					int cbte_nro = Integer.parseInt(datos.getNroCbte().toString()), cbt_desde = cbte_nro, cbt_hasta = cbte_nro;
+					int cbte_nro = Integer.parseInt(datos.getNroCbte().toString());
+					int cbt_desde = cbte_nro;
+					int cbt_hasta = cbte_nro;
 
 					String imp_total = datos.getImpTotal().toString();
 					String imp_tot_conc = datos.getImpTotConcNoGrav().toString();
 					String imp_neto = datos.getImpNeto().toString();
-					String imp_iva = datos.getImpIva().toString(), imp_trib = datos.getImpTrib().toString(), imp_op_ex = datos.getImpOpEx().toString();
+					String imp_iva = datos.getImpIva().toString();
+					String imp_trib = datos.getImpTrib().toString();
+					String imp_op_ex = datos.getImpOpEx().toString();
 
 					String fecha_cbte = datos.getFechaCbte();
-					String fecha_venc_pago = "", fecha_serv_desde = "", fecha_serv_hasta = "";
+					String fecha_venc_pago = "";
+					String fecha_serv_desde = "";
+					String fecha_serv_hasta = "";
 					
 					if (concepto.equals("2") || concepto.equals("3")) {
 						fecha_serv_desde = datos.getFechaServDesde();
@@ -240,6 +248,22 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 						}
 					}
 
+					/* Agrego Periodo Comprobantes Opcionales */
+					for (int i = 0; datos.getPeriodoComprobanteAsociados() != null && i < datos.getPeriodoComprobanteAsociados().length; i++) {
+						PeriodoComprobanteAsociado aux = datos.getPeriodoComprobanteAsociados()[i];
+						if ((datos.getPeriodoComprobanteAsociados()[i]).getFechaDesde()!=null
+								&& (datos.getPeriodoComprobanteAsociados()[i]).getFechaHasta()!=null) { 
+							if (!(datos.getPeriodoComprobanteAsociados()[i]).toString().trim().equals("")) {
+								
+								Variant fecheDesde = new Variant((datos.getPeriodoComprobanteAsociados()[i]).getFechaDesde()); 
+								Variant	fecheHasta = new Variant((datos.getPeriodoComprobanteAsociados()[i]).getFechaHasta());
+								
+								Dispatch.call(wsfev1, "AgregarPeriodoComprobantesAsociados", 
+										fecheDesde, fecheHasta);
+							}					
+						}
+					}
+					
 					/* Habilito reprocesamiento automático (predeterminado): */
 					Dispatch.put(wsfev1, "Reprocesar", new Variant(true));
 

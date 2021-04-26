@@ -24,6 +24,7 @@ import ar.com.coninf.doconline.rest.model.tx.ControlTransaccion;
 import ar.com.coninf.doconline.rest.model.tx.DatoOpcional;
 import ar.com.coninf.doconline.rest.model.tx.DatoQr;
 import ar.com.coninf.doconline.rest.model.tx.Iva;
+import ar.com.coninf.doconline.rest.model.tx.PeriodoComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.Tributo;
 
 public interface DocOnlineServicioWeb {
@@ -35,7 +36,9 @@ public interface DocOnlineServicioWeb {
 			Integer concepto, Integer tipoDoc, Long nroDoc, Integer tipoCbte, Integer ptoVta, Long nroCbte, 
 			BigDecimal impTotal, BigDecimal impTotConcNoGrav, BigDecimal impNeto, BigDecimal impIva, BigDecimal impTrib, BigDecimal impOpEx, 
 			String fechaCbte, String fechaVencPago, String fechaServDesde, String fechaServHasta,
-			String monedaId, BigDecimal monedaCtz, Tributo[] tributos, Iva[] ivas, ComprobanteAsociado[] comprobantesAsociados, DatoOpcional[] datosOpcionales);
+			String monedaId, BigDecimal monedaCtz, 
+			Tributo[] tributos, Iva[] ivas, ComprobanteAsociado[] comprobantesAsociados, 
+			DatoOpcional[] datosOpcionales, PeriodoComprobanteAsociado[] periodosAsociados);
 	
 	public ResponseConsultarUltimoComprobante consultarUltimoComprobante(ControlTransaccion ctx, Integer tipoCbte, Integer ptoVta);
 	public ResponseConsultarComprobante consultarComprobante(ControlTransaccion ctx, Integer tipoCbte, Integer ptoVta, Integer cbte);

@@ -21,6 +21,19 @@ CREATE PROCEDURE [FEWS_UPD_AST_FEWS_LOG_HIDROTERMIA]
 AS
 BEGIN 
 SET NOCOUNT ON
+
+declare @intento datetime = getdate()
+
+insert into [FEWS_AST_FEWS_LOG] (
+[TIPO],[CUIT_EMPRESA],[TIPODOC_CLIENTE],[NRODOC_CLIENTE],[AS_ID],[TIPO_COMPROBANTE],[PUNTO_VENTA],[NUMERO_COMPROBANTE],[FECHA_COMPROBANTE],[CONCEPTO_FACTURA],[MONEDA],  [MONEDA_CTZ],[IMPORTE_TOTAL],[NETO_NOGRAVADO],[NETO_GRAVADO],[NETO_EXENTO],[IVA_TOTAL],[TRIBUTOS_TOTAL],  [CAE],[FECHA_VENCIMIENTO],[CODIGO],[DESCRIPCION],[OBSERVACION],[EXCEPCION_WSAA],[EXCEPCION_WSFEV1],  [RESULTADO],  [ERR_MSG],[OBS],[XML_REQUEST_AFIP],[XML_RESPONSE_AFIP],[INTENTO]) select
+'IUD' ,[CUIT_EMPRESA],[TIPODOC_CLIENTE],[NRODOC_CLIENTE],[AS_ID],[TIPO_COMPROBANTE],[PUNTO_VENTA],[NUMERO_COMPROBANTE],[FECHA_COMPROBANTE],[CONCEPTO_FACTURA],[MONEDA],l.[MONEDA_CTZ],[IMPORTE_TOTAL],[NETO_NOGRAVADO],[NETO_GRAVADO],[NETO_EXENTO],[IVA_TOTAL],[TRIBUTOS_TOTAL],l.[CAE],[FECHA_VENCIMIENTO],[CODIGO],[DESCRIPCION],[OBSERVACION],[EXCEPCION_WSAA],[EXCEPCION_WSFEV1],l.[RESULTADO],l.[ERR_MSG],[OBS],[XML_REQUEST_AFIP],[XML_RESPONSE_AFIP],@intento
+from fews_encabezado fenc
+	, [LQ5\LQ5].FAF_HIDROTERMIA.dbo.ast_fews_log l
+where fenc.id=@id
+	and cuit_empresa=fenc.cuit collate database_default
+	and convert(int, tipo_comprobante)=fenc.tipo_cbte
+	and convert(int, punto_venta)=fenc.punto_vta
+	and convert(int, numero_comprobante)=fenc.cbte_nro
 	
 	update [LQ5\LQ5].FAF_HIDROTERMIA.dbo.AST_FEWS_LOG
 	set resultado=fenc.resultado,
@@ -51,6 +64,17 @@ SET NOCOUNT ON
 		and convert(int, tipo_comprobante)=fenc.tipo_cbte
 		and convert(int, punto_venta)=fenc.punto_vta
 		and convert(int, numero_comprobante)=fenc.cbte_nro
+	
+insert into [FEWS_AST_FEWS_LOG] (
+[TIPO],[CUIT_EMPRESA],[TIPODOC_CLIENTE],[NRODOC_CLIENTE],[AS_ID],[TIPO_COMPROBANTE],[PUNTO_VENTA],[NUMERO_COMPROBANTE],[FECHA_COMPROBANTE],[CONCEPTO_FACTURA],[MONEDA],  [MONEDA_CTZ],[IMPORTE_TOTAL],[NETO_NOGRAVADO],[NETO_GRAVADO],[NETO_EXENTO],[IVA_TOTAL],[TRIBUTOS_TOTAL],  [CAE],[FECHA_VENCIMIENTO],[CODIGO],[DESCRIPCION],[OBSERVACION],[EXCEPCION_WSAA],[EXCEPCION_WSFEV1],  [RESULTADO],  [ERR_MSG],[OBS],[XML_REQUEST_AFIP],[XML_RESPONSE_AFIP],[INTENTO]) select
+'FUD' ,[CUIT_EMPRESA],[TIPODOC_CLIENTE],[NRODOC_CLIENTE],[AS_ID],[TIPO_COMPROBANTE],[PUNTO_VENTA],[NUMERO_COMPROBANTE],[FECHA_COMPROBANTE],[CONCEPTO_FACTURA],[MONEDA],l.[MONEDA_CTZ],[IMPORTE_TOTAL],[NETO_NOGRAVADO],[NETO_GRAVADO],[NETO_EXENTO],[IVA_TOTAL],[TRIBUTOS_TOTAL],l.[CAE],[FECHA_VENCIMIENTO],[CODIGO],[DESCRIPCION],[OBSERVACION],[EXCEPCION_WSAA],[EXCEPCION_WSFEV1],l.[RESULTADO],l.[ERR_MSG],[OBS],[XML_REQUEST_AFIP],[XML_RESPONSE_AFIP],@intento
+from fews_encabezado fenc
+	, [LQ5\LQ5].FAF_HIDROTERMIA.dbo.ast_fews_log l
+where fenc.id=@id
+	and cuit_empresa=fenc.cuit collate database_default
+	and convert(int, tipo_comprobante)=fenc.tipo_cbte
+	and convert(int, punto_venta)=fenc.punto_vta
+	and convert(int, numero_comprobante)=fenc.cbte_nro
 	
 	--por ahora no se usa, se envia un default ...
 	select 0 _codigo_, 'OK' _descripcion_, 'FINALIZADO' _observacion_

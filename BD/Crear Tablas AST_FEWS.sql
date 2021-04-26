@@ -1,21 +1,45 @@
-/****** Object:  Table [dbo].[AST_FEWS_LOG]    Script Date: 05/25/2016 10:40:21 ******/
-DROP TABLE [dbo].[AST_FEWS_LOG]
-GO
+-- /****** Object:  Table [dbo].[AST_FEWS_LOG]    Script Date: 05/25/2016 10:40:21 ******/
+-- DROP TABLE [dbo].[AST_FEWS_LOG]
+-- GO
 
-/****** Object:  Table [dbo].[AST_FEWS_LOG_IVA]    Script Date: 05/25/2016 10:40:21 ******/
-DROP TABLE [dbo].[AST_FEWS_LOG_IVA]
-GO
+-- /****** Object:  Table [dbo].[AST_FEWS_LOG_IVA]    Script Date: 05/25/2016 10:40:21 ******/
+-- DROP TABLE [dbo].[AST_FEWS_LOG_IVA]
+-- GO
 
-/****** Object:  Table [dbo].[AST_FEWS_LOG_TRIBUTOS]    Script Date: 05/25/2016 10:40:21 ******/
-DROP TABLE [dbo].[AST_FEWS_LOG_TRIBUTOS]
-GO
+-- /****** Object:  Table [dbo].[AST_FEWS_LOG_TRIBUTOS]    Script Date: 05/25/2016 10:40:21 ******/
+-- DROP TABLE [dbo].[AST_FEWS_LOG_TRIBUTOS]
+-- GO
 
-/****** Object:  Table [dbo].[AST_FEWS_LOG_DATOS_OPC]    Script Date: 05/25/2016 10:40:21 ******/
-DROP TABLE [dbo].[AST_FEWS_LOG_DATOS_OPC]
-GO
+-- /****** Object:  Table [dbo].[AST_FEWS_LOG_DATOS_OPC]    Script Date: 05/25/2016 10:40:21 ******/
+-- DROP TABLE [dbo].[AST_FEWS_LOG_DATOS_OPC]
+-- GO
 
-/****** Object:  Table [dbo].[AST_FEWS_LOG_CBTE_ASOC]    Script Date: 05/25/2016 10:40:21 ******/
-DROP TABLE [dbo].[AST_FEWS_LOG_CBTE_ASOC]
+-- /****** Object:  Table [dbo].[AST_FEWS_LOG_CBTE_ASOC]    Script Date: 05/25/2016 10:40:21 ******/
+-- DROP TABLE [dbo].[AST_FEWS_LOG_CBTE_ASOC]
+-- GO
+
+-- /****** Object:  Table [dbo].[AST_FEWS_LOG_PERIODO_ASOC]    Script Date: 05/25/2016 10:40:21 ******/
+-- DROP TABLE [dbo].[AST_FEWS_LOG_PERIODO_ASOC]
+-- GO
+
+/****** Object:  Table [dbo].[AST_FEWS_LOG_PERIODO_ASOC]    Script Date: 05/25/2016 10:40:21 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[AST_FEWS_LOG_PERIODO_ASOC](
+    [AS_ID] VARCHAR(20) NULL,
+    [CUIT_EMPRESA] VARCHAR(20) NULL,
+    [TIPO_COMPROBANTE] VARCHAR(3) NULL,
+    [PUNTO_VENTA] VARCHAR(10) NULL,
+    [NUMERO_COMPROBANTE] VARCHAR(20) NULL,
+	[FECHA_DESDE] [varchar](10) NULL,
+    [FECHA_HASTA] [varchar](10) NULL
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
 GO
 
 /****** Object:  Table [dbo].[AST_FEWS_LOG_CBTE_ASOC]    Script Date: 05/25/2016 10:40:21 ******/

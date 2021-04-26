@@ -39,7 +39,7 @@ public class ScheduledTaskFews {
 
 		String ejecuta2001 = dolProperties.getProperty("interfaz_2001");
 		String ejecuta2006 = dolProperties.getProperty("interfaz_2006");
-		String ejecuta3001 = dolProperties.getProperty("interfaz_3001");
+		String ejecuta3001 = dolProperties.getProperty("interfaz_4001");
 		String ejecuta9901 = dolProperties.getProperty("interfaz_9901");
 
 		if (ejecuta2001==null && ejecuta2006==null && ejecuta3001==null && ejecuta9901==null) {

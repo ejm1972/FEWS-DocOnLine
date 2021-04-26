@@ -17,6 +17,7 @@ import ar.com.coninf.doconline.model.dao.FewsComprobanteAsociadoDao;
 import ar.com.coninf.doconline.model.dao.FewsDatoOpcionalDao;
 import ar.com.coninf.doconline.model.dao.FewsEncabezadoDao;
 import ar.com.coninf.doconline.model.dao.FewsIvaDao;
+import ar.com.coninf.doconline.model.dao.FewsPeriodoAsociadoDao;
 import ar.com.coninf.doconline.model.dao.FewsQrDao;
 import ar.com.coninf.doconline.model.dao.FewsTributoDao;
 import ar.com.coninf.doconline.model.dao.FewsXmlDao;
@@ -29,11 +30,13 @@ import ar.com.coninf.doconline.rest.model.tx.ControlTransaccion;
 import ar.com.coninf.doconline.rest.model.tx.DatoOpcional;
 import ar.com.coninf.doconline.rest.model.tx.DatoQr;
 import ar.com.coninf.doconline.rest.model.tx.Iva;
+import ar.com.coninf.doconline.rest.model.tx.PeriodoComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.Tributo;
 import ar.com.coninf.doconline.shared.dto.FewsComprobanteAsociado;
 import ar.com.coninf.doconline.shared.dto.FewsDatoOpcional;
 import ar.com.coninf.doconline.shared.dto.FewsEncabezado;
 import ar.com.coninf.doconline.shared.dto.FewsIva;
+import ar.com.coninf.doconline.shared.dto.FewsPeriodoAsociado;
 import ar.com.coninf.doconline.shared.dto.FewsQr;
 import ar.com.coninf.doconline.shared.dto.FewsResultado;
 import ar.com.coninf.doconline.shared.dto.FewsTributo;
@@ -72,6 +75,10 @@ public class AutorizadorFews {
 	@Autowired
 	@Qualifier("fewsQrDao")
 	private FewsQrDao fewsQrDao;
+	
+	@Autowired
+	@Qualifier("fewsPeriodoAsociadoDao")
+	private FewsPeriodoAsociadoDao fewsPeriodoAsociadoDao;
 	
 	@Autowired
 	@Qualifier("dolProperties")
@@ -270,7 +277,8 @@ public class AutorizadorFews {
 			List<FewsTributo> listFewsTributo = fewsTributoDao.getListById(selected.getId());
 			List<FewsDatoOpcional> listFewsDatoOpcional = fewsDatoOpcionalDao.getListById(selected.getId());
 			List<FewsComprobanteAsociado> listFewsComprobanteAsociado = fewsComprobanteAsociadoDao.getListById(selected.getId());
-
+			List<FewsPeriodoAsociado> listFewsPeriodoAsociado = fewsPeriodoAsociadoDao.getListById(selected.getId());
+			
 			FewsXml fewsXml = fewsXmlDao.getById(selected.getId());
 			FewsQr fewsQr = fewsQrDao.getById(selected.getId());
 
@@ -301,7 +309,8 @@ public class AutorizadorFews {
 			Iva[] ivas = new Iva[listFewsIva.size()];
 			DatoOpcional[] datosOpcionales = new DatoOpcional[listFewsDatoOpcional.size()];
 			ComprobanteAsociado[] comprobantesAsociados = new ComprobanteAsociado[listFewsComprobanteAsociado.size()];
-
+			PeriodoComprobanteAsociado[] periodosAsociados = new PeriodoComprobanteAsociado[listFewsPeriodoAsociado.size()];
+			
 			logger.debug("Comprobante:"+selected.getTipoComprobante()+"-"+selected.getNumeroPuntoVenta()+"-"+selected.getNumeroComprobante());
 			logger.debug("Fecha:"+selected.getFechaCbte());
 			logger.debug("ImpTotal:"+selected.getImpTotal().toString());
@@ -376,6 +385,20 @@ public class AutorizadorFews {
 			sbDatoOpcional.append("]");
 			logger.debug("DatosOpcionales:"+sbDatoOpcional.toString());
 
+			StringBuilder sbPeriodoAsociado = new StringBuilder("[");
+			size = listFewsPeriodoAsociado.size();
+			for (int i = 0;  i < size; i++) {			
+				periodosAsociados[i] = new PeriodoComprobanteAsociado();
+				periodosAsociados[i].setFechaDesde( listFewsPeriodoAsociado.get(i).getFechaDesde() );
+				periodosAsociados[i].setFechaHasta( listFewsPeriodoAsociado.get(i).getFechaHasta() );
+				if (i>0) {
+					sbPeriodoAsociado.append(",");
+				}
+				sbPeriodoAsociado.append("{fechaDesde: "+periodosAsociados[i].getFechaDesde()+", fechaHasta: "+periodosAsociados[i].getFechaHasta()+"}");
+			}
+			sbPeriodoAsociado.append("]");
+			logger.debug("PeriodoComprobanteAsociado:"+sbPeriodoAsociado.toString());
+			
 			ResponseAutenticacion respI = new ResponseAutenticacion();
 			respI.setEsReintento(false);
 
@@ -418,7 +441,7 @@ public class AutorizadorFews {
 							impTotal, impTotConcNoGrav, impNeto, impIva, impTrib, impOpEx, 
 							fechaCbte, fechaVencPago, fechaServDesde, fechaServHasta, 
 							monedaId, monedaCtz, 
-							tributos, ivas, comprobantesAsociados, datosOpcionales);
+							tributos, ivas, comprobantesAsociados, datosOpcionales, periodosAsociados);
 
 					logger.debug("Ejecucion dolws.autorizarComprobante() de WS");
 

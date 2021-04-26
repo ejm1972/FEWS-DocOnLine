@@ -34,6 +34,7 @@ import ar.com.coninf.doconline.rest.model.tx.ControlTransaccion;
 import ar.com.coninf.doconline.rest.model.tx.DatoOpcional;
 import ar.com.coninf.doconline.rest.model.tx.DatoQr;
 import ar.com.coninf.doconline.rest.model.tx.Iva;
+import ar.com.coninf.doconline.rest.model.tx.PeriodoComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.Tributo;
 import ar.com.coninf.doconline.shared.dto.InterfazDto;
 import ar.com.coninf.doconline.shared.excepcion.ApplicationException;
@@ -95,7 +96,9 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 			Integer concepto, Integer tipoDoc, Long nroDoc, Integer tipoCbte, Integer ptoVta, Long nroCbte, 
 			BigDecimal impTotal, BigDecimal impTotConcNoGrav, BigDecimal impNeto, BigDecimal impIva, BigDecimal impTrib, BigDecimal impOpEx, 
 			String fechaCbte, String fechaVencPago, String fechaServDesde, String fechaServHasta,
-			String monedaId, BigDecimal monedaCtz, Tributo[] tributos, Iva[] ivas, ComprobanteAsociado[] comprobantesAsociados, DatoOpcional[] datosOpcionales)  {
+			String monedaId, BigDecimal monedaCtz, 
+			Tributo[] tributos, Iva[] ivas, ComprobanteAsociado[] comprobantesAsociados, 
+			DatoOpcional[] datosOpcionales, PeriodoComprobanteAsociado[] periodosAsociados)  {
 
 		RequestAutorizarComprobante datos = new RequestAutorizarComprobante();
 		
@@ -106,21 +109,19 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		try {
 
 			interfaz = interfazDao.getById(ctx.getInterfaz());
-			if(interfaz == null){					
+			if (interfaz == null) {					
 				throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
 			} else {
-				
 				if (ctx.getInterfaz().equals(9901)
 						|| ctx.getInterfaz().equals(9902) 
 						|| ctx.getInterfaz().equals(2001)
 						|| ctx.getInterfaz().equals(2002) 
 						|| ctx.getInterfaz().equals(2003)
-						|| ctx.getInterfaz().equals(2009)
 						|| ctx.getInterfaz().equals(2005)
 						|| ctx.getInterfaz().equals(2006)
 						|| ctx.getInterfaz().equals(2007)
 						|| ctx.getInterfaz().equals(2008)
-						|| ctx.getInterfaz().equals(3001)
+						|| ctx.getInterfaz().equals(2009)
 						|| ctx.getInterfaz().equals(4001)) {
 					datos.setCuit(interfaz.getCuitSuscripcion());
 				} else {
@@ -213,10 +214,18 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 			}
 		}
 		
+		for (int i = 0; periodosAsociados != null && i < periodosAsociados.length; i++) {
+			if (!(periodosAsociados[i]).toString().trim().equals("")) {
+			}
+		}
+		
 		datos.setTributos(tributos);
 		datos.setIvas(ivas);
-		datos.setComprobantesAsociados(comprobantesAsociados);
 		datos.setDatosOpcionales(datosOpcionales);
+		
+		//SOLO DEBE ENVIARSE COMPROBANTE ASOC O PERIODO ASOC
+		datos.setComprobantesAsociados(comprobantesAsociados);
+		datos.setPeriodoComprobanteAsociados(periodosAsociados);
 		
 		return autorizarComprobanteAyudante.hacer(ctx, datos);
 	}
@@ -226,14 +235,7 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		RequestConsultarUltimoComprobante datos = new RequestConsultarUltimoComprobante();
 		
 		datos.setControlTransaccion(ctx);
-		if (ctx.getInterfaz().equals(9902)) {
-			datos.setCuit("30710092792"); //Astrasud HOMO
-		} else if (ctx.getInterfaz().equals(9901)) {
-			datos.setCuit("20225925055"); //DEMO HOMO
-		} else if (ctx.getInterfaz().equals(1003)) {
-			datos.setCuit("30568506665"); //Panamer PROD
-		} else {
-			
+		
 			//ACA SE TIENE QUE RECUPERAR EL CUIT DE LA SUSCRIPCION
 			InterfazDto interfaz = null;
 			try {
@@ -243,15 +245,16 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 					throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
 				} else {
 					
-					if (ctx.getInterfaz().equals(2001)
+					if (ctx.getInterfaz().equals(9901)
+							|| ctx.getInterfaz().equals(9902) 
+							|| ctx.getInterfaz().equals(2001)
 							|| ctx.getInterfaz().equals(2002) 
 							|| ctx.getInterfaz().equals(2003)
-							|| ctx.getInterfaz().equals(2009)
 							|| ctx.getInterfaz().equals(2005)
 							|| ctx.getInterfaz().equals(2006)
 							|| ctx.getInterfaz().equals(2007)
 							|| ctx.getInterfaz().equals(2008)
-							|| ctx.getInterfaz().equals(3001)
+							|| ctx.getInterfaz().equals(2009)
 							|| ctx.getInterfaz().equals(4001)) {
 						datos.setCuit(interfaz.getCuitSuscripcion());
 					} else {
@@ -263,8 +266,6 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 				e.printStackTrace();
 				throw new ApplicationException(e);
 			}
-
-		}
 
 		datos.setTipoCbte(tipoCbte);
 		datos.setPtoVta(ptoVta);
@@ -278,13 +279,6 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		RequestConsultarComprobante datos = new RequestConsultarComprobante();
 		
 		datos.setControlTransaccion(ctx);
-		if (ctx.getInterfaz().equals(9902)) {
-			datos.setCuit("30710092792"); //Astrasud HOMO
-		} else if (ctx.getInterfaz().equals(9901)) {
-			datos.setCuit("20225925055"); //DEMO HOMO
-		} else if (ctx.getInterfaz().equals(1003)) {
-			datos.setCuit("30568506665"); //Panamer PROD
-		} else {
 			
 			//ACA SE TIENE QUE RECUPERAR EL CUIT DE LA SUSCRIPCION
 			InterfazDto interfaz = null;
@@ -295,14 +289,16 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 					throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
 				} else {
 					
-					if (ctx.getInterfaz().equals(2001)
+					if (ctx.getInterfaz().equals(9901)
+							|| ctx.getInterfaz().equals(9902) 
+							|| ctx.getInterfaz().equals(2001)
 							|| ctx.getInterfaz().equals(2002) 
 							|| ctx.getInterfaz().equals(2003)
-							|| ctx.getInterfaz().equals(2009)
 							|| ctx.getInterfaz().equals(2005)
 							|| ctx.getInterfaz().equals(2006)
 							|| ctx.getInterfaz().equals(2007)
 							|| ctx.getInterfaz().equals(2008)
+							|| ctx.getInterfaz().equals(2009)
 							|| ctx.getInterfaz().equals(4001)) {
 						datos.setCuit(interfaz.getCuitSuscripcion());
 					} else {
@@ -315,8 +311,6 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 				throw new ApplicationException(e);
 			}
 
-		}
-
 		datos.setTipoCbte(tipoCbte);
 		datos.setPtoVta(ptoVta);
 		datos.setCbte(cbte);
@@ -326,9 +320,6 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 
 	@Override
 	public ResponseActualizarItemComprobante actualizarItemComprobante(RequestActualizarItemComprobante request) {
-
-		// TODO Auto-generated method stub
-
 		ResponseActualizarItemComprobante resp = new ResponseActualizarItemComprobante();
 		resp.setEsReintento(false);
 		resp.cargarError(new Response(ErrorEnum.SIN_ERROR));
@@ -337,9 +328,6 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 
 	@Override
 	public ResponseConsultarPadronLocal consultarPadronLocal(RequestConsultarPadronLocal request) {
-
-		// TODO Auto-generated method stub
-
 		ResponseConsultarPadronLocal resp = new ResponseConsultarPadronLocal();
 		resp.setEsReintento(false);
 		resp.cargarError(new Response(ErrorEnum.SIN_ERROR));
@@ -348,9 +336,6 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 
 	@Override
 	public ResponseConsultarPadronOnline consultarPadronOnline(RequestConsultarPadronOnline request) {
-
-		// TODO Auto-generated method stub
-
 		ResponseConsultarPadronOnline resp = new ResponseConsultarPadronOnline();
 		resp.setEsReintento(false);
 		resp.cargarError(new Response(ErrorEnum.SIN_ERROR));
