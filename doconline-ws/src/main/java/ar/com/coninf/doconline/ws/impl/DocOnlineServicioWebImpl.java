@@ -122,7 +122,9 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 						|| ctx.getInterfaz().equals(2007)
 						|| ctx.getInterfaz().equals(2008)
 						|| ctx.getInterfaz().equals(2009)
-						|| ctx.getInterfaz().equals(4001)) {
+						|| ctx.getInterfaz().equals(4001)
+						|| ctx.getInterfaz().equals(5001)
+						|| ctx.getInterfaz().equals(5002)) {
 					datos.setCuit(interfaz.getCuitSuscripcion());
 				} else {
 					throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
@@ -180,6 +182,9 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 			}
 			sumaTributos = sumaTributos.add(tributos[i].getTributoImporte());
 		}
+		if (sumaTributos.equals(BigDecimal.ZERO) && !datos.getImpTrib().equals(BigDecimal.ZERO)) {
+			throw new ApplicationException(ErrorEnum.ERROR_DIFERENCIA_TOTAL_TRIBUTO, "error.ws-diferencia_total_tributo");
+		}
 		if (!sumaTributos.equals(datos.getImpTrib()) && iTributo >= 0) {
 			BigDecimal nuevaPercepcion = tributos[iTributo].getTributoImporte().add(datos.getImpTrib().subtract(sumaTributos));
 			tributos[iTributo].setTributoImporte(nuevaPercepcion);
@@ -195,7 +200,6 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 				}
 			}
 		}
-		
 		if (sumaIvas.equals(BigDecimal.ZERO) && !datos.getImpIva().equals(BigDecimal.ZERO)) {
 			throw new ApplicationException(ErrorEnum.ERROR_DIFERENCIA_TOTAL_IVA, "error.ws-diferencia_total_iva");
 		}
@@ -255,7 +259,9 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 							|| ctx.getInterfaz().equals(2007)
 							|| ctx.getInterfaz().equals(2008)
 							|| ctx.getInterfaz().equals(2009)
-							|| ctx.getInterfaz().equals(4001)) {
+							|| ctx.getInterfaz().equals(4001)
+							|| ctx.getInterfaz().equals(5001)
+							|| ctx.getInterfaz().equals(5002)) {
 						datos.setCuit(interfaz.getCuitSuscripcion());
 					} else {
 						throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
@@ -299,7 +305,9 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 							|| ctx.getInterfaz().equals(2007)
 							|| ctx.getInterfaz().equals(2008)
 							|| ctx.getInterfaz().equals(2009)
-							|| ctx.getInterfaz().equals(4001)) {
+							|| ctx.getInterfaz().equals(4001)
+							|| ctx.getInterfaz().equals(5001)
+							|| ctx.getInterfaz().equals(5002)) {
 						datos.setCuit(interfaz.getCuitSuscripcion());
 					} else {
 						throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");

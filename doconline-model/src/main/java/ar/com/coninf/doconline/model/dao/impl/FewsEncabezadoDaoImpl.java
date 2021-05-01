@@ -37,11 +37,11 @@ public class FewsEncabezadoDaoImpl extends GenericDaoImpl<FewsEncabezado> implem
 	}
 
 	@Override
-	public List<FewsResultado> updateLog(Long id) throws SQLException {
+	public List<FewsResultado> updateLog(Long id, Long interfaz) throws SQLException {
 
-		String destino = dolProperties.getProperty("actualizador_log");
+		String destino = dolProperties.getProperty("actualizador_log_"+interfaz.toString());
 		String sql = "exec " + destino + " ?";
-		logger.debug("Ejecucion fewsEncabezadoDaoImpl.updateLog() - "+ sql + " -> " + id.toString());
+		logger.debug("Ejecucion fewsEncabezadoDaoImpl.updateLog() - "+ sql + " -> " + id.toString()+","+interfaz.toString());
 
 		List<FewsResultado> fewsList = getJdbcTemplate().query(sql,
 				new GenericRowMapper<FewsResultado>(FewsResultado.class), 
@@ -51,11 +51,11 @@ public class FewsEncabezadoDaoImpl extends GenericDaoImpl<FewsEncabezado> implem
 	}
 
 	@Override
-	public List<FewsResultado> importLog() throws SQLException {
+	public List<FewsResultado> importLog(Long interfaz) throws SQLException {
 
-		String destino = dolProperties.getProperty("importador_log");
+		String destino = dolProperties.getProperty("importador_log_"+interfaz.toString());
 		String sql = "exec " + destino;
-		logger.debug("Ejecucion fewsEncabezadoDaoImpl.importLog() - " + sql);
+		logger.debug("Ejecucion fewsEncabezadoDaoImpl.importLog() - " + sql + " -> " + interfaz.toString());
 
 		List<FewsResultado> fewsList = getJdbcTemplate().query(sql,
 				new GenericRowMapper<FewsResultado>(FewsResultado.class), 

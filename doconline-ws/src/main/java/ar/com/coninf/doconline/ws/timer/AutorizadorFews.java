@@ -240,7 +240,7 @@ public class AutorizadorFews {
 	
 	}
 
-	public void procesarPendientes() {
+	public void procesarPendientes(List<Long> interfaces) {
 
 		this.log = new LogTransaccionContenido();
 
@@ -248,17 +248,19 @@ public class AutorizadorFews {
 
 			logger.debug("Ejecucion AutorizadorFews.procesarPendientes()");
 			
-			fewsEncabezadoDao.importLog();
-			logger.debug("Fin Ejecucion fewsEncabezadoDao.importLog()");
-			
-			List<FewsEncabezado> pendientes = fewsEncabezadoDao.getFewsPendiente((long) -1);
-			logger.debug("Fin Ejecucion fewsEncabezadoDao.getFewsPendiente()");
-			
-			for (int i=0; i < pendientes.size(); i++) {
-
-				autorizarComprobante(pendientes.get(i));
-				logger.debug("Fin Ejecucion AutorizadorFews.autorizarComprobante()");
+			for (Long interfaz : interfaces) {
+				fewsEncabezadoDao.importLog(interfaz);
+				logger.debug("Fin Ejecucion fewsEncabezadoDao.importLog()="+interfaz);
 				
+				List<FewsEncabezado> pendientes = fewsEncabezadoDao.getFewsPendiente((long) -1);
+				logger.debug("Fin Ejecucion fewsEncabezadoDao.getFewsPendiente()");
+				
+				for (int i=0; i < pendientes.size(); i++) {
+	
+					autorizarComprobante(pendientes.get(i));
+					logger.debug("Fin Ejecucion AutorizadorFews.autorizarComprobante()="+pendientes.get(i).getId().toString()+","+pendientes.get(i).getIdInterfaz().toString());
+					
+				}
 			}
 
 		} catch (Exception e) {
@@ -538,8 +540,8 @@ public class AutorizadorFews {
 
 					fewsEncabezadoDao.update(selected);
 
-					fewsEncabezadoDao.updateLog(selected.getId());
-					logger.debug("Fin Ejecucion fewsEncabezadoDao.updateLog()");
+					fewsEncabezadoDao.updateLog(selected.getId(), selected.getIdInterfaz());
+					logger.debug("Fin Ejecucion fewsEncabezadoDao.updateLog()="+selected.getId().toString()+","+selected.getIdInterfaz().toString());
 
 				} catch (Exception e) {
 
@@ -560,7 +562,7 @@ public class AutorizadorFews {
 
 				fewsXmlDao.update(fewsXml);
 
-				fewsEncabezadoDao.updateLog(selected.getId());
+				fewsEncabezadoDao.updateLog(selected.getId(), selected.getIdInterfaz());
 				logger.debug("Fin Ejecucion fewsEncabezadoDao.updateLog()");
 
 			}

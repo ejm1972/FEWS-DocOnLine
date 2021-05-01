@@ -1,6 +1,8 @@
 package ar.com.coninf.doconline.ws.timer;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -14,6 +16,8 @@ public class ScheduledTaskFews {
 	private Logger logger = Logger.getLogger(this.getClass());
 
 	private int countScheduledTaskFews;
+	
+	private List<Long> interfaces;
 
 	@Autowired
 	ThreadPoolTaskScheduler poolSchedulerFews;
@@ -39,10 +43,11 @@ public class ScheduledTaskFews {
 
 		String ejecuta2001 = dolProperties.getProperty("interfaz_2001");
 		String ejecuta2006 = dolProperties.getProperty("interfaz_2006");
-		String ejecuta3001 = dolProperties.getProperty("interfaz_4001");
-		String ejecuta9901 = dolProperties.getProperty("interfaz_9901");
+		String ejecuta4001 = dolProperties.getProperty("interfaz_4001");
+		String ejecuta5001 = dolProperties.getProperty("interfaz_5001");
+		String ejecuta5002 = dolProperties.getProperty("interfaz_5002");
 
-		if (ejecuta2001==null && ejecuta2006==null && ejecuta3001==null && ejecuta9901==null) {
+		if (ejecuta2001==null && ejecuta2006==null && ejecuta4001==null && ejecuta5001==null && ejecuta5002==null) {
 
 			logger.info("***");
 			logger.info("*** scheduledTaskFews " + poolSchedulerFews.getThreadNamePrefix() + "* shutdown *** " + new Date() + " - " + countScheduledTaskFews);
@@ -53,6 +58,20 @@ public class ScheduledTaskFews {
 			poolSchedulerFews.destroy();
 
 		} else {
+			
+			if (interfaces==null) {
+				interfaces = new ArrayList<>();
+				if (ejecuta2001!=null)
+					interfaces.add(2001L);
+				if (ejecuta2006!=null)
+					interfaces.add(2006L);
+				if (ejecuta4001!=null)
+					interfaces.add(4001L);
+				if (ejecuta5001!=null)
+					interfaces.add(5001L);
+				if (ejecuta5002!=null)
+					interfaces.add(5002L);
+			}
 
 			ApplicationException applicationException = null;
 
@@ -63,7 +82,7 @@ public class ScheduledTaskFews {
 				logger.info("*** Ini scheduledTaskFews *** " + new Date() + " - " + countScheduledTaskFews);
 				logger.info("***");
 
-				autorizadorFews.procesarPendientes();
+				autorizadorFews.procesarPendientes(interfaces);
 				logger.info("Fin Ejecucion procesarPendientes()");
 
 				autorizadorFews.logTimerSql();
