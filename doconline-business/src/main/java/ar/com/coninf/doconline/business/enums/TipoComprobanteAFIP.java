@@ -26,7 +26,17 @@ public enum TipoComprobanteAFIP {
 	reciboC("15","Recibo C","RC"),
 	notaVentaContadoA("5","N. V. Contado A","VA"),
 	notaVentaContadoB("10","N. V. Contado B","VB"),
-	notaVentaContadoC("16","N. V. Contado C","VC");
+	notaVentaContadoC("16","N. V. Contado C","VC"),
+	facturaE("19","Factura E","FE"),
+	notaDebitoE("20","Nota de Debito E","NDE"),
+	notaCreditoE("21","Nota de Credito E","NCE"),
+	facturaEPS("22","Factura E Permiso Simplificado","FEPS"),
+	facturaM("51","Factura M","FM"),
+	notaDebitoM("52","Nota de Debito M","NDM"),
+	notaCreditoM("53","Nota de Credito A","NCM"),
+	reciboM("54","Recibo M","RM"),
+	notaVentaContadoM("55","N. V. Contado M","VM")
+	;
 	
 	private String cod;
 	private String desc;
