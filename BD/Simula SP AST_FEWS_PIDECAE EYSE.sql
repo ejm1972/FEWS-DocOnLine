@@ -7,6 +7,8 @@ drop table #AST_FEWS_LOG_TRIBUTOS
 drop table #AST_FEWS_LOG_DATOS_OPC
 drop table #AST_FEWS_LOG_CBTE_ASOC
 drop table #AST_FEWS_LOG_PERIODO_ASOC
+drop table #ITEMS
+drop table #APLICA
 go
 
 select * into #AST_FEWS_LOG              from AST_FEWS_LOG              where 1=2
@@ -16,9 +18,17 @@ select * into #AST_FEWS_LOG_DATOS_OPC    from AST_FEWS_LOG_DATOS_OPC    where 1=
 select * into #AST_FEWS_LOG_CBTE_ASOC	 from AST_FEWS_LOG_CBTE_ASOC    where 1=2
 select * into #AST_FEWS_LOG_PERIODO_ASOC from AST_FEWS_LOG_PERIODO_ASOC where 1=2
 
+USE [FINN_EYSE]
+GO
+/****** Object:  StoredProcedure [dbo].[AST_FEWS_PIDECAE]    Script Date: 05/06/2021 08:56:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 /*
 
---- vinculación al servidor de la consola web
+--- vinculaciÃ³n al servidor de la consola web
 
 USE [master]
 EXEC master.dbo.sp_addlinkedserver @server = N'FINNGS-TEST-01', @srvproduct=N'SQL Server'
@@ -82,15 +92,23 @@ delete FROM #AST_FEWS_LOG_TRIBUTOS
 select * from asiento where as_numero=3103
  */
 
-  
-declare @@AS_ID INT = 797672 --797685
-declare @@FLAG BIT = 1
+/*
+select TIPO_COMPROBANTE=(select comprt_alias from comprobantetipo where comprobantetipo.COMPRT_ID=
+				(select comprt_id from Talonario where talonario.TAL_ID=
+				(SELECT tal_id FROM Documentotipotalonario where DOC_ID=asiento.DOC_ID and cf_id=
+				(select cf_id from Tercero where tercero.te_id=asiento.TE_ID)))), as_id
+from asiento 
+where as_numerodoc = 'A000500000001'
+*/
 
+declare @@AS_ID INT = 720612
+declare @@FLAG BIT = 1   
+
+BEGIN    
 DECLARE @R VARCHAR(100)
 SET @R='0'
 DECLARE  @FLAG BIT
 SET @FLAG=@@FLAG
-
 
 
 IF @FLAG=1
@@ -150,7 +168,7 @@ GRUPO ='FAF_'+CAST((select EMPR_ID from CIRCUITOCONTABLE WHERE CC_ID=
 			SET @EXPOFISCAL=(SELECT EXFISC_ID FROM ExposicionFiscal WHERE EXFISC_aLIAS='FEWS')
 
 			---		
-			---   RECOPILA INFORMACIÓN DE ITEMS DE LA FACTURA
+			---   RECOPILA INFORMACIÃ“N DE ITEMS DE LA FACTURA
 			---
 			CREATE TABLE #ITEMS(
 			PR_ID INT,
@@ -295,39 +313,41 @@ GRUPO ='FAF_'+CAST((select EMPR_ID from CIRCUITOCONTABLE WHERE CC_ID=
 	select * from #AST_FEWS_LOG		 where AS_ID=@@AS_ID 
 
 ------------------------------------------------------------------------------------------------------ caso eyse
-update #AST_FEWS_LOG
+	update #AST_FEWS_LOG
 set NETO_NOGRAVADO=IMPORTE_TOTAL
 from #AST_FEWS_LOG
 where
-	cast(IMPORTE_TOTAL as money)+ cast(neto_nogravado as money)+cast(NETO_GRAVADO as money)+ cast(NETO_EXENTO as money)+
-	cast(IVA_TOTAL as money)+ cast(TRIBUTOS_TOTAL as money) = cast(IMPORTE_TOTAL as money)
-	and TIPO_COMPROBANTE in ('02','07')
-	and AS_ID=@@AS_ID
-----------------------------------------------------------------------------------------------------------
+cast(IMPORTE_TOTAL as money)+ cast(neto_nogravado as money)+cast(NETO_GRAVADO as money)+ cast(NETO_EXENTO as money)+
+ cast(IVA_TOTAL as money)+ cast(TRIBUTOS_TOTAL as money) = cast(IMPORTE_TOTAL as money)
+ and TIPO_COMPROBANTE in ('02','07', '202')
+ and AS_ID=@@AS_ID
+ ----------------------------------------------------------------------------------------------------------
 			--- 
 			--- INSERTA EN #AST_FEWS_LOG_IVA 
 			---
 
-			INSERT INTO #AST_FEWS_LOG_IVA(
-				AS_ID,
-				CUIT_EMPRESA,
-				TIPO_COMPROBANTE,
-				PUNTO_VENTA,
-				NUMERO_COMPROBANTE,
-				PORCENTAJE,
-				NETO_GRAVADO,
-				IMPORTE)					
+			 INSERT INTO #AST_FEWS_LOG_IVA(
+					AS_ID,
+					CUIT_EMPRESA,
+					TIPO_COMPROBANTE,
+					PUNTO_VENTA,
+					NUMERO_COMPROBANTE,
+					PORCENTAJE,
+					NETO_GRAVADO,
+					IMPORTE)
+					
 			SELECT 
 					AS_ID=@@AS_ID,
 					CUIT_EMPRESA= @EmpresaCuit,
-					TIPO_COMPROBANTE=AST_FEWS_LOG.TIPO_COMPROBANTE,
-					PUNTO_VENTA=AST_FEWS_LOG.PUNTO_VENTA,
-					NUMERO_COMPROBANTE=AST_FEWS_LOG.NUMERO_COMPROBANTE,
+					TIPO_COMPROBANTE=#AST_FEWS_LOG.TIPO_COMPROBANTE,
+					PUNTO_VENTA=#AST_FEWS_LOG.PUNTO_VENTA,
+					NUMERO_COMPROBANTE=#AST_FEWS_LOG.NUMERO_COMPROBANTE,
 					PORCENTAJE=#ITEMS.TI_PORCENTAJE,
 					NETO_GRAVADO=ISNULL((SELECT SUM(i.GRAVADO) FROM #ITEMS as i where i.TI_PORCENTAJE=#items.ti_porcentaje),0),
-					IMPORTE=#ITEMS.IMPORTE					
-			FROM #ITEMS, #AST_FEWS_LOG as AST_FEWS_LOG WHERE
-			AST_FEWS_LOG.AS_ID=@@AS_ID AND 
+					IMPORTE=#ITEMS.IMPORTE
+					
+			FROM #ITEMS, #AST_FEWS_LOG WHERE
+			#AST_FEWS_LOG.AS_ID=@@AS_ID AND 
 			#ITEMS.EXFISC_CONCEPTONOMBRE='IVA' AND
 			#ITEMS.TI_PORCENTAJE<>0 
 			and #ITEMS.IMPORTE<>0
@@ -345,6 +365,7 @@ where
 						PORCENTAJE, -- FORMATO 0.2100
 						NETO_GRAVADO,
 						IMPORTE)
+						
 			SELECT 
 					AS_ID=@@AS_ID,
 					CUIT_EMPRESA= @EmpresaCuit,
@@ -371,7 +392,7 @@ where
 			
 				
 				
-		--------- TABLAS DE FACTURA DE CRÈDITO  #AST_FEWS_LOG_DATOS_OPC
+		--------- TABLAS DE FACTURA DE CRÃˆDITO  #AST_FEWS_LOG_DATOS_OPC
 		
 			/*		
 			
@@ -506,7 +527,7 @@ where
 		WHERE 
 			#AST_FEWS_LOG.AS_ID=@@AS_ID
 			AND  TIPO_COMPROBANTE IN ( 201,203,208,202,207)
-		------------------------------------------------ RESOLUCIÓN PARA FCE,M VIGENTE A PARTIR DEL 1-4-2021
+		------------------------------------------------ RESOLUCIÃ“N PARA FCE,M VIGENTE A PARTIR DEL 1-4-2021
 		UNION ALL
 				Select 
 			@@AS_ID,
@@ -537,7 +558,7 @@ where
 			#AST_FEWS_LOG.AS_ID=@@AS_ID 
 			AND   TIPO_COMPROBANTE IN (201,206)
 		
-		--------- TABLAS DE FACTURA DE CRÈDITO SOLAMENTE NC/ND
+		--------- TABLAS DE FACTURA DE CRÃˆDITO SOLAMENTE NC/ND
 		
 		create table #aplica(
 				as_id_aplica INT,
@@ -630,9 +651,9 @@ where
 	
 	--------------------------------------------------------------------------------------------------------------------
 	
-	
+	-- select * from comprobantetipo
 		
-		IF (SELECT ISNULL(TIPO_COMPROBANTE,0) FROM #AST_FEWS_LOG WHERE #AST_FEWS_LOG.AS_ID=@@AS_ID  AND TIPO_COMPROBANTE IN (03, 07, 08,203,208,202,207)) <>0 -- TABLAS DE FACTURA DE CRÈDITO
+		IF (SELECT ISNULL(TIPO_COMPROBANTE,0) FROM #AST_FEWS_LOG WHERE #AST_FEWS_LOG.AS_ID=@@AS_ID  AND TIPO_COMPROBANTE IN (03, 07, 08)) <>0 -- TABLAS DE FACTURA DE CRÃˆDITO
 			INSERT INTO #AST_FEWS_LOG_CBTE_ASOC(
 				AS_ID,
 				CUIT_EMPRESA,
@@ -660,10 +681,68 @@ where
 			FROM #AST_FEWS_LOG , #aplica
 			WHERE 
 			#AST_FEWS_LOG.AS_ID=@@AS_ID 
-			AND  TIPO_COMPROBANTE IN (03, 08,203,208,202,207)
-			and TIPO_COMPROBANTE_ASOC in (06, 07, 08, 09, 10, 35, 40, 61, 64, 88, 991)
+			AND  TIPO_COMPROBANTE IN (03, 07, 08)
+			and TIPO_COMPROBANTE_ASOC in (01,06, 07, 08, 09, 10, 35, 40, 61, 64, 88, 991)
+			
+-------------------------------------------------------------------------------------------------------------------------ND MIPYME EYSE
+		IF (SELECT ISNULL(TIPO_COMPROBANTE,0) FROM #AST_FEWS_LOG WHERE #AST_FEWS_LOG.AS_ID=@@AS_ID  AND TIPO_COMPROBANTE IN (202,207)) <>0 -- TABLAS DE FACTURA DE CRÃˆDITO
+			INSERT INTO #AST_FEWS_LOG_CBTE_ASOC(
+				AS_ID,
+				CUIT_EMPRESA,
+				TIPO_COMPROBANTE,
+				PUNTO_VENTA,
+				NUMERO_COMPROBANTE,
+				TIPO_COMPROBANTE_ASOC,
+				PUNTO_VENTA_ASOC,
+				NUMERO_COMPROBANTE_ASOC,
+				CUIT_ASOC,
+				FECHA_COMPROBANTE_ASOC)
+				
+				/*
+							 TIPO_COMPROBANTE_asoc =isnull((select isnull(comprt_alias,'01') from comprobantetipo where comprobantetipo.COMPRT_ID=
+				(select comprt_id from Talonario where talonario.TAL_ID=
+				(SELECT tal_id FROM Documentotipotalonario where DOC_ID=#aplica.DOC_ID and cf_id=
+				(select cf_id from Tercero where tercero.te_id=#aplica.TE_ID)))),'01'),
+				--select * from documentotipo where doc_nombre like '%agsf%'
+				PUNTO_VENTA_asoc=substring((select ASIENTO.AS_NUMERODOC from Asiento where asiento.AS_ID= #aplica.as_id_aplica),2,4),
+				NUMERO_COMPROBANTE_asoc=RIGHT((select ASIENTO.AS_NUMERODOC from Asiento where asiento.AS_ID= #aplica.as_id_aplica),8),
+				CUIT_ASOC=(SELECT TE_CUIT FROM TERCERO WHERE TE_ID =(select ASIENTO.TE_ID from Asiento where asiento.AS_ID= #aplica.as_id_aplica)),
+				FECHA_COMPROBANTE_ASOC =(select CONVERT(VARCHAR(8),Asiento.as_FECHA,112) from Asiento where asiento.AS_ID= #aplica.as_id_aplica)
+				*/
+			
+			SELECT top 1
+				#AST_FEWS_LOG.AS_ID,
+				CUIT_EMPRESA,
+				TIPO_COMPROBANTE,
+				PUNTO_VENTA,
+				NUMERO_COMPROBANTE,
+				TIPO_COMPROBANTE_ASOC=isnull((select isnull(comprt_alias,'01') from comprobantetipo where comprobantetipo.COMPRT_ID=
+				(select comprt_id from Talonario where talonario.TAL_ID=
+				(SELECT tal_id FROM Documentotipotalonario where DOC_ID=A.DOC_ID and cf_id=
+				(select cf_id from Tercero where tercero.te_id=A.TE_ID)))),'01'),
+				PUNTO_VENTA_ASOC=substring(A.AS_NumeroDoc,2,4),
+				NUMERO_COMPROBANTE_ASOC=RIGHT(A.AS_NUMERODOC,8),
+				CUIT_ASOC=(SELECT TE_CUIT FROM TERCERO WHERE TE_ID =(select ASIENTO.TE_ID from Asiento where asiento.AS_ID= A.AS_ID)),
+				FECHA_COMPROBANTE_ASOC=(select CONVERT(VARCHAR(8),Asiento.as_FECHA,112) from Asiento where asiento.AS_ID= A.AS_ID)
+			
+			FROM #AST_FEWS_LOG , ASIENTO, Asiento AS A
+			WHERE 
+			#AST_FEWS_LOG.AS_ID=@@AS_ID 
+			AND  TIPO_COMPROBANTE IN (202,207)
+			and -----TIPO_COMPROBANTE_ASOC 
+			isnull((select isnull(comprt_alias,'01') from comprobantetipo where comprobantetipo.COMPRT_ID=
+				(select comprt_id from Talonario where talonario.TAL_ID=
+				(SELECT tal_id FROM Documentotipotalonario where DOC_ID=A.DOC_ID and cf_id=
+				(select cf_id from Tercero where tercero.te_id=A.TE_ID)))),'01')
+			
+			in (201, 203, 206, 208)
+			AND #AST_FEWS_LOG.AS_ID=ASIENTO.AS_ID
+			----------------------------------------------- BUSCA EL ENLACE CON LOS CAMPOS ADICIONALES DE EYSE
+			AND asiento.DocumentoAsociadoTipo=a.DOC_ID
+            and cast(asiento.DocumentoAsociadoNro as int)=a.as_numero
 			
 	
+		
 	
 	
 	
@@ -701,3 +780,16 @@ where
 
 						
 	END
+
+
+END
+--ELSE 
+select 0
+end
+
+select '#AST_FEWS_LOG',*				FROM #AST_FEWS_LOG				WHERE AS_ID=@@AS_ID
+select '#AST_FEWS_LOG_IVA',*			FROM #AST_FEWS_LOG_IVA			WHERE AS_ID=@@AS_ID
+select '#AST_FEWS_LOG_TRIBUTOS',*		FROM #AST_FEWS_LOG_TRIBUTOS		WHERE AS_ID=@@AS_ID
+select '#AST_FEWS_LOG_CBTE_ASOC',*		FROM #AST_FEWS_LOG_CBTE_ASOC	WHERE AS_ID=@@AS_ID
+select '#AST_FEWS_LOG_DATOS_OPC',*		FROM #AST_FEWS_LOG_DATOS_OPC	WHERE AS_ID=@@AS_ID	
+select '#AST_FEWS_LOG_PERIODO_ASOC',*	FROM #AST_FEWS_LOG_PERIODO_ASOC	WHERE AS_ID=@@AS_ID

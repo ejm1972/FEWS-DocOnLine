@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import ar.com.coninf.doconline.business.facade.AutorizarComprobanteFacade;
+import ar.com.coninf.doconline.business.facade.AutorizarComprobanteExportacionFacade;
 import ar.com.coninf.doconline.rest.model.request.RequestAutorizarComprobanteExportacion;
 import ar.com.coninf.doconline.rest.model.response.Response;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutorizarComprobanteExportacion;
