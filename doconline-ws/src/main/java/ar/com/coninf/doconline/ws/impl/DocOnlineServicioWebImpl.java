@@ -17,9 +17,11 @@ import ar.com.coninf.doconline.rest.model.request.RequestActualizarItemComproban
 import ar.com.coninf.doconline.rest.model.request.RequestAutorizarComprobante;
 import ar.com.coninf.doconline.rest.model.request.RequestAutorizarComprobanteExportacion;
 import ar.com.coninf.doconline.rest.model.request.RequestConsultarComprobante;
+import ar.com.coninf.doconline.rest.model.request.RequestConsultarComprobanteExportacion;
 import ar.com.coninf.doconline.rest.model.request.RequestConsultarPadronLocal;
 import ar.com.coninf.doconline.rest.model.request.RequestConsultarPadronOnline;
 import ar.com.coninf.doconline.rest.model.request.RequestConsultarUltimoComprobante;
+import ar.com.coninf.doconline.rest.model.request.RequestConsultarUltimoComprobanteExportacion;
 import ar.com.coninf.doconline.rest.model.request.RequestGenerarQr;
 import ar.com.coninf.doconline.rest.model.response.Response;
 import ar.com.coninf.doconline.rest.model.response.ResponseActualizarItemComprobante;
@@ -27,9 +29,11 @@ import ar.com.coninf.doconline.rest.model.response.ResponseAutenticacion;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutorizarComprobante;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutorizarComprobanteExportacion;
 import ar.com.coninf.doconline.rest.model.response.ResponseConsultarComprobante;
+import ar.com.coninf.doconline.rest.model.response.ResponseConsultarComprobanteExportacion;
 import ar.com.coninf.doconline.rest.model.response.ResponseConsultarPadronLocal;
 import ar.com.coninf.doconline.rest.model.response.ResponseConsultarPadronOnline;
 import ar.com.coninf.doconline.rest.model.response.ResponseConsultarUltimoComprobante;
+import ar.com.coninf.doconline.rest.model.response.ResponseConsultarUltimoComprobanteExportacion;
 import ar.com.coninf.doconline.rest.model.response.ResponseGenerarQr;
 import ar.com.coninf.doconline.rest.model.tx.ComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.ControlTransaccion;
@@ -37,6 +41,7 @@ import ar.com.coninf.doconline.rest.model.tx.DatoOpcional;
 import ar.com.coninf.doconline.rest.model.tx.DatoQr;
 import ar.com.coninf.doconline.rest.model.tx.Iva;
 import ar.com.coninf.doconline.rest.model.tx.PeriodoComprobanteAsociado;
+import ar.com.coninf.doconline.rest.model.tx.Permiso;
 import ar.com.coninf.doconline.rest.model.tx.Tributo;
 import ar.com.coninf.doconline.shared.dto.InterfazDto;
 import ar.com.coninf.doconline.shared.excepcion.ApplicationException;
@@ -46,7 +51,9 @@ import ar.com.coninf.doconline.ws.ayudante.AutenticacionDatos;
 import ar.com.coninf.doconline.ws.ayudante.AutorizarComprobanteAyudante;
 import ar.com.coninf.doconline.ws.ayudante.AutorizarComprobanteExportacionAyudante;
 import ar.com.coninf.doconline.ws.ayudante.ConsultarComprobanteAyudante;
+import ar.com.coninf.doconline.ws.ayudante.ConsultarComprobanteExportacionAyudante;
 import ar.com.coninf.doconline.ws.ayudante.ConsultarUltimoComprobanteAyudante;
+import ar.com.coninf.doconline.ws.ayudante.ConsultarUltimoComprobanteExportacionAyudante;
 import ar.com.coninf.doconline.ws.ayudante.GenerarQrAyudante;
 import ar.com.coninf.doconline.ws.ayudante.SesionDatos;
 
@@ -80,6 +87,14 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 	@Autowired
 	@Qualifier("ayudante.autorizarComprobanteExportacionAyudante")
 	private AutorizarComprobanteExportacionAyudante autorizarComprobanteExportacionAyudante;
+	
+	@Autowired
+	@Qualifier("ayudante.consultarUltimoComprobanteExportacionAyudante")
+	private ConsultarUltimoComprobanteExportacionAyudante consultarUltimoComprobanteExportacionAyudante;
+
+	@Autowired
+	@Qualifier("ayudante.consultarComprobanteExportacionAyudante")
+	private ConsultarComprobanteExportacionAyudante consultarComprobanteExportacionAyudante;
 	
 	public ResponseAutenticacion iniciarSesion(Integer interfaz, String clave) {
 		AutenticacionDatos datos = new AutenticacionDatos();
@@ -365,13 +380,15 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		return generarQrAyudante.hacer(ctx, datos);
 	}
 
+	@Override
 	public ResponseAutorizarComprobanteExportacion autorizarComprobanteExportacion(ControlTransaccion ctx, 
 			Integer concepto, Integer tipoDoc, Long nroDoc, Integer tipoCbte, Integer ptoVta, Long nroCbte, 
 			BigDecimal impTotal, BigDecimal impTotConcNoGrav, BigDecimal impNeto, BigDecimal impIva, BigDecimal impTrib, BigDecimal impOpEx, 
 			String fechaCbte, String fechaVencPago, String fechaServDesde, String fechaServHasta,
 			String monedaId, BigDecimal monedaCtz, 
 			Tributo[] tributos, Iva[] ivas, ComprobanteAsociado[] comprobantesAsociados, 
-			DatoOpcional[] datosOpcionales, PeriodoComprobanteAsociado[] periodosAsociados)  {
+			DatoOpcional[] datosOpcionales, PeriodoComprobanteAsociado[] periodosAsociados,
+			Permiso[] permisos)  {
 
 		RequestAutorizarComprobanteExportacion datos = new RequestAutorizarComprobanteExportacion();
 		
@@ -504,7 +521,102 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		datos.setComprobantesAsociados(comprobantesAsociados);
 		datos.setPeriodoComprobanteAsociados(periodosAsociados);
 		
+		//Para exporación
+		datos.setPermisos(permisos);
+		
 		return autorizarComprobanteExportacionAyudante.hacer(ctx, datos);
+	}
+
+	public ResponseConsultarUltimoComprobanteExportacion consultarUltimoComprobanteExportacion(ControlTransaccion ctx, Integer tipoCbte, Integer ptoVta) {
+		
+		RequestConsultarUltimoComprobanteExportacion datos = new RequestConsultarUltimoComprobanteExportacion();
+		
+		datos.setControlTransaccion(ctx);
+		
+			//ACA SE TIENE QUE RECUPERAR EL CUIT DE LA SUSCRIPCION
+			InterfazDto interfaz = null;
+			try {
+
+				interfaz = interfazDao.getById(ctx.getInterfaz());
+				if(interfaz == null){					
+					throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
+				} else {
+					
+					if (ctx.getInterfaz().equals(9901)
+							|| ctx.getInterfaz().equals(9902) 
+							|| ctx.getInterfaz().equals(2001)
+							|| ctx.getInterfaz().equals(2002) 
+							|| ctx.getInterfaz().equals(2003)
+							|| ctx.getInterfaz().equals(2005)
+							|| ctx.getInterfaz().equals(2006)
+							|| ctx.getInterfaz().equals(2007)
+							|| ctx.getInterfaz().equals(2008)
+							|| ctx.getInterfaz().equals(2009)
+							|| ctx.getInterfaz().equals(4001)
+							|| ctx.getInterfaz().equals(5001)
+							|| ctx.getInterfaz().equals(5002)) {
+						datos.setCuit(interfaz.getCuitSuscripcion());
+					} else {
+						throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
+					}
+				}
+			
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new ApplicationException(e);
+			}
+
+		datos.setTipoCbte(tipoCbte);
+		datos.setPtoVta(ptoVta);
+
+		return consultarUltimoComprobanteExportacionAyudante.hacer(ctx, datos);
+	};
+
+	@Override
+	public ResponseConsultarComprobanteExportacion consultarComprobanteExportacion(ControlTransaccion ctx, Integer tipoCbte, Integer ptoVta, Integer cbte) {
+		
+		RequestConsultarComprobanteExportacion datos = new RequestConsultarComprobanteExportacion();
+		
+		datos.setControlTransaccion(ctx);
+			
+			//ACA SE TIENE QUE RECUPERAR EL CUIT DE LA SUSCRIPCION
+			InterfazDto interfaz = null;
+			try {
+
+				interfaz = interfazDao.getById(ctx.getInterfaz());
+				if(interfaz == null){					
+					throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
+				} else {
+					
+					if (ctx.getInterfaz().equals(9901)
+							|| ctx.getInterfaz().equals(9902) 
+							|| ctx.getInterfaz().equals(2001)
+							|| ctx.getInterfaz().equals(2002) 
+							|| ctx.getInterfaz().equals(2003)
+							|| ctx.getInterfaz().equals(2005)
+							|| ctx.getInterfaz().equals(2006)
+							|| ctx.getInterfaz().equals(2007)
+							|| ctx.getInterfaz().equals(2008)
+							|| ctx.getInterfaz().equals(2009)
+							|| ctx.getInterfaz().equals(4001)
+							|| ctx.getInterfaz().equals(5001)
+							|| ctx.getInterfaz().equals(5002)) {
+						datos.setCuit(interfaz.getCuitSuscripcion());
+					} else {
+						throw new ApplicationException(ErrorEnum.ERROR_INTERFAZ_INVALIDA, "error.ws-interfaz_invalida");
+					}
+				}
+			
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new ApplicationException(e);
+			}
+
+		datos.setTipoCbte(tipoCbte);
+		datos.setPtoVta(ptoVta);
+		datos.setCbte(cbte);
+		
+		return consultarComprobanteExportacionAyudante.hacer(ctx, datos);
 	}
 
 }

@@ -18,12 +18,14 @@ import ar.com.coninf.doconline.model.dao.FewsDatoOpcionalDao;
 import ar.com.coninf.doconline.model.dao.FewsEncabezadoDao;
 import ar.com.coninf.doconline.model.dao.FewsIvaDao;
 import ar.com.coninf.doconline.model.dao.FewsPeriodoAsociadoDao;
+import ar.com.coninf.doconline.model.dao.FewsPermisoDao;
 import ar.com.coninf.doconline.model.dao.FewsQrDao;
 import ar.com.coninf.doconline.model.dao.FewsTributoDao;
 import ar.com.coninf.doconline.model.dao.FewsXmlDao;
 import ar.com.coninf.doconline.model.dao.ParametroDao;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutenticacion;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutorizarComprobante;
+import ar.com.coninf.doconline.rest.model.response.ResponseAutorizarComprobanteExportacion;
 import ar.com.coninf.doconline.rest.model.response.ResponseGenerarQr;
 import ar.com.coninf.doconline.rest.model.tx.ComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.ControlTransaccion;
@@ -31,12 +33,14 @@ import ar.com.coninf.doconline.rest.model.tx.DatoOpcional;
 import ar.com.coninf.doconline.rest.model.tx.DatoQr;
 import ar.com.coninf.doconline.rest.model.tx.Iva;
 import ar.com.coninf.doconline.rest.model.tx.PeriodoComprobanteAsociado;
+import ar.com.coninf.doconline.rest.model.tx.Permiso;
 import ar.com.coninf.doconline.rest.model.tx.Tributo;
 import ar.com.coninf.doconline.shared.dto.FewsComprobanteAsociado;
 import ar.com.coninf.doconline.shared.dto.FewsDatoOpcional;
 import ar.com.coninf.doconline.shared.dto.FewsEncabezado;
 import ar.com.coninf.doconline.shared.dto.FewsIva;
 import ar.com.coninf.doconline.shared.dto.FewsPeriodoAsociado;
+import ar.com.coninf.doconline.shared.dto.FewsPermiso;
 import ar.com.coninf.doconline.shared.dto.FewsQr;
 import ar.com.coninf.doconline.shared.dto.FewsResultado;
 import ar.com.coninf.doconline.shared.dto.FewsTributo;
@@ -81,6 +85,10 @@ public class AutorizadorFews {
 	private FewsPeriodoAsociadoDao fewsPeriodoAsociadoDao;
 	
 	@Autowired
+	@Qualifier("fewsPermisoDao")
+	private FewsPermisoDao fewsPermisoDao;
+	
+	@Autowired
 	@Qualifier("dolProperties")
 	protected Properties dolProperties;
 
@@ -114,7 +122,7 @@ public class AutorizadorFews {
 
 	}
 
-	public void registrarAuditoriaIni(ControlTransaccion ctx, FewsEncabezado selected, String ivas, String tributos, String comprobantesAsociados, String datosOpcionales) {
+	private void registrarAuditoriaIni(ControlTransaccion ctx, FewsEncabezado selected, String ivas, String tributos, String comprobantesAsociados, String datosOpcionales, String periodosAsociados, String permisos) {
 
 		logger.debug("Ejecucion AutorizadorFews.registrarAuditoriaIni()");
 
@@ -180,12 +188,18 @@ public class AutorizadorFews {
 		if (!datosOpcionales.equals("")) {
 			sb.append(", datosOpcionales: "+datosOpcionales);
 		}
+		if (!periodosAsociados.equals("")) {
+			sb.append(", peridosAsociados: "+periodosAsociados);
+		}
+		if (!permisos.equals("")) {
+			sb.append(", permisos: "+permisos);
+		}
 		sb.append("}");
 		
 		log.setXmlEntrada(sb.toString());
 	}
 
-	public void registrarAuditoriaFin(ResponseAutorizarComprobante resp) {
+	private void registrarAuditoriaFin(ResponseAutorizarComprobante resp) {
 
 		logger.debug("Ejecucion AutorizadorFews.registrarAuditoriaFin()");
 		
@@ -213,6 +227,43 @@ public class AutorizadorFews {
 		sb.append(", codigo: "+resp.getCodigo().toString()+", descripcion: "+resp.getDescripcion()+", observacion: "+resp.getObservacion()+", esReintento: "+resp.getEsReintento().toString());
 		sb.append(", resultado: "+resp.getResultado()+", cae: "+resp.getCae()+", fechaVencimiento: "+resp.getFechaVencimiento());
 		sb.append(", obs: "+resp.getObs()+", errMsg: "+resp.getErrMsg()+", excepcionWsaa: "+resp.getExcepcionWsaa()+", excepcionWsfev1: "+resp.getExcepcionWsfev1());
+		sb.append(", xmlRequest: "+resp.getXmlRequest());
+		sb.append(", xmlResponse: "+resp.getXmlResponse());
+		sb.append("}");
+
+		log.setXmlSalida(sb.toString());
+
+		logTransaccionFacade.registrarAuditoria(log);
+	}
+
+	private void registrarAuditoriaFin(ResponseAutorizarComprobanteExportacion resp) {
+
+		logger.debug("Ejecucion AutorizadorFews.registrarAuditoriaFin()");
+		
+		log.setCodigo(resp.getCodigo().toString());
+		log.setDescripcion(resp.getDescripcion());
+		log.setObservacion(resp.getObservacion());
+
+		log.setExcepcionWsaa(resp.getExcepcionWsaa());
+		log.setExcepcionWsfev1(resp.getExcepcionWsfexv1());
+		log.setErrMsg(resp.getErrMsg());
+		log.setObs(resp.getObs());
+		
+		log.setXmlRequest(resp.getXmlRequest());
+		log.setXmlResponse(resp.getXmlResponse());
+
+		log.setCae(resp.getCae());
+		log.setFechaVencimiento(resp.getFechaVencimiento());
+		log.setResultado(resp.getResultado());
+
+		log.setFechaFinOp(new Date());
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("lanzador: AutorizadorFews.procesarPendientes.autorizarComprobante");
+		sb.append(", codigo: "+resp.getCodigo().toString()+", descripcion: "+resp.getDescripcion()+", observacion: "+resp.getObservacion()+", esReintento: "+resp.getEsReintento().toString());
+		sb.append(", resultado: "+resp.getResultado()+", cae: "+resp.getCae()+", fechaVencimiento: "+resp.getFechaVencimiento());
+		sb.append(", obs: "+resp.getObs()+", errMsg: "+resp.getErrMsg()+", excepcionWsaa: "+resp.getExcepcionWsaa()+", excepcionWsfev1: "+resp.getExcepcionWsfexv1());
 		sb.append(", xmlRequest: "+resp.getXmlRequest());
 		sb.append(", xmlResponse: "+resp.getXmlResponse());
 		sb.append("}");
@@ -280,10 +331,10 @@ public class AutorizadorFews {
 			List<FewsDatoOpcional> listFewsDatoOpcional = fewsDatoOpcionalDao.getListById(selected.getId());
 			List<FewsComprobanteAsociado> listFewsComprobanteAsociado = fewsComprobanteAsociadoDao.getListById(selected.getId());
 			List<FewsPeriodoAsociado> listFewsPeriodoAsociado = fewsPeriodoAsociadoDao.getListById(selected.getId());
-			
 			FewsXml fewsXml = fewsXmlDao.getById(selected.getId());
 			FewsQr fewsQr = fewsQrDao.getById(selected.getId());
-
+			List<FewsPermiso> listFewsPermiso = fewsPermisoDao.getListById(selected.getId());
+			
 			interfaz = selected.getIdInterfaz().intValue();
 			clave = dolProperties.getProperty("interfaz_"+interfaz); 
 
@@ -312,6 +363,7 @@ public class AutorizadorFews {
 			DatoOpcional[] datosOpcionales = new DatoOpcional[listFewsDatoOpcional.size()];
 			ComprobanteAsociado[] comprobantesAsociados = new ComprobanteAsociado[listFewsComprobanteAsociado.size()];
 			PeriodoComprobanteAsociado[] periodosAsociados = new PeriodoComprobanteAsociado[listFewsPeriodoAsociado.size()];
+			Permiso[] permisos = new Permiso[listFewsPermiso.size()];
 			
 			logger.debug("Comprobante:"+selected.getTipoComprobante()+"-"+selected.getNumeroPuntoVenta()+"-"+selected.getNumeroComprobante());
 			logger.debug("Fecha:"+selected.getFechaCbte());
@@ -401,17 +453,22 @@ public class AutorizadorFews {
 			sbPeriodoAsociado.append("]");
 			logger.debug("PeriodoComprobanteAsociado:"+sbPeriodoAsociado.toString());
 			
+			StringBuilder sbPermiso = new StringBuilder("[");
+			size = listFewsPermiso.size();
+			for (int i = 0;  i < size; i++) {			
+				permisos[i] = new Permiso();
+				permisos[i].setDstMerc( listFewsPermiso.get(i).getDstMerc() );
+				permisos[i].setIdPermiso( listFewsPermiso.get(i).getIdPermiso() );
+				if (i>0) {
+					sbPermiso.append(",");
+				}
+				sbPermiso.append("{idPermiso: "+permisos[i].getIdPermiso()+", dstMerc: "+permisos[i].getDstMerc()+"}");
+			}
+			sbPermiso.append("]");
+			logger.debug("PeriodoComprobanteAsociado:"+sbPeriodoAsociado.toString());
+			
 			ResponseAutenticacion respI = new ResponseAutenticacion();
 			respI.setEsReintento(false);
-
-			ResponseAutorizarComprobante respA = new ResponseAutorizarComprobante();
-			respA.setEsReintento(false);
-
-			String idSesion;
-
-			Long nroTransaccion = System.currentTimeMillis();
-			nroTransaccion = nroTransaccion - (nroTransaccion/1000000000)*1000000000;
-			ControlTransaccion ctx = new ControlTransaccion() ;
 
 			respI = dolsw.iniciarSesion(interfaz, clave);
 			logger.debug("Fin Ejecucion dolsw.iniciarSesion() de WS");
@@ -424,7 +481,14 @@ public class AutorizadorFews {
 
 			if (respI.getCodigo().equals(0)) {
 
+				String idSesion;
+
+				Long nroTransaccion = System.currentTimeMillis();
+				nroTransaccion = nroTransaccion - (nroTransaccion/1000000000)*1000000000;
+				ControlTransaccion ctx = new ControlTransaccion() ;
+
 				idSesion = respI.getIdSesion();
+				
 				ctx.setIdSesion(idSesion);
 				ctx.setInterfaz(interfaz);
 				ctx.setNroTransaccion(nroTransaccion);
@@ -433,129 +497,67 @@ public class AutorizadorFews {
 				nroTransaccion = nroTransaccion - ((nroTransaccion/100000000)*100000000);
 				ctx.setNroTransaccion(nroTransaccion);
 
-				registrarAuditoriaIni(ctx, selected, sbIva.toString(), sbTributo.toString(), sbComprobanteAsociado.toString(), sbDatoOpcional.toString() );
+				registrarAuditoriaIni(ctx, selected, sbIva.toString(), sbTributo.toString(), sbComprobanteAsociado.toString(), sbDatoOpcional.toString(), sbPeriodoAsociado.toString(), sbPermiso.toString());
 				logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaIni()");
-
-				try {
-					respA = dolsw.autorizarComprobante(ctx, 
-							concepto, tipoDoc, nroDoc, 
-							tipoCbte, ptoVta, nroCbte, 
-							impTotal, impTotConcNoGrav, impNeto, impIva, impTrib, impOpEx, 
-							fechaCbte, fechaVencPago, fechaServDesde, fechaServHasta, 
-							monedaId, monedaCtz, 
-							tributos, ivas, comprobantesAsociados, datosOpcionales, periodosAsociados);
-
-					logger.debug("Ejecucion dolws.autorizarComprobante() de WS");
-
-					logger.debug("Codigo:"+respA.getCodigo());
-					logger.debug("Descripcion:"+respA.getDescripcion());
-					logger.debug("Observacion:"+respA.getObservacion());
-					logger.debug("EsReintento:"+respA.getEsReintento());
-
-					logger.debug("ExcepcionWSAA:"+respA.getExcepcionWsaa());
-					logger.debug("ExcepcionWSFEV1:"+respA.getExcepcionWsfev1());
-					logger.debug("CAE:"+respA.getCae());
-					logger.debug("FechaVencimiento:"+respA.getFechaVencimiento());
-					logger.debug("Resultado:"+respA.getResultado());
-					logger.debug("ErrMsg:"+respA.getErrMsg());
-					logger.debug("Obs:"+respA.getObs());
-					logger.debug("XMLRequest:"+respA.getXmlRequest());
-					logger.debug("XMLResponse:"+respA.getXmlResponse());
-
-					String codigo = respA.getCodigo().toString();
-					String descripcion = respA.getDescripcion();
-					String observacion = respA.getObservacion();
-
-					String excepcionWsaa = respA.getExcepcionWsaa();
-					String excepcionWsfev1 = respA.getExcepcionWsfev1();
-
-					String cae = respA.getCae();
-					String fechaVto = respA.getFechaVencimiento();
-					String resultado = respA.getResultado();
-					String errMsg = respA.getErrMsg();
-					String obs = respA.getObs();
-					String xmlRequest=respA.getXmlRequest();
-					String xmlResponse=respA.getXmlResponse();
-
-					cae=cae==null||cae.equals("")?"0":cae;
-					selected.setCae(Long.valueOf(cae));
-					selected.setFechaVto(fechaVto);
-					selected.setResultado(resultado);
-					selected.setErrMsg(errMsg);
-					selected.setMotivo(obs);
-
-					if (xmlRequest!=null) {
-						fewsXml.setXmlRequest(xmlRequest.toCharArray());
-					} else {
-						fewsXml.setXmlRequest(descripcion);
-					}
-					if (xmlResponse!=null) {
-						fewsXml.setXmlResponse(xmlResponse.toCharArray());
-					} else {
-						fewsXml.setXmlResponse(descripcion);
-					}
-					fewsXml.setCodigo(codigo);
-					fewsXml.setDescripcion(descripcion);
-					fewsXml.setObservacion(observacion);
-					fewsXml.setExcepcionWsaa(excepcionWsaa==null?descripcion:excepcionWsaa);
-					fewsXml.setExcepcionWsfev1(excepcionWsfev1==null?descripcion:excepcionWsfev1);
-
-					if (respA.getCodigo().equals(0)) {
-						respI = dolsw.iniciarSesion(interfaz, clave);
-						logger.debug("Fin Ejecucion dolsw.iniciarSesion() de WS para QR");
-
-						logger.debug("Codigo:"+respI.getCodigo());
-						logger.debug("Descripcion:"+respI.getDescripcion());
-						logger.debug("Observacion:"+respI.getObservacion());
-						logger.debug("EsReintento:"+respI.getEsReintento());
-						logger.debug("IdSesion:"+respI.getIdSesion());
-
-						if (respI.getCodigo().equals(0)) {
-							DatoQr datoQr = new DatoQr();
-							datoQr.setVer(1);
-							datoQr.setFecha(fechaCbte);
-							datoQr.setCuit(Long.valueOf(selected.getCuit()));
-							datoQr.setPtoVta(ptoVta);
-							datoQr.setTipoCmp(tipoCbte);
-							datoQr.setNroCmp(nroCbte);
-							datoQr.setImporte(impTotal.longValue());
-							datoQr.setMoneda(monedaId);
-							datoQr.setCtz(monedaCtz.longValue());
-							datoQr.setTipoDocRec(tipoDoc);
-							datoQr.setNroDocRec(nroDoc);
-							datoQr.setTipoCodAut("E"); 				//E-> CAE o A->CAEA
-							datoQr.setCodAut(cae);
-	
-							ResponseGenerarQr respG = dolsw.generarQr(ctx, datoQr);
-							if (respG.getCodigo().equals(0)) {
-								fewsQr.setTextoQr(respG.getTextoQr());
-								fewsQr.setImagenQr(respG.getImagenQr());
-								
-								fewsQrDao.update(fewsQr);
-							}
-						}
-					}
-
-					fewsXmlDao.update(fewsXml);
-
-					fewsEncabezadoDao.update(selected);
-
-					fewsEncabezadoDao.updateLog(selected.getId(), selected.getIdInterfaz());
-					logger.debug("Fin Ejecucion fewsEncabezadoDao.updateLog()="+selected.getId().toString()+","+selected.getIdInterfaz().toString());
-
-				} catch (Exception e) {
-
-					logger.error(e);
-
-				} finally {
-
-					registrarAuditoriaFin(respA);
-					logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaFin()");
-
+				
+				switch (selected.getTipoCbte()) {
+				case 19:
+				case 20:
+				case 21:
+				case 22:
+					autorizaWSFEXV1(ctx, selected, fewsXml, fewsQr, concepto,
+							 tipoDoc,
+							 nroDoc,
+							 tipoCbte,
+							 ptoVta,
+							 nroCbte,
+							 fechaCbte,
+							 fechaVencPago,
+							 fechaServDesde,
+							 fechaServHasta,
+							 monedaId,
+							 impTotal,
+							 impTotConcNoGrav,
+							 impNeto,
+							 impIva,
+							 impTrib,
+							 impOpEx,
+							 monedaCtz,
+							 tributos,
+							 ivas,
+							 datosOpcionales,
+							 comprobantesAsociados,
+							 periodosAsociados, permisos);
+					break;
+				default:
+					autorizaWSFEV1(ctx, selected, fewsXml, fewsQr, concepto,
+							 tipoDoc,
+							 nroDoc,
+							 tipoCbte,
+							 ptoVta,
+							 nroCbte,
+							 fechaCbte,
+							 fechaVencPago,
+							 fechaServDesde,
+							 fechaServHasta,
+							 monedaId,
+							 impTotal,
+							 impTotConcNoGrav,
+							 impNeto,
+							 impIva,
+							 impTrib,
+							 impOpEx,
+							 monedaCtz,
+							 tributos,
+							 ivas,
+							 datosOpcionales,
+							 comprobantesAsociados,
+							 periodosAsociados);
+					break;			
 				}
-
+				
 			} else {
-
+				
 				fewsXml.setCodigo(respI.getCodigo());
 				fewsXml.setDescripcion(respI.getDescripcion());
 				fewsXml.setObservacion(respI.getObservacion());
@@ -571,6 +573,303 @@ public class AutorizadorFews {
 			logger.error(e);
 		}
 
+	}
+	
+	private void autorizaWSFEV1(ControlTransaccion ctx, FewsEncabezado selected, FewsXml fewsXml, FewsQr fewsQr, 
+			Integer concepto,
+			Integer tipoDoc,
+			Long nroDoc,
+			Integer tipoCbte,
+			Integer ptoVta,
+			Long nroCbte,
+			String fechaCbte,
+			String fechaVencPago,
+			String fechaServDesde,
+			String fechaServHasta,
+			String monedaId,
+			BigDecimal impTotal,
+			BigDecimal impTotConcNoGrav,
+			BigDecimal impNeto,
+			BigDecimal impIva,
+			BigDecimal impTrib,
+			BigDecimal impOpEx,
+			BigDecimal monedaCtz,
+			Tributo[] tributos,
+			Iva[] ivas,
+			DatoOpcional[] datosOpcionales,
+			ComprobanteAsociado[] comprobantesAsociados,
+			PeriodoComprobanteAsociado[] periodosAsociados) {
+		
+		ResponseAutorizarComprobante respA = new ResponseAutorizarComprobante();
+		respA.setEsReintento(false);
+		
+		try {
+			respA = dolsw.autorizarComprobante(ctx, 
+					concepto, tipoDoc, nroDoc, 
+					tipoCbte, ptoVta, nroCbte, 
+					impTotal, impTotConcNoGrav, impNeto, impIva, impTrib, impOpEx, 
+					fechaCbte, fechaVencPago, fechaServDesde, fechaServHasta, 
+					monedaId, monedaCtz, 
+					tributos, ivas, comprobantesAsociados, datosOpcionales, periodosAsociados);
+	
+			logger.debug("Ejecucion dolws.autorizarComprobante() de WS");
+	
+			logger.debug("Codigo:"+respA.getCodigo());
+			logger.debug("Descripcion:"+respA.getDescripcion());
+			logger.debug("Observacion:"+respA.getObservacion());
+			logger.debug("EsReintento:"+respA.getEsReintento());
+	
+			logger.debug("ExcepcionWSAA:"+respA.getExcepcionWsaa());
+			logger.debug("ExcepcionWSFEV1:"+respA.getExcepcionWsfev1());
+			logger.debug("CAE:"+respA.getCae());
+			logger.debug("FechaVencimiento:"+respA.getFechaVencimiento());
+			logger.debug("Resultado:"+respA.getResultado());
+			logger.debug("ErrMsg:"+respA.getErrMsg());
+			logger.debug("Obs:"+respA.getObs());
+			logger.debug("XMLRequest:"+respA.getXmlRequest());
+			logger.debug("XMLResponse:"+respA.getXmlResponse());
+	
+			String codigo = respA.getCodigo().toString();
+			String descripcion = respA.getDescripcion();
+			String observacion = respA.getObservacion();
+	
+			String excepcionWsaa = respA.getExcepcionWsaa();
+			String excepcionWsfev1 = respA.getExcepcionWsfev1();
+	
+			String cae = respA.getCae();
+			String fechaVto = respA.getFechaVencimiento();
+			String resultado = respA.getResultado();
+			String errMsg = respA.getErrMsg();
+			String obs = respA.getObs();
+			String xmlRequest=respA.getXmlRequest();
+			String xmlResponse=respA.getXmlResponse();
+	
+			cae=cae==null||cae.equals("")?"0":cae;
+			selected.setCae(Long.valueOf(cae));
+			selected.setFechaVto(fechaVto);
+			selected.setResultado(resultado);
+			selected.setErrMsg(errMsg);
+			selected.setMotivo(obs);
+	
+			if (xmlRequest!=null) {
+				fewsXml.setXmlRequest(xmlRequest.toCharArray());
+			} else {
+				fewsXml.setXmlRequest(descripcion);
+			}
+			if (xmlResponse!=null) {
+				fewsXml.setXmlResponse(xmlResponse.toCharArray());
+			} else {
+				fewsXml.setXmlResponse(descripcion);
+			}
+			fewsXml.setCodigo(codigo);
+			fewsXml.setDescripcion(descripcion);
+			fewsXml.setObservacion(observacion);
+			fewsXml.setExcepcionWsaa(excepcionWsaa==null?descripcion:excepcionWsaa);
+			fewsXml.setExcepcionWsfev1(excepcionWsfev1==null?descripcion:excepcionWsfev1);
+	
+			if (respA.getCodigo().equals(0)) {
+				ResponseAutenticacion respI = dolsw.iniciarSesion(interfaz, clave);
+				logger.debug("Fin Ejecucion dolsw.iniciarSesion() de WS para QR");
+	
+				logger.debug("Codigo:"+respI.getCodigo());
+				logger.debug("Descripcion:"+respI.getDescripcion());
+				logger.debug("Observacion:"+respI.getObservacion());
+				logger.debug("EsReintento:"+respI.getEsReintento());
+				logger.debug("IdSesion:"+respI.getIdSesion());
+	
+				if (respI.getCodigo().equals(0)) {
+					DatoQr datoQr = new DatoQr();
+					datoQr.setVer(1);
+					datoQr.setFecha(fechaCbte);
+					datoQr.setCuit(Long.valueOf(selected.getCuit()));
+					datoQr.setPtoVta(ptoVta);
+					datoQr.setTipoCmp(tipoCbte);
+					datoQr.setNroCmp(nroCbte);
+					datoQr.setImporte(impTotal.longValue());
+					datoQr.setMoneda(monedaId);
+					datoQr.setCtz(monedaCtz.longValue());
+					datoQr.setTipoDocRec(tipoDoc);
+					datoQr.setNroDocRec(nroDoc);
+					datoQr.setTipoCodAut("E"); 				//E-> CAE o A->CAEA
+					datoQr.setCodAut(cae);
+	
+					ResponseGenerarQr respG = dolsw.generarQr(ctx, datoQr);
+					if (respG.getCodigo().equals(0)) {
+						
+						fewsQr.setTextoQr(respG.getTextoQr());
+						fewsQr.setImagenQr(respG.getImagenQr());
+						
+						fewsQrDao.update(fewsQr);
+					}
+				}
+			}
+	
+			fewsXmlDao.update(fewsXml);
+	
+			fewsEncabezadoDao.update(selected);
+	
+			fewsEncabezadoDao.updateLog(selected.getId(), selected.getIdInterfaz());
+			logger.debug("Fin Ejecucion fewsEncabezadoDao.updateLog()="+selected.getId().toString()+","+selected.getIdInterfaz().toString());
+	
+		} catch (Exception e) {
+	
+			logger.error(e);
+	
+		} finally {
+	
+			registrarAuditoriaFin(respA);
+			logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaFin()");
+	
+		}
+	}
+
+	private void autorizaWSFEXV1(ControlTransaccion ctx, FewsEncabezado selected, FewsXml fewsXml, FewsQr fewsQr, 
+			Integer concepto,
+			Integer tipoDoc,
+			Long nroDoc,
+			Integer tipoCbte,
+			Integer ptoVta,
+			Long nroCbte,
+			String fechaCbte,
+			String fechaVencPago,
+			String fechaServDesde,
+			String fechaServHasta,
+			String monedaId,
+			BigDecimal impTotal,
+			BigDecimal impTotConcNoGrav,
+			BigDecimal impNeto,
+			BigDecimal impIva,
+			BigDecimal impTrib,
+			BigDecimal impOpEx,
+			BigDecimal monedaCtz,
+			Tributo[] tributos,
+			Iva[] ivas,
+			DatoOpcional[] datosOpcionales,
+			ComprobanteAsociado[] comprobantesAsociados,
+			PeriodoComprobanteAsociado[] periodosAsociados,
+			Permiso[] permisos) {
+
+		ResponseAutorizarComprobanteExportacion respA = new ResponseAutorizarComprobanteExportacion();
+		respA.setEsReintento(false);
+		
+		try {
+			respA = dolsw.autorizarComprobanteExportacion(ctx, 
+					concepto, tipoDoc, nroDoc, 
+					tipoCbte, ptoVta, nroCbte, 
+					impTotal, impTotConcNoGrav, impNeto, impIva, impTrib, impOpEx, 
+					fechaCbte, fechaVencPago, fechaServDesde, fechaServHasta, 
+					monedaId, monedaCtz, 
+					tributos, ivas, comprobantesAsociados, datosOpcionales, periodosAsociados, permisos);
+	
+			logger.debug("Ejecucion dolws.autorizarComprobante() de WS");
+	
+			logger.debug("Codigo:"+respA.getCodigo());
+			logger.debug("Descripcion:"+respA.getDescripcion());
+			logger.debug("Observacion:"+respA.getObservacion());
+			logger.debug("EsReintento:"+respA.getEsReintento());
+	
+			logger.debug("ExcepcionWSAA:"+respA.getExcepcionWsaa());
+			logger.debug("ExcepcionWSFEXV1:"+respA.getExcepcionWsfexv1());
+			logger.debug("CAE:"+respA.getCae());
+			logger.debug("FechaVencimiento:"+respA.getFechaVencimiento());
+			logger.debug("Resultado:"+respA.getResultado());
+			logger.debug("ErrMsg:"+respA.getErrMsg());
+			logger.debug("Obs:"+respA.getObs());
+			logger.debug("XMLRequest:"+respA.getXmlRequest());
+			logger.debug("XMLResponse:"+respA.getXmlResponse());
+	
+			String codigo = respA.getCodigo().toString();
+			String descripcion = respA.getDescripcion();
+			String observacion = respA.getObservacion();
+	
+			String excepcionWsaa = respA.getExcepcionWsaa();
+			String excepcionWsfexv1 = respA.getExcepcionWsfexv1();
+	
+			String cae = respA.getCae();
+			String fechaVto = respA.getFechaVencimiento();
+			String resultado = respA.getResultado();
+			String errMsg = respA.getErrMsg();
+			String obs = respA.getObs();
+			String xmlRequest=respA.getXmlRequest();
+			String xmlResponse=respA.getXmlResponse();
+	
+			cae=cae==null||cae.equals("")?"0":cae;
+			selected.setCae(Long.valueOf(cae));
+			selected.setFechaVto(fechaVto);
+			selected.setResultado(resultado);
+			selected.setErrMsg(errMsg);
+			selected.setMotivo(obs);
+	
+			if (xmlRequest!=null) {
+				fewsXml.setXmlRequest(xmlRequest.toCharArray());
+			} else {
+				fewsXml.setXmlRequest(descripcion);
+			}
+			if (xmlResponse!=null) {
+				fewsXml.setXmlResponse(xmlResponse.toCharArray());
+			} else {
+				fewsXml.setXmlResponse(descripcion);
+			}
+			fewsXml.setCodigo(codigo);
+			fewsXml.setDescripcion(descripcion);
+			fewsXml.setObservacion(observacion);
+			fewsXml.setExcepcionWsaa(excepcionWsaa==null?descripcion:excepcionWsaa);
+			fewsXml.setExcepcionWsfev1(excepcionWsfexv1==null?descripcion:excepcionWsfexv1);
+	
+			if (respA.getCodigo().equals(0)) {
+				ResponseAutenticacion respI = dolsw.iniciarSesion(interfaz, clave);
+				logger.debug("Fin Ejecucion dolsw.iniciarSesion() de WS para QR");
+	
+				logger.debug("Codigo:"+respI.getCodigo());
+				logger.debug("Descripcion:"+respI.getDescripcion());
+				logger.debug("Observacion:"+respI.getObservacion());
+				logger.debug("EsReintento:"+respI.getEsReintento());
+				logger.debug("IdSesion:"+respI.getIdSesion());
+	
+				if (respI.getCodigo().equals(0)) {
+					DatoQr datoQr = new DatoQr();
+					datoQr.setVer(1);
+					datoQr.setFecha(fechaCbte);
+					datoQr.setCuit(Long.valueOf(selected.getCuit()));
+					datoQr.setPtoVta(ptoVta);
+					datoQr.setTipoCmp(tipoCbte);
+					datoQr.setNroCmp(nroCbte);
+					datoQr.setImporte(impTotal.longValue());
+					datoQr.setMoneda(monedaId);
+					datoQr.setCtz(monedaCtz.longValue());
+					datoQr.setTipoDocRec(tipoDoc);
+					datoQr.setNroDocRec(nroDoc);
+					datoQr.setTipoCodAut("E"); 				//E-> CAE o A->CAEA
+					datoQr.setCodAut(cae);
+	
+					ResponseGenerarQr respG = dolsw.generarQr(ctx, datoQr);
+					if (respG.getCodigo().equals(0)) {
+						
+						fewsQr.setTextoQr(respG.getTextoQr());
+						fewsQr.setImagenQr(respG.getImagenQr());
+						
+						fewsQrDao.update(fewsQr);
+					}
+				}
+			}
+	
+			fewsXmlDao.update(fewsXml);
+	
+			fewsEncabezadoDao.update(selected);
+	
+			fewsEncabezadoDao.updateLog(selected.getId(), selected.getIdInterfaz());
+			logger.debug("Fin Ejecucion fewsEncabezadoDao.updateLog()="+selected.getId().toString()+","+selected.getIdInterfaz().toString());
+	
+		} catch (Exception e) {
+	
+			logger.error(e);
+	
+		} finally {
+	
+			registrarAuditoriaFin(respA);
+			logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaFin()");
+	
+		}
 	}
 
 } 

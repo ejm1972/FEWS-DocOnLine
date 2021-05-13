@@ -33,5 +33,14 @@
 	<operation name="generarQr">
 		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
 	</operation>
+		<operation name="autorizarComprobanteExportacion">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+	<operation name="consultarUltimoComprobanteExportacion">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+	<operation name="consultarComprobanteExportacion">
+		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
 </service>
 </serviceGroup>

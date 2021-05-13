@@ -13,7 +13,7 @@ import ar.com.coninf.doconline.shared.anotacion.InsertOptional;
 
 @Entity
 @Table(name = "LOG_TRANSACCIONES")
-public class LogTransaccionDto implements Serializable{
+public class LogTransaccionDto implements Serializable {
 
 	
 	private static final long serialVersionUID = -898598838564582168L;

@@ -12,7 +12,7 @@ import ar.com.coninf.doconline.rest.model.tx.ControlTransaccion;
 import ar.com.coninf.doconline.ws.validador.ValidadorWS;
 
 @Component("ayudante.consultarComprobanteExportacionAyudante")
-public class ConsultarComprobanteAyudanteExportacion implements AyudanteWS<RequestConsultarComprobanteExportacion> {
+public class ConsultarComprobanteExportacionAyudante implements AyudanteWS<RequestConsultarComprobanteExportacion> {
 
 	@Autowired
 	@Qualifier("facade.consultarComprobanteExportacionFacade")

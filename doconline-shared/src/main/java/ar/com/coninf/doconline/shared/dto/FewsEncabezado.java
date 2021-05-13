@@ -13,7 +13,7 @@ import ar.com.coninf.doconline.shared.anotacion.InsertOptional;
 
 @Entity
 @Table(name = "fews_encabezado")
-public class FewsEncabezado implements Serializable{
+public class FewsEncabezado implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@InsertOptional

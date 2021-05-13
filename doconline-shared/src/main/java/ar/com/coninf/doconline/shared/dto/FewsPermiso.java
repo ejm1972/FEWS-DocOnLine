@@ -1,7 +1,6 @@
 package ar.com.coninf.doconline.shared.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,15 +8,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "fews_iva")
-public class FewsIva implements Serializable {
+@Table(name = "dbo.fews_permiso")
+public class FewsPermiso implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
 	private Integer tipoReg;
-	private Integer ivaId;
-	private BigDecimal baseImp;
-	private BigDecimal importe;
+	private String idPermiso;
+	private Integer dstMerc;
 	
 	@Id
 	@Column(name = "id")
@@ -40,28 +38,20 @@ public class FewsIva implements Serializable {
 	}
 
 	@Id
-	@Column(name = "iva_id")
-	public Integer getIvaId() {
-		return ivaId;
+	@Column(name = "id_permiso")
+	public String getIdPermiso() {
+		return idPermiso;
 	}
-	public void setIvaId(Integer ivaId) {
-		this.ivaId = ivaId;
-	}
-	
-	@Column(name = "base_imp")
-	public BigDecimal getBaseImp() {
-		return baseImp;
-	}
-	public void setBaseImp(BigDecimal baseImp) {
-		this.baseImp = baseImp;
+	public void setIdPermiso(String idPermiso) {
+		this.idPermiso = idPermiso;
 	}
 	
-	@Column(name = "importe")
-	public BigDecimal getImporte() {
-		return importe;
+	@Column(name = "dst_merc")
+	public Integer getDstMerc() {
+		return dstMerc;
 	}
-	public void setImporte(BigDecimal importe) {
-		this.importe = importe;
+	public void setDstMerc(Integer dstMerc) {
+		this.dstMerc = dstMerc;
 	}
 
 }

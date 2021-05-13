@@ -69,7 +69,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 			/****************************************************************************************************/			
 			wsdl = urlWsaa;
 			Dispatch.call(wsaa, "Autenticar", 
-					new Variant("wsfe"), 
+					new Variant("wsfex"), 
 					new Variant(userDir + archivoCrt), 
 					new Variant(userDir + archivoKey), 
 					new Variant(wsdl),
@@ -88,22 +88,22 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 				/****************************************************************************************************/			
 
 				/* Instanciar WSFEv1: WebService de Factura Electronica version 1 */
-				ActiveXComponent wsfev1 = new ActiveXComponent("WSFEv1");
+				ActiveXComponent wsfexv1 = new ActiveXComponent("WSFEXv1");
 
 				logger.debug("Directorio de Instalacion: " +
-						Dispatch.get(wsfev1, "InstallDir").toString() + 
+						Dispatch.get(wsfexv1, "InstallDir").toString() + 
 						" Version: " + 
-						Dispatch.get(wsfev1, "Version").toString()
+						Dispatch.get(wsfexv1, "Version").toString()
 						);
 
 				/* Establecer parametros de uso: */
-				Dispatch.put(wsfev1, "Cuit", new Variant(datos.getCuit()));
-				Dispatch.put(wsfev1, "Token", new Variant(token));
-				Dispatch.put(wsfev1, "Sign", new Variant(sign));
+				Dispatch.put(wsfexv1, "Cuit", new Variant(datos.getCuit()));
+				Dispatch.put(wsfexv1, "Token", new Variant(token));
+				Dispatch.put(wsfexv1, "Sign", new Variant(sign));
 
 				/* Conectar al websrvice (cambiar URL para producción) */
 				wsdl = urlWsfev1;
-				Dispatch.call(wsfev1, "Conectar", 
+				Dispatch.call(wsfexv1, "Conectar", 
 						new Variant(cache), 
 						new Variant(wsdl),
 						new Variant(proxy),
@@ -111,7 +111,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 						null,
 						new Variant(timeout));
 				
-				excepcion =  Dispatch.get(wsfev1, "Excepcion").toString();
+				excepcion =  Dispatch.get(wsfexv1, "Excepcion").toString();
 				logger.debug("Excepcion: " + excepcion);
 				resp.setExcepcionWsfexv1(excepcion);
 
@@ -165,7 +165,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 
 					String moneda_id = datos.getMonedaId(), moneda_ctz = datos.getMonedaCtz().toString();
 
-					Variant ok = Dispatch.call(wsfev1, "CrearFactura",
+					Variant ok = Dispatch.call(wsfexv1, "CrearFactura",
 							new Variant(concepto), new Variant(tipo_doc), 
 							new Variant(nro_doc), new Variant(tipo_cbte), 
 							new Variant(pto_vta), 
@@ -191,7 +191,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 										tributo_alic = new Variant((datos.getTributos()[i]).getTributoAlic().toString()),
 										tributo_importe = new Variant((datos.getTributos()[i]).getTributoImporte().toString());
 								
-								Dispatch.call(wsfev1, "AgregarTributo", 
+								Dispatch.call(wsfexv1, "AgregarTributo", 
 										tributo_id, tributo_desc, tributo_base_imp, 
 										tributo_alic, tributo_importe);
 							}
@@ -209,7 +209,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 										iva_base_imp = new Variant((datos.getIvas()[i]).getIvaBaseImp().toString()),
 										iva_importe = new Variant((datos.getIvas()[i]).getIvaImporte().toString());
 								
-								Dispatch.call(wsfev1, "AgregarIva", 
+								Dispatch.call(wsfexv1, "AgregarIva", 
 										iva_id, iva_base_imp, iva_importe);
 							}
 						}
@@ -227,7 +227,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 										cuit1 = new Variant((datos.getComprobantesAsociados()[i]).getCuit()),
 										fecha_cbte1 = new Variant((datos.getComprobantesAsociados()[i]).getFechaCbte());
 									
-								Dispatch.call(wsfev1, "AgregarCmpAsoc", 
+								Dispatch.call(wsfexv1, "AgregarCmpAsoc", 
 										tipo_cbte1, punto_vta1, cbte_nro1, cuit1, fecha_cbte1);
 							}
 						}
@@ -242,7 +242,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 								Variant opcional_id1 = new Variant((datos.getDatosOpcionales()[i]).getOpcionalId().toString()), 
 										valor1 = new Variant((datos.getDatosOpcionales()[i]).getValor());
 								
-								Dispatch.call(wsfev1, "AgregarOpcional", 
+								Dispatch.call(wsfexv1, "AgregarOpcional", 
 										opcional_id1, valor1);
 							}					
 						}
@@ -258,35 +258,51 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 								Variant fecheDesde = new Variant((datos.getPeriodoComprobanteAsociados()[i]).getFechaDesde()); 
 								Variant	fecheHasta = new Variant((datos.getPeriodoComprobanteAsociados()[i]).getFechaHasta());
 								
-								Dispatch.call(wsfev1, "AgregarPeriodoComprobantesAsociados", 
+								Dispatch.call(wsfexv1, "AgregarPeriodoComprobantesAsociados", 
+										fecheDesde, fecheHasta);
+							}					
+						}
+					}
+					
+					/* Agrego Periodo Comprobantes Opcionales */
+					for (int i = 0; datos.getPeriodoComprobanteAsociados() != null && i < datos.getPeriodoComprobanteAsociados().length; i++) {
+						PeriodoComprobanteAsociado aux = datos.getPeriodoComprobanteAsociados()[i];
+						if ((datos.getPeriodoComprobanteAsociados()[i]).getFechaDesde()!=null
+								&& (datos.getPeriodoComprobanteAsociados()[i]).getFechaHasta()!=null) { 
+							if (!(datos.getPeriodoComprobanteAsociados()[i]).toString().trim().equals("")) {
+								
+								Variant fecheDesde = new Variant((datos.getPeriodoComprobanteAsociados()[i]).getFechaDesde()); 
+								Variant	fecheHasta = new Variant((datos.getPeriodoComprobanteAsociados()[i]).getFechaHasta());
+								
+								Dispatch.call(wsfexv1, "AgregarPeriodoComprobantesAsociados", 
 										fecheDesde, fecheHasta);
 							}					
 						}
 					}
 					
 					/* Habilito reprocesamiento automático (predeterminado): */
-					Dispatch.put(wsfev1, "Reprocesar", new Variant(true));
+					Dispatch.put(wsfexv1, "Reprocesar", new Variant(true));
 
 					/* Solicito CAE (llamando al webservice de AFIP): */
-					Variant cae = Dispatch.call(wsfev1, "CAESolicitar");
+					Variant cae = Dispatch.call(wsfexv1, "CAESolicitar");
 
-					excepcion =  Dispatch.get(wsfev1, "Excepcion").toString();
+					excepcion =  Dispatch.get(wsfexv1, "Excepcion").toString();
 					logger.debug("Excepcion: " + excepcion);
 					resp.setExcepcionWsfexv1(excepcion);
 
 					/* Mostrar mensajes XML enviados y recibidos (depuración) */
-					String xmlReq = Dispatch.get(wsfev1, "XmlRequest").toString();
+					String xmlReq = Dispatch.get(wsfexv1, "XmlRequest").toString();
 					logger.debug("XmlRequest: " + xmlReq);
 					resp.setXmlRequest(xmlReq);
-					String xmlRes = Dispatch.get(wsfev1, "XmlResponse").toString();
+					String xmlRes = Dispatch.get(wsfexv1, "XmlResponse").toString();
 					logger.debug("XmlResponse: " + xmlRes);
 					resp.setXmlResponse(xmlRes);
 
-					String errmsg =  Dispatch.get(wsfev1, "ErrMsg").toString();
+					String errmsg =  Dispatch.get(wsfexv1, "ErrMsg").toString();
 					logger.debug("ErrMsg: " + errmsg);
 					resp.setErrMsg(errmsg);
 
-					String obs =  Dispatch.get(wsfev1, "Obs").toString();
+					String obs =  Dispatch.get(wsfexv1, "Obs").toString();
 					logger.debug("Obs: " + obs);
 					resp.setObservacion(obs);
 					resp.setObs(obs);
@@ -295,12 +311,12 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 					logger.debug("CAE: " + cae.toString());
 					resp.setCae(cae.toString());
 
-					String resultado = Dispatch.get(wsfev1, "Resultado").toString();
+					String resultado = Dispatch.get(wsfexv1, "Resultado").toString();
 					logger.debug("Resultado: " + resultado);
 					resp.setResultado(resultado);
 
 					/* Mostrar Vencimiento */
-					Variant fechaVencimiento = Dispatch.get(wsfev1, "Vencimiento");
+					Variant fechaVencimiento = Dispatch.get(wsfexv1, "Vencimiento");
 					logger.debug("Vencimiento: " + resultado);
 					resp.setFechaVencimiento(fechaVencimiento.toString());
 					
@@ -315,7 +331,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 					logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion());
 				}
 				
-				wsfev1.safeRelease();
+				wsfexv1.safeRelease();
 				
 			} else { //excepcion wsaa
 				resp.cargarError(new Response(ErrorEnum.ERROR_CONEXION_WSAA, excepcion));

@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "dbo.fews_cmp_asoc")
-public class FewsComprobanteAsociado implements Serializable{
+public class FewsComprobanteAsociado implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
