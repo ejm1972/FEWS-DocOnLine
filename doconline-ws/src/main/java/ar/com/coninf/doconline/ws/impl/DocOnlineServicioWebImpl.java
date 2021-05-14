@@ -13,7 +13,6 @@ import com.google.zxing.WriterException;
 
 import ar.com.coninf.doconline.model.dao.InterfazDao;
 import ar.com.coninf.doconline.rest.model.enums.ErrorEnum;
-import ar.com.coninf.doconline.rest.model.request.RequestActualizarItemComprobante;
 import ar.com.coninf.doconline.rest.model.request.RequestAutorizarComprobante;
 import ar.com.coninf.doconline.rest.model.request.RequestAutorizarComprobanteExportacion;
 import ar.com.coninf.doconline.rest.model.request.RequestConsultarComprobante;
@@ -24,7 +23,6 @@ import ar.com.coninf.doconline.rest.model.request.RequestConsultarUltimoComproba
 import ar.com.coninf.doconline.rest.model.request.RequestConsultarUltimoComprobanteExportacion;
 import ar.com.coninf.doconline.rest.model.request.RequestGenerarQr;
 import ar.com.coninf.doconline.rest.model.response.Response;
-import ar.com.coninf.doconline.rest.model.response.ResponseActualizarItemComprobante;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutenticacion;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutorizarComprobante;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutorizarComprobanteExportacion;
@@ -39,6 +37,7 @@ import ar.com.coninf.doconline.rest.model.tx.ComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.ControlTransaccion;
 import ar.com.coninf.doconline.rest.model.tx.DatoOpcional;
 import ar.com.coninf.doconline.rest.model.tx.DatoQr;
+import ar.com.coninf.doconline.rest.model.tx.Item;
 import ar.com.coninf.doconline.rest.model.tx.Iva;
 import ar.com.coninf.doconline.rest.model.tx.PeriodoComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.Permiso;
@@ -349,14 +348,6 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 	}
 
 	@Override
-	public ResponseActualizarItemComprobante actualizarItemComprobante(RequestActualizarItemComprobante request) {
-		ResponseActualizarItemComprobante resp = new ResponseActualizarItemComprobante();
-		resp.setEsReintento(false);
-		resp.cargarError(new Response(ErrorEnum.SIN_ERROR));
-		return resp;
-	}
-
-	@Override
 	public ResponseConsultarPadronLocal consultarPadronLocal(RequestConsultarPadronLocal request) {
 		ResponseConsultarPadronLocal resp = new ResponseConsultarPadronLocal();
 		resp.setEsReintento(false);
@@ -383,12 +374,17 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 	@Override
 	public ResponseAutorizarComprobanteExportacion autorizarComprobanteExportacion(ControlTransaccion ctx, 
 			Integer concepto, Integer tipoDoc, Long nroDoc, Integer tipoCbte, Integer ptoVta, Long nroCbte, 
-			BigDecimal impTotal, BigDecimal impTotConcNoGrav, BigDecimal impNeto, BigDecimal impIva, BigDecimal impTrib, BigDecimal impOpEx, 
+			BigDecimal impTotal, BigDecimal impTotConcNoGrav, BigDecimal impNeto, 
+			BigDecimal impIva, BigDecimal impTrib, BigDecimal impOpEx, 
 			String fechaCbte, String fechaVencPago, String fechaServDesde, String fechaServHasta,
 			String monedaId, BigDecimal monedaCtz, 
+			Integer tipoExpo, String permisoExistente, Integer dstCmp, 
+			String cliente, String cuitPaisCliente, String domicilioCliente, String idImpositivo, 
+			String obsComerciales, String obsGenerales, String formaPago, 
+			String incoterms, String incotermsDs, String idiomaCbte,
 			Tributo[] tributos, Iva[] ivas, ComprobanteAsociado[] comprobantesAsociados, 
 			DatoOpcional[] datosOpcionales, PeriodoComprobanteAsociado[] periodosAsociados,
-			Permiso[] permisos)  {
+			Permiso[] permisos, Item[] items)  {
 
 		RequestAutorizarComprobanteExportacion datos = new RequestAutorizarComprobanteExportacion();
 		
@@ -446,7 +442,20 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		datos.setFechaVencPago(fechaVencPago);
 		datos.setMonedaId(monedaId);
 		datos.setMonedaCtz(monedaCtz.divide(big100));
-		
+		datos.setTipoExpo(tipoExpo);
+		datos.setPermisoExistente(permisoExistente);
+		datos.setDstCmp(dstCmp);
+		datos.setCliente(cliente);
+		datos.setCuitPaisCliente(cuitPaisCliente);
+		datos.setDomicilioCliente(domicilioCliente);
+		datos.setIdImpositivo(idImpositivo);
+		datos.setObsComerciales(obsComerciales);
+		datos.setObsGenerales(obsGenerales);
+		datos.setFormaPago(formaPago);
+		datos.setIncoterms(incoterms);
+		datos.setIncotermsDs(incotermsDs);
+		datos.setIdiomaCbte(idiomaCbte);
+
 		BigDecimal sumaTotal = BigDecimal.ZERO;
 		sumaTotal = sumaTotal.add(impTotConcNoGrav);
 		sumaTotal = sumaTotal.add(impNeto);
@@ -513,6 +522,23 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 			}
 		}
 		
+		for (int i = 0; permisos != null && i < permisos.length; i++) {
+			if (!(permisos[i]).toString().trim().equals("")) {
+			}
+		}
+		
+		BigDecimal sumaItems = BigDecimal.ZERO;
+		for (int i = 0; items != null && i < items.length; i++) {
+			if (!(items[i]).toString().trim().equals("")) {
+				if (items[i]!=null && items[i].getCodigo()!=null) {
+					sumaItems = sumaItems.add(items[i].getImpTotal());
+				}
+			}
+		}
+		if (sumaItems.equals(BigDecimal.ZERO) && !datos.getImpTotal().equals(BigDecimal.ZERO)) {
+			throw new ApplicationException(ErrorEnum.ERROR_DIFERENCIA_TOTAL_ITEMS, "error.ws-diferencia_total_items");
+		}
+		
 		datos.setTributos(tributos);
 		datos.setIvas(ivas);
 		datos.setDatosOpcionales(datosOpcionales);
@@ -523,6 +549,7 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		
 		//Para exporación
 		datos.setPermisos(permisos);
+		datos.setItems(items);
 		
 		return autorizarComprobanteExportacionAyudante.hacer(ctx, datos);
 	}

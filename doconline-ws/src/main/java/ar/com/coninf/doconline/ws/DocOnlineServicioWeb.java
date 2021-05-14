@@ -7,11 +7,9 @@ import org.apache.commons.codec.EncoderException;
 
 import com.google.zxing.WriterException;
 
-import ar.com.coninf.doconline.rest.model.request.RequestActualizarItemComprobante;
 import ar.com.coninf.doconline.rest.model.request.RequestConsultarPadronLocal;
 import ar.com.coninf.doconline.rest.model.request.RequestConsultarPadronOnline;
 import ar.com.coninf.doconline.rest.model.response.Response;
-import ar.com.coninf.doconline.rest.model.response.ResponseActualizarItemComprobante;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutenticacion;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutorizarComprobante;
 import ar.com.coninf.doconline.rest.model.response.ResponseAutorizarComprobanteExportacion;
@@ -26,6 +24,7 @@ import ar.com.coninf.doconline.rest.model.tx.ComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.ControlTransaccion;
 import ar.com.coninf.doconline.rest.model.tx.DatoOpcional;
 import ar.com.coninf.doconline.rest.model.tx.DatoQr;
+import ar.com.coninf.doconline.rest.model.tx.Item;
 import ar.com.coninf.doconline.rest.model.tx.Iva;
 import ar.com.coninf.doconline.rest.model.tx.PeriodoComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.Permiso;
@@ -46,7 +45,7 @@ public interface DocOnlineServicioWeb {
 	
 	public ResponseConsultarUltimoComprobante consultarUltimoComprobante(ControlTransaccion ctx, Integer tipoCbte, Integer ptoVta);
 	public ResponseConsultarComprobante consultarComprobante(ControlTransaccion ctx, Integer tipoCbte, Integer ptoVta, Integer cbte);
-	public ResponseActualizarItemComprobante actualizarItemComprobante(RequestActualizarItemComprobante request);
+
 	public ResponseConsultarPadronLocal consultarPadronLocal(RequestConsultarPadronLocal request);
 	public ResponseConsultarPadronOnline consultarPadronOnline(RequestConsultarPadronOnline request);
 	
@@ -57,9 +56,13 @@ public interface DocOnlineServicioWeb {
 			BigDecimal impTotal, BigDecimal impTotConcNoGrav, BigDecimal impNeto, BigDecimal impIva, BigDecimal impTrib, BigDecimal impOpEx, 
 			String fechaCbte, String fechaVencPago, String fechaServDesde, String fechaServHasta,
 			String monedaId, BigDecimal monedaCtz, 
+			Integer tipoExpo, String permisoExistente, Integer dstCmp, 
+			String cliente, String cuitPaisCliente, String domicilioCliente, String idImpositivo, 
+			String obsComerciales, String obsGenerales, String formaPago, 
+			String incoterms, String incotermsDs, String idiomaCbte,
 			Tributo[] tributos, Iva[] ivas, ComprobanteAsociado[] comprobantesAsociados, 
 			DatoOpcional[] datosOpcionales, PeriodoComprobanteAsociado[] periodosAsociados, 
-			Permiso[] permisos);
+			Permiso[] permisos, Item[] items);
 	
 	public ResponseConsultarUltimoComprobanteExportacion consultarUltimoComprobanteExportacion(ControlTransaccion ctx, Integer tipoCbte, Integer ptoVta);
 	public ResponseConsultarComprobanteExportacion consultarComprobanteExportacion(ControlTransaccion ctx, Integer tipoCbte, Integer ptoVta, Integer cbte);
