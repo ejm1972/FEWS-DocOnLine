@@ -125,11 +125,6 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 					int cbte_nro = Integer.parseInt(datos.getNroCbte().toString());
 
 					String imp_total = datos.getImpTotal().toString();
-					String imp_tot_conc = datos.getImpTotConcNoGrav().toString();
-					String imp_neto = datos.getImpNeto().toString();
-					String imp_iva = datos.getImpIva().toString();
-					String imp_trib = datos.getImpTrib().toString();
-					String imp_op_ex = datos.getImpOpEx().toString();
 
 					String fecha_cbte = datos.getFechaCbte();
 					String moneda_id = datos.getMonedaId();
@@ -188,102 +183,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 		    	    
 		    	    ' Llamo al WebService de Autorización para obtener el CAE
 		    	    CAE = WSFEXv1.Authorize(CDec(id))
-
-					/* Agrego Comprobantes Asociados */
-					for (int i = 0; datos.getComprobantesAsociados() != null && i < datos.getComprobantesAsociados().length; i++) {
-						ComprobanteAsociado aux = datos.getComprobantesAsociados()[i];
-						if ((datos.getComprobantesAsociados()[i]).getTipoCbte()!=null) { 
-							if (!(datos.getComprobantesAsociados()[i]).toString().trim().equals("")) {
-								
-								Variant tipo_cbte1 = new Variant((datos.getComprobantesAsociados()[i]).getTipoCbte().toString()),
-										punto_vta1 = new Variant((datos.getComprobantesAsociados()[i]).getPuntoVta().toString()),
-										cbte_nro1 = new Variant((datos.getComprobantesAsociados()[i]).getCbteNro().toString()),
-										cuit1 = new Variant((datos.getComprobantesAsociados()[i]).getCuit()),
-										fecha_cbte1 = new Variant((datos.getComprobantesAsociados()[i]).getFechaCbte());
-									
-								Dispatch.call(wsfexv1, "AgregarCmpAsoc", 
-										tipo_cbte1, punto_vta1, cbte_nro1, cuit1, fecha_cbte1);
-							}
-						}
-					}
-
-					/* Agrego Datos Opcionales */
-					for (int i = 0; datos.getDatosOpcionales() != null && i < datos.getDatosOpcionales().length; i++) {
-						DatoOpcional aux = datos.getDatosOpcionales()[i];
-						if ((datos.getDatosOpcionales()[i]).getOpcionalId()!=null) { 
-							if (!(datos.getDatosOpcionales()[i]).toString().trim().equals("")) {
-								
-								Variant opcional_id1 = new Variant((datos.getDatosOpcionales()[i]).getOpcionalId().toString()), 
-										valor1 = new Variant((datos.getDatosOpcionales()[i]).getValor());
-								
-								Dispatch.call(wsfexv1, "AgregarOpcional", 
-										opcional_id1, valor1);
-							}					
-						}
-					}
-
-					/* Agrego Periodo Comprobantes Opcionales */
-					for (int i = 0; datos.getPeriodoComprobanteAsociados() != null && i < datos.getPeriodoComprobanteAsociados().length; i++) {
-						PeriodoComprobanteAsociado aux = datos.getPeriodoComprobanteAsociados()[i];
-						if ((datos.getPeriodoComprobanteAsociados()[i]).getFechaDesde()!=null
-								&& (datos.getPeriodoComprobanteAsociados()[i]).getFechaHasta()!=null) { 
-							if (!(datos.getPeriodoComprobanteAsociados()[i]).toString().trim().equals("")) {
-								
-								Variant fecheDesde = new Variant((datos.getPeriodoComprobanteAsociados()[i]).getFechaDesde()); 
-								Variant	fecheHasta = new Variant((datos.getPeriodoComprobanteAsociados()[i]).getFechaHasta());
-								
-								Dispatch.call(wsfexv1, "AgregarPeriodoComprobantesAsociados", 
-										fecheDesde, fecheHasta);
-							}					
-						}
-					}
-					
-					/* Habilito reprocesamiento automático (predeterminado): */
-					Dispatch.put(wsfexv1, "Reprocesar", new Variant(true));
-
-					/* Solicito CAE (llamando al webservice de AFIP): */
-					Variant cae = Dispatch.call(wsfexv1, "CAESolicitar");
-
-					excepcion =  Dispatch.get(wsfexv1, "Excepcion").toString();
-					logger.debug("Excepcion: " + excepcion);
-					resp.setExcepcionWsfexv1(excepcion);
-
-					/* Mostrar mensajes XML enviados y recibidos (depuración) */
-					String xmlReq = Dispatch.get(wsfexv1, "XmlRequest").toString();
-					logger.debug("XmlRequest: " + xmlReq);
-					resp.setXmlRequest(xmlReq);
-					String xmlRes = Dispatch.get(wsfexv1, "XmlResponse").toString();
-					logger.debug("XmlResponse: " + xmlRes);
-					resp.setXmlResponse(xmlRes);
-
-					String errmsg =  Dispatch.get(wsfexv1, "ErrMsg").toString();
-					logger.debug("ErrMsg: " + errmsg);
-					resp.setErrMsg(errmsg);
-
-					String obs =  Dispatch.get(wsfexv1, "Obs").toString();
-					logger.debug("Obs: " + obs);
-					resp.setObservacion(obs);
-					resp.setObs(obs);
-
-					/* Datos devueltos */
-					logger.debug("CAE: " + cae.toString());
-					resp.setCae(cae.toString());
-
-					String resultado = Dispatch.get(wsfexv1, "Resultado").toString();
-					logger.debug("Resultado: " + resultado);
-					resp.setResultado(resultado);
-
-					/* Mostrar Vencimiento */
-					Variant fechaVencimiento = Dispatch.get(wsfexv1, "Vencimiento");
-					logger.debug("Vencimiento: " + resultado);
-					resp.setFechaVencimiento(fechaVencimiento.toString());
-					
-					if (!resultado.equals("A") && !resultado.equals("P")) {
-						//Debo enviar un Error cuando no se Autoriza ...
-						resp.cargarError(new Response(ErrorEnum.ERROR_ORIGEN_AFIP, obs));
-						logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion() + " - ErrMsg: " + resp.getErrMsg());
-					}
-					
+		    	    
 				    If WSFEXv1.Excepcion <> "" Then
 				        MsgBox WSFEXv1.Traceback, vbExclamation, WSFEXv1.Excepcion
 				    End If
@@ -388,8 +288,102 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 				            Debug.Print Err.Description
 				    End Select
 				    'Debug.Assert False
-				    
+						    
+					/* Agrego Comprobantes Asociados */
+					for (int i = 0; datos.getComprobantesAsociados() != null && i < datos.getComprobantesAsociados().length; i++) {
+						ComprobanteAsociado aux = datos.getComprobantesAsociados()[i];
+						if ((datos.getComprobantesAsociados()[i]).getTipoCbte()!=null) { 
+							if (!(datos.getComprobantesAsociados()[i]).toString().trim().equals("")) {
+								
+								Variant tipo_cbte1 = new Variant((datos.getComprobantesAsociados()[i]).getTipoCbte().toString()),
+										punto_vta1 = new Variant((datos.getComprobantesAsociados()[i]).getPuntoVta().toString()),
+										cbte_nro1 = new Variant((datos.getComprobantesAsociados()[i]).getCbteNro().toString()),
+										cuit1 = new Variant((datos.getComprobantesAsociados()[i]).getCuit()),
+										fecha_cbte1 = new Variant((datos.getComprobantesAsociados()[i]).getFechaCbte());
+									
+								Dispatch.call(wsfexv1, "AgregarCmpAsoc", 
+										tipo_cbte1, punto_vta1, cbte_nro1, cuit1, fecha_cbte1);
+							}
+						}
+					}
 
+					/* Agrego Datos Opcionales */
+					for (int i = 0; datos.getDatosOpcionales() != null && i < datos.getDatosOpcionales().length; i++) {
+						DatoOpcional aux = datos.getDatosOpcionales()[i];
+						if ((datos.getDatosOpcionales()[i]).getOpcionalId()!=null) { 
+							if (!(datos.getDatosOpcionales()[i]).toString().trim().equals("")) {
+								
+								Variant opcional_id1 = new Variant((datos.getDatosOpcionales()[i]).getOpcionalId().toString()), 
+										valor1 = new Variant((datos.getDatosOpcionales()[i]).getValor());
+								
+								Dispatch.call(wsfexv1, "AgregarOpcional", 
+										opcional_id1, valor1);
+							}					
+						}
+					}
+
+					/* Agrego Periodo Comprobantes Opcionales */
+					for (int i = 0; datos.getPeriodoComprobanteAsociados() != null && i < datos.getPeriodoComprobanteAsociados().length; i++) {
+						PeriodoComprobanteAsociado aux = datos.getPeriodoComprobanteAsociados()[i];
+						if ((datos.getPeriodoComprobanteAsociados()[i]).getFechaDesde()!=null
+								&& (datos.getPeriodoComprobanteAsociados()[i]).getFechaHasta()!=null) { 
+							if (!(datos.getPeriodoComprobanteAsociados()[i]).toString().trim().equals("")) {
+								
+								Variant fecheDesde = new Variant((datos.getPeriodoComprobanteAsociados()[i]).getFechaDesde()); 
+								Variant	fecheHasta = new Variant((datos.getPeriodoComprobanteAsociados()[i]).getFechaHasta());
+								
+								Dispatch.call(wsfexv1, "AgregarPeriodoComprobantesAsociados", 
+										fecheDesde, fecheHasta);
+							}					
+						}
+					}
+					
+					/* Habilito reprocesamiento automático (predeterminado): */
+					Dispatch.put(wsfexv1, "Reprocesar", new Variant(true));
+
+					/* Solicito CAE (llamando al webservice de AFIP): */
+					Variant cae = Dispatch.call(wsfexv1, "CAESolicitar");
+
+					excepcion =  Dispatch.get(wsfexv1, "Excepcion").toString();
+					logger.debug("Excepcion: " + excepcion);
+					resp.setExcepcionWsfexv1(excepcion);
+
+					/* Mostrar mensajes XML enviados y recibidos (depuración) */
+					String xmlReq = Dispatch.get(wsfexv1, "XmlRequest").toString();
+					logger.debug("XmlRequest: " + xmlReq);
+					resp.setXmlRequest(xmlReq);
+					String xmlRes = Dispatch.get(wsfexv1, "XmlResponse").toString();
+					logger.debug("XmlResponse: " + xmlRes);
+					resp.setXmlResponse(xmlRes);
+
+					String errmsg =  Dispatch.get(wsfexv1, "ErrMsg").toString();
+					logger.debug("ErrMsg: " + errmsg);
+					resp.setErrMsg(errmsg);
+
+					String obs =  Dispatch.get(wsfexv1, "Obs").toString();
+					logger.debug("Obs: " + obs);
+					resp.setObservacion(obs);
+					resp.setObs(obs);
+
+					/* Datos devueltos */
+					logger.debug("CAE: " + cae.toString());
+					resp.setCae(cae.toString());
+
+					String resultado = Dispatch.get(wsfexv1, "Resultado").toString();
+					logger.debug("Resultado: " + resultado);
+					resp.setResultado(resultado);
+
+					/* Mostrar Vencimiento */
+					Variant fechaVencimiento = Dispatch.get(wsfexv1, "Vencimiento");
+					logger.debug("Vencimiento: " + resultado);
+					resp.setFechaVencimiento(fechaVencimiento.toString());
+					
+					if (!resultado.equals("A") && !resultado.equals("P")) {
+						//Debo enviar un Error cuando no se Autoriza ...
+						resp.cargarError(new Response(ErrorEnum.ERROR_ORIGEN_AFIP, obs));
+						logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion() + " - ErrMsg: " + resp.getErrMsg());
+					}
+					
 				} else { //excepcion wsfe
 					resp.cargarError(new Response(ErrorEnum.ERROR_CONEXION_WSFE, excepcion));
 					logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion());

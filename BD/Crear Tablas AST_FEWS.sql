@@ -22,6 +22,59 @@
 -- DROP TABLE [dbo].[AST_FEWS_LOG_PERIODO_ASOC]
 -- GO
 
+-- /****** Object:  Table [dbo].[AST_FEWS_LOG_PERMISO]    Script Date: 05/25/2016 10:40:21 ******/
+-- DROP TABLE [dbo].[AST_FEWS_LOG_PERMISO]
+-- GO
+
+-- /****** Object:  Table [dbo].[AST_FEWS_LOG_DETALLE]    Script Date: 05/25/2016 10:40:21 ******/
+-- DROP TABLE [dbo].[AST_FEWS_LOG_DETALLE]
+-- GO
+
+/****** Object:  Table [dbo].[AST_FEWS_LOG_DETALLE]    Script Date: 05/25/2016 10:40:21 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[AST_FEWS_LOG_DETALLE](
+    [AS_ID] VARCHAR(20) NULL,
+    [CUIT_EMPRESA] VARCHAR(20) NULL,
+    [TIPO_COMPROBANTE] VARCHAR(3) NULL,
+    [PUNTO_VENTA] VARCHAR(10) NULL,
+    [NUMERO_COMPROBANTE] VARCHAR(20) NULL,
+	[CODIGO] [varchar](30) NULL,
+	[DESCRIPCION] [varchar](4000) NULL,
+	[CANTIDAD] [varchar](20) NULL,
+	[UNIDAD_MEDIDA] [smallint] NULL,
+	[PRECIO] [varchar](20) NULL,
+	[IMPORTE_TOTAL] [varchar](20) NULL,
+	[BONIFICACION] [varchar](20) NULL
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+
+/****** Object:  Table [dbo].[AST_FEWS_LOG_PERMISO]    Script Date: 05/25/2016 10:40:21 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[AST_FEWS_LOG_PERMISO](
+    [AS_ID] VARCHAR(20) NULL,
+    [CUIT_EMPRESA] VARCHAR(20) NULL,
+    [TIPO_COMPROBANTE] VARCHAR(3) NULL,
+    [PUNTO_VENTA] VARCHAR(10) NULL,
+    [NUMERO_COMPROBANTE] VARCHAR(20) NULL,
+	[ID_PERMISO] [varchar](16) NULL,
+	[DST_MERCADERIA] [smallint] NULL
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+
 /****** Object:  Table [dbo].[AST_FEWS_LOG_PERIODO_ASOC]    Script Date: 05/25/2016 10:40:21 ******/
 SET ANSI_NULLS ON
 GO
@@ -166,7 +219,24 @@ CREATE TABLE [dbo].[AST_FEWS_LOG](
 	[OBS] [varchar](1000) NULL,
 	[XML_REQUEST_AFIP] [text] NULL,
 	[XML_RESPONSE_AFIP] [text] NULL,
-	[QR] [varbinary](max) NULL
+	[QR] [varbinary](max) NULL,
+	---------------------------------------------
+	[TIPO_EXPORTACION] [varchar](1) NULL,
+	[PERMISO_EXISTENTE] [varchar](1) NULL,
+	[DST_COMPROBANTE] [varchar](3) NULL,
+	[CLIENTE] [varchar](200) NULL,
+	[CUIT_PAIS_CLIENTE] [varchar](1000) NULL,
+	[DOMICILIO_CLIENTE] [varchar](300) NULL,
+	[ID_IMPOSITIVO] [varchar](50) NULL,
+	[OBS_COMERCIALES] [varchar](1000) NULL,
+	[OBS_GENERALES] [varchar](1000) NULL,
+	[FORMA_PAGO] [varchar](50) NULL,
+	[INCOTERMS] [varchar](3) NULL,
+	[INCOTERMS_DS] [varchar](20) NULL,
+	[IDIOMA_COMPROBANTE] [varchar](1) NULL,
+	---------------------------------------------
+	[EXCEPCION_WSFEXV1] [varchar](1000) NULL
+	---------------------------------------------	
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 SET ANSI_PADDING OFF

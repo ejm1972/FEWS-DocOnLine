@@ -31,6 +31,7 @@ import ar.com.coninf.doconline.rest.model.tx.ComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.ControlTransaccion;
 import ar.com.coninf.doconline.rest.model.tx.DatoOpcional;
 import ar.com.coninf.doconline.rest.model.tx.DatoQr;
+import ar.com.coninf.doconline.rest.model.tx.Item;
 import ar.com.coninf.doconline.rest.model.tx.Iva;
 import ar.com.coninf.doconline.rest.model.tx.PeriodoComprobanteAsociado;
 import ar.com.coninf.doconline.rest.model.tx.Permiso;
@@ -365,6 +366,21 @@ public class AutorizadorFews {
 			PeriodoComprobanteAsociado[] periodosAsociados = new PeriodoComprobanteAsociado[listFewsPeriodoAsociado.size()];
 			Permiso[] permisos = new Permiso[listFewsPermiso.size()];
 			
+			Integer tipoExpo = selected.getTipoExpo();
+			String permisoExistente = selected.getPermisoExistente();
+			Integer dstCmp = selected.getDstCmp();
+			String cliente = selected.getNombreCliente();
+			String cuitPaisCliente = selected.getcuitPaisCliente();
+			String domicilioCliente = selected.getDomicilioCliente();
+			String idImpositivo = selected.getIdImpositivo();
+			String obsComerciales = selected.getObsComerciales();
+			String obsGenerales = selected.getObsGenerales();
+			String formaPago = selected.getFormaPago(); 
+			String incoterms = selected.getIncoterms();
+			String incotermsDs = selected.getIncotermsDs();
+			String idiomaCbte = selected.getIdiomaCbte();
+			Item[] items = new Item[listFewsItem.size()];
+
 			logger.debug("Comprobante:"+selected.getTipoComprobante()+"-"+selected.getNumeroPuntoVenta()+"-"+selected.getNumeroComprobante());
 			logger.debug("Fecha:"+selected.getFechaCbte());
 			logger.debug("ImpTotal:"+selected.getImpTotal().toString());
@@ -735,19 +751,27 @@ public class AutorizadorFews {
 			String fechaServDesde,
 			String fechaServHasta,
 			String monedaId,
+			BigDecimal monedaCtz,
+
+			Integer tipoExpo, String permisoExistente, Integer dstCmp, 
+			String cliente, String cuitPaisCliente, String domicilioCliente, String idImpositivo, 
+			String obsComerciales, String obsGenerales, String formaPago, 
+			String incoterms, String incotermsDs, String idiomaCbte,
+			
 			BigDecimal impTotal,
 			BigDecimal impTotConcNoGrav,
 			BigDecimal impNeto,
 			BigDecimal impIva,
 			BigDecimal impTrib,
 			BigDecimal impOpEx,
-			BigDecimal monedaCtz,
+			
 			Tributo[] tributos,
 			Iva[] ivas,
 			DatoOpcional[] datosOpcionales,
 			ComprobanteAsociado[] comprobantesAsociados,
 			PeriodoComprobanteAsociado[] periodosAsociados,
-			Permiso[] permisos) {
+			Permiso[] permisos,
+			Item[] items) {
 
 		ResponseAutorizarComprobanteExportacion respA = new ResponseAutorizarComprobanteExportacion();
 		respA.setEsReintento(false);
@@ -759,8 +783,14 @@ public class AutorizadorFews {
 					impTotal, impTotConcNoGrav, impNeto, impIva, impTrib, impOpEx, 
 					fechaCbte, fechaVencPago, fechaServDesde, fechaServHasta, 
 					monedaId, monedaCtz, 
-					tributos, ivas, comprobantesAsociados, datosOpcionales, periodosAsociados, permisos);
-	
+					tipoExpo, permisoExistente, dstCmp, 
+					cliente, cuitPaisCliente, domicilioCliente, idImpositivo, 
+					obsComerciales, obsGenerales, formaPago, 
+					incoterms, incotermsDs, idiomaCbte,
+					tributos, ivas, comprobantesAsociados, 
+					datosOpcionales, periodosAsociados, 
+					permisos, items); 
+
 			logger.debug("Ejecucion dolws.autorizarComprobante() de WS");
 	
 			logger.debug("Codigo:"+respA.getCodigo());
