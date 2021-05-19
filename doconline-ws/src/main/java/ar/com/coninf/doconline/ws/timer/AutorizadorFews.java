@@ -15,6 +15,7 @@ import ar.com.coninf.doconline.business.facade.LogTransaccionFacade;
 import ar.com.coninf.doconline.business.log.LogTransaccionContenido;
 import ar.com.coninf.doconline.model.dao.FewsComprobanteAsociadoDao;
 import ar.com.coninf.doconline.model.dao.FewsDatoOpcionalDao;
+import ar.com.coninf.doconline.model.dao.FewsDetalleDao;
 import ar.com.coninf.doconline.model.dao.FewsEncabezadoDao;
 import ar.com.coninf.doconline.model.dao.FewsIvaDao;
 import ar.com.coninf.doconline.model.dao.FewsPeriodoAsociadoDao;
@@ -38,6 +39,7 @@ import ar.com.coninf.doconline.rest.model.tx.Permiso;
 import ar.com.coninf.doconline.rest.model.tx.Tributo;
 import ar.com.coninf.doconline.shared.dto.FewsComprobanteAsociado;
 import ar.com.coninf.doconline.shared.dto.FewsDatoOpcional;
+import ar.com.coninf.doconline.shared.dto.FewsDetalle;
 import ar.com.coninf.doconline.shared.dto.FewsEncabezado;
 import ar.com.coninf.doconline.shared.dto.FewsIva;
 import ar.com.coninf.doconline.shared.dto.FewsPeriodoAsociado;
@@ -88,6 +90,10 @@ public class AutorizadorFews {
 	@Autowired
 	@Qualifier("fewsPermisoDao")
 	private FewsPermisoDao fewsPermisoDao;
+	
+	@Autowired
+	@Qualifier("fewsDetalleDao")
+	private FewsDetalleDao fewsDetalleDao;
 	
 	@Autowired
 	@Qualifier("dolProperties")
@@ -300,9 +306,9 @@ public class AutorizadorFews {
 
 			logger.debug("Ejecucion AutorizadorFews.procesarPendientes()");
 			
-			for (Long interfaz : interfaces) {
-				fewsEncabezadoDao.importLog(interfaz);
-				logger.debug("Fin Ejecucion fewsEncabezadoDao.importLog()="+interfaz);
+			for (Long intrfz : interfaces) {
+				fewsEncabezadoDao.importLog(intrfz);
+				logger.debug("Fin Ejecucion fewsEncabezadoDao.importLog()="+intrfz);
 				
 				List<FewsEncabezado> pendientes = fewsEncabezadoDao.getFewsPendiente((long) -1);
 				logger.debug("Fin Ejecucion fewsEncabezadoDao.getFewsPendiente()");
@@ -335,6 +341,7 @@ public class AutorizadorFews {
 			FewsXml fewsXml = fewsXmlDao.getById(selected.getId());
 			FewsQr fewsQr = fewsQrDao.getById(selected.getId());
 			List<FewsPermiso> listFewsPermiso = fewsPermisoDao.getListById(selected.getId());
+			List<FewsDetalle> listFewsDetalle = fewsDetalleDao.getListById(selected.getId());
 			
 			interfaz = selected.getIdInterfaz().intValue();
 			clave = dolProperties.getProperty("interfaz_"+interfaz); 
@@ -364,13 +371,12 @@ public class AutorizadorFews {
 			DatoOpcional[] datosOpcionales = new DatoOpcional[listFewsDatoOpcional.size()];
 			ComprobanteAsociado[] comprobantesAsociados = new ComprobanteAsociado[listFewsComprobanteAsociado.size()];
 			PeriodoComprobanteAsociado[] periodosAsociados = new PeriodoComprobanteAsociado[listFewsPeriodoAsociado.size()];
-			Permiso[] permisos = new Permiso[listFewsPermiso.size()];
 			
 			Integer tipoExpo = selected.getTipoExpo();
 			String permisoExistente = selected.getPermisoExistente();
 			Integer dstCmp = selected.getDstCmp();
 			String cliente = selected.getNombreCliente();
-			String cuitPaisCliente = selected.getcuitPaisCliente();
+			String cuitPaisCliente = selected.getCuitPaisCliente();
 			String domicilioCliente = selected.getDomicilioCliente();
 			String idImpositivo = selected.getIdImpositivo();
 			String obsComerciales = selected.getObsComerciales();
@@ -379,7 +385,8 @@ public class AutorizadorFews {
 			String incoterms = selected.getIncoterms();
 			String incotermsDs = selected.getIncotermsDs();
 			String idiomaCbte = selected.getIdiomaCbte();
-			Item[] items = new Item[listFewsItem.size()];
+			Permiso[] permisos = new Permiso[listFewsPermiso.size()];
+			Item[] items = new Item[listFewsDetalle.size()];
 
 			logger.debug("Comprobante:"+selected.getTipoComprobante()+"-"+selected.getNumeroPuntoVenta()+"-"+selected.getNumeroComprobante());
 			logger.debug("Fecha:"+selected.getFechaCbte());
@@ -521,29 +528,48 @@ public class AutorizadorFews {
 				case 20:
 				case 21:
 				case 22:
-					autorizaWSFEXV1(ctx, selected, fewsXml, fewsQr, concepto,
-							 tipoDoc,
-							 nroDoc,
-							 tipoCbte,
-							 ptoVta,
-							 nroCbte,
-							 fechaCbte,
-							 fechaVencPago,
-							 fechaServDesde,
-							 fechaServHasta,
-							 monedaId,
-							 impTotal,
-							 impTotConcNoGrav,
-							 impNeto,
-							 impIva,
-							 impTrib,
-							 impOpEx,
-							 monedaCtz,
-							 tributos,
-							 ivas,
-							 datosOpcionales,
-							 comprobantesAsociados,
-							 periodosAsociados, permisos);
+					autorizaWSFEXV1(ctx, selected, fewsXml, fewsQr, 
+							concepto,
+							tipoDoc,
+							nroDoc,
+							tipoCbte,
+							ptoVta,
+							nroCbte,
+							fechaCbte,
+							fechaVencPago,
+							fechaServDesde,
+							fechaServHasta,
+							monedaId,
+							monedaCtz,
+
+							tipoExpo, 
+							permisoExistente, 
+							dstCmp, 
+							cliente, 
+							cuitPaisCliente, 
+							domicilioCliente, 
+							idImpositivo, 
+							obsComerciales, 
+							obsGenerales, 
+							formaPago, 
+							incoterms, 
+							incotermsDs, 
+							idiomaCbte,
+							
+							impTotal, 
+							impTotConcNoGrav,
+							impNeto, 
+							impIva,
+							impTrib, 
+							impOpEx,
+							
+							tributos, 
+							ivas, 
+							datosOpcionales,
+							comprobantesAsociados, 
+							periodosAsociados,
+							permisos, 
+							items);
 					break;
 				default:
 					autorizaWSFEV1(ctx, selected, fewsXml, fewsQr, concepto,
@@ -557,19 +583,21 @@ public class AutorizadorFews {
 							 fechaServDesde,
 							 fechaServHasta,
 							 monedaId,
+							 monedaCtz,
+							 							 
 							 impTotal,
 							 impTotConcNoGrav,
 							 impNeto,
 							 impIva,
 							 impTrib,
 							 impOpEx,
-							 monedaCtz,
+							 
 							 tributos,
 							 ivas,
 							 datosOpcionales,
 							 comprobantesAsociados,
 							 periodosAsociados);
-					break;			
+					break;
 				}
 				
 			} else {
@@ -603,13 +631,13 @@ public class AutorizadorFews {
 			String fechaServDesde,
 			String fechaServHasta,
 			String monedaId,
+			BigDecimal monedaCtz,
 			BigDecimal impTotal,
 			BigDecimal impTotConcNoGrav,
 			BigDecimal impNeto,
 			BigDecimal impIva,
 			BigDecimal impTrib,
 			BigDecimal impOpEx,
-			BigDecimal monedaCtz,
 			Tributo[] tributos,
 			Iva[] ivas,
 			DatoOpcional[] datosOpcionales,
@@ -627,7 +655,6 @@ public class AutorizadorFews {
 					fechaCbte, fechaVencPago, fechaServDesde, fechaServHasta, 
 					monedaId, monedaCtz, 
 					tributos, ivas, comprobantesAsociados, datosOpcionales, periodosAsociados);
-	
 			logger.debug("Ejecucion dolws.autorizarComprobante() de WS");
 	
 			logger.debug("Codigo:"+respA.getCodigo());
@@ -789,9 +816,8 @@ public class AutorizadorFews {
 					incoterms, incotermsDs, idiomaCbte,
 					tributos, ivas, comprobantesAsociados, 
 					datosOpcionales, periodosAsociados, 
-					permisos, items); 
-
-			logger.debug("Ejecucion dolws.autorizarComprobante() de WS");
+					permisos, items); 			
+			logger.debug("Ejecucion dolws.autorizarComprobanteExportacion() de WS");
 	
 			logger.debug("Codigo:"+respA.getCodigo());
 			logger.debug("Descripcion:"+respA.getDescripcion());
@@ -844,7 +870,7 @@ public class AutorizadorFews {
 			fewsXml.setDescripcion(descripcion);
 			fewsXml.setObservacion(observacion);
 			fewsXml.setExcepcionWsaa(excepcionWsaa==null?descripcion:excepcionWsaa);
-			fewsXml.setExcepcionWsfev1(excepcionWsfexv1==null?descripcion:excepcionWsfexv1);
+			fewsXml.setExcepcionWsfexv1(excepcionWsfexv1==null?descripcion:excepcionWsfexv1);
 	
 			if (respA.getCodigo().equals(0)) {
 				ResponseAutenticacion respI = dolsw.iniciarSesion(interfaz, clave);

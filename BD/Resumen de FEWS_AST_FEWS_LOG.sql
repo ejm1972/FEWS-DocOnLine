@@ -8,7 +8,7 @@ SELECT max(id),
 	, sum(case when TIPO in ('IIN', 'FIN') then 1 else 0 end) as Cantidad_IN
 	, sum(case when TIPO in ('IUD', 'FUD') then 1 else 0 end) as Cantidad_UD
 FROM [fews].[dbo].[FEWS_AST_FEWS_LOG]
-where CUIT_EMPRESA <> '20225925055'
+--where CUIT_EMPRESA <> '20225925055'
 group by CUIT_EMPRESA, TIPO_COMPROBANTE, PUNTO_VENTA, NUMERO_COMPROBANTE
 order by max(id) desc
 

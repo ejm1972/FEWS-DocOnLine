@@ -31,6 +31,7 @@ public class FewsEncabezado implements Serializable {
 	private Integer tipoExpo;
 	private String permisoExistente;
 	private Integer dstCmp;
+	private String cuitPaisCliente;
 	private String nombreCliente;
 	private Integer tipoDoc;
 	private Long nroDoc;
@@ -206,6 +207,14 @@ public class FewsEncabezado implements Serializable {
 		this.nombreCliente = nombreCliente;
 	}
 
+	@Column(name = "cuit_pais_cliente")
+	public String getCuitPaisCliente() {
+		return cuitPaisCliente;
+	}
+	public void setCuitPaisCliente(String cuitPaisCliente) {
+		this.cuitPaisCliente = cuitPaisCliente;
+	}
+	
 	@Column(name = "tipo_doc")
 	public Integer getTipoDoc() {
 		return tipoDoc;

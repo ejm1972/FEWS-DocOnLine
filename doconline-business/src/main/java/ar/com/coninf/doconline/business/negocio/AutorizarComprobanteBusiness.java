@@ -7,6 +7,7 @@ import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.ComFailException;
 import com.jacob.com.Dispatch;
 import com.jacob.com.LibraryLoader;
+import com.jacob.com.SafeArray;
 import com.jacob.com.Variant;
 
 import ar.com.coninf.doconline.rest.model.enums.ErrorEnum;
@@ -273,7 +274,15 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 					excepcion =  Dispatch.get(wsfev1, "Excepcion").toString();
 					logger.debug("Excepcion: " + excepcion);
 					resp.setExcepcionWsfev1(excepcion);
-
+					
+					Variant aux = Dispatch.get(wsfev1, "Eventos");
+					SafeArray eventos = aux.toSafeArray();
+					String [] aux1 = eventos.toStringArray();
+					int aux3 = 0;
+					for (String aux2 : aux1) {
+						logger.debug("Evento[" + aux3 + "]: " + excepcion);
+					}
+					
 					/* Mostrar mensajes XML enviados y recibidos (depuración) */
 					String xmlReq = Dispatch.get(wsfev1, "XmlRequest").toString();
 					logger.debug("XmlRequest: " + xmlReq);

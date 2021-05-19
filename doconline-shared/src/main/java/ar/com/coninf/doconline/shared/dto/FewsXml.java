@@ -48,11 +48,14 @@ public class FewsXml implements Serializable {
 	@Column(name = "excepcion_wsfev1", nullable = true)
 	private String excepcionWsfev1;
 	
+	@InsertOptional
+	@Column(name = "excepcion_wsfexv1", nullable = true)
+	private String excepcionWsfexv1;
+	
 	@Transient
 	private char[] xmlRequestAfip;
 	@Transient
 	private char[] xmlResponseAfip;
-
 	@Transient
 	private String txtRequest;
 	@Transient
@@ -152,7 +155,6 @@ public class FewsXml implements Serializable {
 	}
 	public void setCodigo(Integer codigo) {
 		this.codigo = codigo.toString();
-		
 	}
 	
 	public String getDescripcion() {
@@ -172,25 +174,28 @@ public class FewsXml implements Serializable {
 	public String getExcepcionWsaa() {
 		return excepcionWsaa;
 	}
-	public void setExcepcionWsaa(String excepcion_wsaa) {
-		this.excepcionWsaa = excepcion_wsaa;
+	public void setExcepcionWsaa(String excepcion) {
+		this.excepcionWsaa = excepcion;
 	}
 	
 	public String getExcepcionWsfev1() {
 		return excepcionWsfev1;
 	}
-	public void setExcepcionWsfev1(String excepcion_wsfev1) {
-		this.excepcionWsfev1 = excepcion_wsfev1;
+	public void setExcepcionWsfev1(String excepcion) {
+		this.excepcionWsfev1 = excepcion;
 	}
-	public void setXmlRequest(String str) {
-		// TODO Auto-generated method stub
-		
+	
+	public String getExcepcionWsfexv1() {
+		return excepcionWsfexv1;
+	}
+	public void setExcepcionWsfexv1(String excepcion) {
+		this.excepcionWsfexv1 = excepcion;
+	}
+
+	public void setXmlRequest(String str) {		
 		this.xmlRequest = str.toCharArray();
-		
 	}
 	public void setXmlResponse(String str) {
-		// TODO Auto-generated method stub
-		
 		this.xmlResponse = str.toCharArray();
 		
 	}

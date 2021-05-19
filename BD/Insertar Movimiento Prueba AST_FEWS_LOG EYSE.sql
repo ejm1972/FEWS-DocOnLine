@@ -56,7 +56,7 @@ commit tran
 	
 	declare @TipoCbteFC varchar(3)		= '1'
 	declare @PtoVtaFC varchar(5)		= N'00001'
-	declare @CbteFC int					= 73
+	declare @CbteFC int					= 75
 	declare @NroCbteFC varchar(8)		= right('00000000'+convert(varchar(8), @CbteFC),8)
 
 	declare @CuitEmpresa varchar(11)	= N'20225925055'
@@ -77,7 +77,7 @@ commit tran
 
 	declare @TipoCbteNC varchar(3)		= '3'
 	declare @PtoVtaNC varchar(5)		= N'00001'
-	declare @CbteNC int					= 5
+	declare @CbteNC int					= 7
 	declare @NroCbteNC varchar(8)		= right('00000000'+convert(varchar(8), @CbteNC),8)
 	
 begin tran	
