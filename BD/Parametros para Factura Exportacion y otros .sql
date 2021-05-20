@@ -28,7 +28,7 @@ go
 
 if not exists(select top 1 * from sys.columns c, sys.objects o where o.name = N'FEWS_AST_FEWS_LOG' and c.object_id=o.object_id and c.name = N'CUIT_PAIS_CLIENTE')
 	ALTER TABLE [FEWS_AST_FEWS_LOG] 
-	ADD [cuit_pais_cliente] [varchar](1000) NULL
+	ADD [cuit_pais_cliente] [varchar](20) NULL
 go
 
 if not exists(select top 1 * from sys.columns c, sys.objects o where o.name = N'FEWS_AST_FEWS_LOG' and c.object_id=o.object_id and c.name = N'DOMICILIO_CLIENTE')

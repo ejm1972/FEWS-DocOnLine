@@ -26,8 +26,8 @@ public class LogTransaccionDaoImpl extends GenericDaoImpl<LogTransaccionDto> imp
 			long tiempoOp = log.getFechaFinOp().getTime()-log.getFechaInicioOp().getTime();
 			String tiempoOracle = tiempoOp + "/86400000)";
 			String sysdateInicio = "getdate()-(" + tiempoOracle;
-			String insert = "insert into LOG_TRANSACCIONES(F_INICIO_OPERACION,F_FIN_OPERACION,ID_TIPO_TRANSACCION,XML_ENTRADA,XML_SALIDA,ID_REGISTRO_TRANSACCION,CODIGO,DESCRIPCION,OBSERVACION,EXCEPCION_WSAA,EXCEPCION_WSFEV1,RESULTADO,ERR_MSG,OBS,XML_REQUEST_AFIP,XML_RESPONSE_AFIP,TIPO_COMPROBANTE,PUNTO_VENTA,NUMERO_COMPROBANTE,COMPROBANTE,FECHA_COMPROBANTE,IMPORTE_TOTAL,CAE,FECHA_VENCIMIENTO)" +
-					" values ("+sysdateInicio+", getdate(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String insert = "insert into LOG_TRANSACCIONES(F_INICIO_OPERACION,F_FIN_OPERACION,ID_TIPO_TRANSACCION,XML_ENTRADA,XML_SALIDA,ID_REGISTRO_TRANSACCION,CODIGO,DESCRIPCION,OBSERVACION,EXCEPCION_WSAA,EXCEPCION_WSFEV1,EXCEPCION_WSFEXV1,RESULTADO,ERR_MSG,OBS,XML_REQUEST_AFIP,XML_RESPONSE_AFIP,TIPO_COMPROBANTE,PUNTO_VENTA,NUMERO_COMPROBANTE,COMPROBANTE,FECHA_COMPROBANTE,IMPORTE_TOTAL,CAE,FECHA_VENCIMIENTO)" +
+					" values ("+sysdateInicio+", getdate(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			connection = DataSourceUtils.getConnection(getJdbcTemplate().getDataSource());
 			statement = connection.prepareStatement(insert, new String[] {"ID_LOG_TRANSACCION"});
 //			if(log.getClienteId() == null){
@@ -49,23 +49,24 @@ public class LogTransaccionDaoImpl extends GenericDaoImpl<LogTransaccionDto> imp
 			statement.setString(7, log.getObservacion());
 			statement.setString(8, log.getExcepcionWsaa());
 			statement.setString(9, log.getExcepcionWsfev1());
-			statement.setString(10, log.getResultado());
-			statement.setString(11, log.getErrMsg());
-			statement.setString(12, log.getObs());
+			statement.setString(10, log.getExcepcionWsfexv1());
+			statement.setString(11, log.getResultado());
+			statement.setString(12, log.getErrMsg());
+			statement.setString(13, log.getObs());
 			c = CLOB.createTemporary(connection);
 			c.putChars(1, log.getXmlRequestAfip());
-			statement.setClob(13, c);
+			statement.setClob(14, c);
 			c = CLOB.createTemporary(connection);
 			c.putChars(1, log.getXmlResponseAfip());
-			statement.setClob(14, c);
-			statement.setString(15, log.getTipoComprobante());
-			statement.setString(16, log.getPuntoVenta());
-			statement.setString(17, log.getNumeroComprobante());
-			statement.setString(18, log.getComprobante());
-			statement.setString(19, log.getFechaComprobante());
-			statement.setString(20, log.getImporteTotal());
-			statement.setString(21, log.getCae());
-			statement.setString(22, log.getFechaVencimiento());
+			statement.setClob(15, c);
+			statement.setString(16, log.getTipoComprobante());
+			statement.setString(17, log.getPuntoVenta());
+			statement.setString(18, log.getNumeroComprobante());
+			statement.setString(19, log.getComprobante());
+			statement.setString(20, log.getFechaComprobante());
+			statement.setString(21, log.getImporteTotal());
+			statement.setString(22, log.getCae());
+			statement.setString(23, log.getFechaVencimiento());
 			affectedRows = statement.executeUpdate();
 			if (affectedRows == 0) {
 				throw new SQLException("Error al insertar en la tabla LOG_TRANSACCIONES.");

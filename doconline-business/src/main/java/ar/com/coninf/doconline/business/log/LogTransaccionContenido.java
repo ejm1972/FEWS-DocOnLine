@@ -22,6 +22,9 @@ public class LogTransaccionContenido {
 	private String excepcionWsaa;
 	
 	private String excepcionWsfev1;
+	
+	private String excepcionWsfexv1;
+	
 	private String errMsg;
 	private String obs;
 	private String xmlRequest;
@@ -121,12 +124,21 @@ public class LogTransaccionContenido {
 	public void setExcepcionWsaa(String excepcionWsaa) {
 		this.excepcionWsaa = excepcionWsaa;
 	}
+	/*-------------------------------------------------------*/
 	public String getExcepcionWsfev1() {
 		return excepcionWsfev1;
 	}
 	public void setExcepcionWsfev1(String excepcionWsfev1) {
 		this.excepcionWsfev1 = excepcionWsfev1;
 	}
+	/*-------------------------------------------------------*/
+	public String getExcepcionWsfexv1() {
+		return excepcionWsfexv1;
+	}
+	public void setExcepcionWsfexv1(String excepcionWsfexv1) {
+		this.excepcionWsfexv1 = excepcionWsfexv1;
+	}
+	/*-------------------------------------------------------*/
 	public String getResultado() {
 		return resultado;
 	}

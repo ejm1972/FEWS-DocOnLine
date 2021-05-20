@@ -129,7 +129,7 @@ public class AutorizadorFews {
 
 	}
 
-	private void registrarAuditoriaIni(ControlTransaccion ctx, FewsEncabezado selected, String ivas, String tributos, String comprobantesAsociados, String datosOpcionales, String periodosAsociados, String permisos) {
+	private void registrarAuditoriaIni(ControlTransaccion ctx, FewsEncabezado selected, String ivas, String tributos, String comprobantesAsociados, String datosOpcionales, String periodosAsociados, String permisos, String items) {
 
 		logger.debug("Ejecucion AutorizadorFews.registrarAuditoriaIni()");
 
@@ -142,24 +142,43 @@ public class AutorizadorFews {
 		log.setOperacion("autorizarComprobante");
 
 		BigDecimal big100 = new BigDecimal("100");
-		String concepto = selected.getConcepto().toString();
+		String concepto = selected.getConcepto()==null?"":selected.getConcepto().toString();
 		String tipoDoc = selected.getTipoDoc().toString();
 		String nroDoc = selected.getNroDoc().toString();
 		String tipoCbte = selected.getTipoCbte().toString();
 		String ptoVta = selected.getPuntoVta().toString();
 		String nroCbte = selected.getCbteNro().toString();
+		
 		String fechaCbte = selected.getFechaCbte();
 		String fechaVencPago = selected.getFechaVencPago();
 		String fechaServDesde = selected.getFechaServDesde();
 		String fechaServHasta = selected.getFechaServHasta();
+
 		String monedaId = selected.getMonedaId();
+		String monedaCtz = selected.getMonedaCtz().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP).toString();
+		
 		String impTotal = selected.getImpTotal().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP).toString();
 		String impTotConcNoGrav = selected.getImpTotConc().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP).toString();
 		String impNeto = selected.getImpNeto().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP).toString();
 		String impIva = selected.getImpIva().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP).toString();
 		String impTrib = selected.getImpTrib().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP).toString();
 		String impOpEx = selected.getImpOpEx().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP).toString();
-		String monedaCtz = selected.getMonedaCtz().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP).toString();
+		
+		String tipoExpo = selected.getTipoExpo().toString();
+		String permisoExistente = selected.getPermisoExistente();
+		String dstCmp = selected.getDstCmp().toString();
+		String idImpositivo = selected.getIdImpositivo();
+		
+		String cuitPaisCliente = selected.getCuitPaisCliente();
+		String nombreCliente = selected.getNombreCliente();
+		String domicilioCliente = selected.getDomicilioCliente();
+		
+		String obsComerciales = selected.getObsComerciales();
+		String obsGenerales = selected.getObsGenerales();
+		String formaPago = selected.getFormaPago();
+		String incoterms = selected.getIncoterms();
+		String incotermsDs = selected.getIncotermsDs();
+		String idiomaCbte = selected.getIdiomaCbte();
 
 		log.setTipoCbte(tipoCbte);
 		ptoVta = String.valueOf("00000").concat(ptoVta);
@@ -177,12 +196,24 @@ public class AutorizadorFews {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		sb.append("lanzador: AutorizadorFews.procesarPendientes.autorizarComprobante");
+		
 		sb.append(", concepto: "+concepto+", tipoDoc: "+tipoDoc+", nroDoc: "+nroDoc);
 		sb.append(", tipoCbte: "+tipoCbte+", ptoVta: "+ptoVta+", nroCbte: "+nroCbte+", fechaCbte: "+fechaCbte);
+		
 		sb.append(", fechaVencPago: "+fechaVencPago+", fechaServDesde: "+fechaServDesde+", fechaServHasta: "+fechaServHasta);
+		
 		sb.append(", monedaId: "+monedaId+", monedaCtz: "+monedaCtz);
+		
 		sb.append(", impTotal: "+impTotal+", impTotConcNoGrav: "+impTotConcNoGrav+", impOpEx: "+impOpEx);
 		sb.append(", impNeto: "+impNeto+", impIva: "+impIva+", impTrib: "+impTrib);
+		
+		sb.append(", tipoExpo: "+tipoExpo+", permisoExistente: "+permisoExistente+", dstCmp: "+dstCmp+", idImpositivo: "+idImpositivo);
+		sb.append(", cuitPaisCliente: "+cuitPaisCliente+", nombreCliente: "+nombreCliente+", domicilioCliente: "+domicilioCliente);
+		sb.append(", obsComerciales: "+obsComerciales);
+		sb.append(", obsGenerales: "+obsGenerales);
+		sb.append(", incoterms: "+incoterms+", incotermsDs: "+incotermsDs);
+		sb.append(", formaPago: "+formaPago+", idiomaCbte: "+idiomaCbte);
+		
 		if (!ivas.equals("")) {
 			sb.append(", ivas: "+ivas);
 		}
@@ -201,6 +232,9 @@ public class AutorizadorFews {
 		if (!permisos.equals("")) {
 			sb.append(", permisos: "+permisos);
 		}
+		if (!items.equals("")) {
+			sb.append(", items: "+items);
+		}
 		sb.append("}");
 		
 		log.setXmlEntrada(sb.toString());
@@ -216,6 +250,7 @@ public class AutorizadorFews {
 
 		log.setExcepcionWsaa(resp.getExcepcionWsaa());
 		log.setExcepcionWsfev1(resp.getExcepcionWsfev1());
+		
 		log.setErrMsg(resp.getErrMsg());
 		log.setObs(resp.getObs());
 		
@@ -252,7 +287,8 @@ public class AutorizadorFews {
 		log.setObservacion(resp.getObservacion());
 
 		log.setExcepcionWsaa(resp.getExcepcionWsaa());
-		log.setExcepcionWsfev1(resp.getExcepcionWsfexv1());
+		log.setExcepcionWsfexv1(resp.getExcepcionWsfexv1());
+		
 		log.setErrMsg(resp.getErrMsg());
 		log.setObs(resp.getObs());
 		
@@ -270,7 +306,7 @@ public class AutorizadorFews {
 		sb.append("lanzador: AutorizadorFews.procesarPendientes.autorizarComprobante");
 		sb.append(", codigo: "+resp.getCodigo().toString()+", descripcion: "+resp.getDescripcion()+", observacion: "+resp.getObservacion()+", esReintento: "+resp.getEsReintento().toString());
 		sb.append(", resultado: "+resp.getResultado()+", cae: "+resp.getCae()+", fechaVencimiento: "+resp.getFechaVencimiento());
-		sb.append(", obs: "+resp.getObs()+", errMsg: "+resp.getErrMsg()+", excepcionWsaa: "+resp.getExcepcionWsaa()+", excepcionWsfev1: "+resp.getExcepcionWsfexv1());
+		sb.append(", obs: "+resp.getObs()+", errMsg: "+resp.getErrMsg()+", excepcionWsaa: "+resp.getExcepcionWsaa()+", excepcionWsfexv1: "+resp.getExcepcionWsfexv1());
 		sb.append(", xmlRequest: "+resp.getXmlRequest());
 		sb.append(", xmlResponse: "+resp.getXmlResponse());
 		sb.append("}");
@@ -354,18 +390,22 @@ public class AutorizadorFews {
 			Integer tipoCbte = selected.getTipoCbte();
 			Integer ptoVta = selected.getPuntoVta();
 			Long nroCbte = selected.getCbteNro().longValue();
+
 			String fechaCbte = selected.getFechaCbte();
 			String fechaVencPago = selected.getFechaVencPago();
 			String fechaServDesde = selected.getFechaServDesde();
 			String fechaServHasta = selected.getFechaServHasta();
+			
 			String monedaId = selected.getMonedaId();
+			BigDecimal monedaCtz = selected.getMonedaCtz().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP);
+
 			BigDecimal impTotal = selected.getImpTotal().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP);
 			BigDecimal impTotConcNoGrav = selected.getImpTotConc().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP);
 			BigDecimal impNeto = selected.getImpNeto().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP);
 			BigDecimal impIva = selected.getImpIva().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP);
 			BigDecimal impTrib = selected.getImpTrib().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP);
 			BigDecimal impOpEx = selected.getImpOpEx().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP);
-			BigDecimal monedaCtz = selected.getMonedaCtz().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP);
+			
 			Tributo[] tributos = new Tributo[listFewsTributo.size()];
 			Iva[] ivas = new Iva[listFewsIva.size()];
 			DatoOpcional[] datosOpcionales = new DatoOpcional[listFewsDatoOpcional.size()];
@@ -385,6 +425,7 @@ public class AutorizadorFews {
 			String incoterms = selected.getIncoterms();
 			String incotermsDs = selected.getIncotermsDs();
 			String idiomaCbte = selected.getIdiomaCbte();
+			
 			Permiso[] permisos = new Permiso[listFewsPermiso.size()];
 			Item[] items = new Item[listFewsDetalle.size()];
 
@@ -485,11 +526,32 @@ public class AutorizadorFews {
 				if (i>0) {
 					sbPermiso.append(",");
 				}
-				sbPermiso.append("{idPermiso: "+permisos[i].getIdPermiso()+", dstMerc: "+permisos[i].getDstMerc()+"}");
+				sbPermiso.append("{idPermiso: "+permisos[i].getIdPermiso()+", dstMerc: "+permisos[i].getDstMerc().toString()+"}");
 			}
 			sbPermiso.append("]");
-			logger.debug("PeriodoComprobanteAsociado:"+sbPeriodoAsociado.toString());
+			logger.debug("Permiso:"+sbPermiso.toString());
 			
+			StringBuilder sbItem = new StringBuilder("[");
+			size = listFewsDetalle.size();
+			for (int i = 0;  i < size; i++) {			
+				items[i] = new Item();
+				items[i].setCodigo( listFewsDetalle.get(i).getCodigo() );
+				items[i].setDs( listFewsDetalle.get(i).getDs() );
+				items[i].setQty( listFewsDetalle.get(i).getQty() );
+				items[i].setPrecio( listFewsDetalle.get(i).getPrecio() );
+				items[i].setBonif( listFewsDetalle.get(i).getBonif() );
+				items[i].setUmed( listFewsDetalle.get(i).getUmed() );
+				items[i].setImpTotal( listFewsDetalle.get(i).getImpTotal() );
+				if (i>0) {
+					sbItem.append(",");
+				}
+				sbItem.append("{codigo: "+items[i].getCodigo()+", ds: "+items[i].getDs()+", umed: "+items[i].getUmed().toString());
+				sbItem.append(", qty: "+items[i].getQty().toString()+", precio: "+items[i].getPrecio().toString()+", bonif: "+items[i].getBonif().toString());
+				sbItem.append(", importeTotal: "+items[i].getImpTotal().toString()+"}");
+			}
+			sbItem.append("]");
+			logger.debug("Items:"+sbItem.toString());
+
 			ResponseAutenticacion respI = new ResponseAutenticacion();
 			respI.setEsReintento(false);
 
@@ -520,7 +582,7 @@ public class AutorizadorFews {
 				nroTransaccion = nroTransaccion - ((nroTransaccion/100000000)*100000000);
 				ctx.setNroTransaccion(nroTransaccion);
 
-				registrarAuditoriaIni(ctx, selected, sbIva.toString(), sbTributo.toString(), sbComprobanteAsociado.toString(), sbDatoOpcional.toString(), sbPeriodoAsociado.toString(), sbPermiso.toString());
+				registrarAuditoriaIni(ctx, selected, sbIva.toString(), sbTributo.toString(), sbComprobanteAsociado.toString(), sbDatoOpcional.toString(), sbPeriodoAsociado.toString(), sbPermiso.toString(), sbItem.toString());
 				logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaIni()");
 				
 				switch (selected.getTipoCbte()) {
@@ -535,10 +597,12 @@ public class AutorizadorFews {
 							tipoCbte,
 							ptoVta,
 							nroCbte,
+							
 							fechaCbte,
 							fechaVencPago,
 							fechaServDesde,
 							fechaServHasta,
+							
 							monedaId,
 							monedaCtz,
 

@@ -1,14 +1,14 @@
-
 /****** Script for SelectTopNRows command from SSMS  ******/
 SELECT max(id), 
 	CUIT_EMPRESA, TIPO_COMPROBANTE, PUNTO_VENTA, NUMERO_COMPROBANTE
-	, MAX(creado), MIN(creado)
+	, MIN(creado) INICIO
+	, MAX(creado) FINAL
 	, DATEDIFF(S,  MIN(creado), MAX(creado))/60 as Minutos
 	, DATEDIFF(SS,  MIN(creado), MAX(creado)) % 60 as Segundos
 	, sum(case when TIPO in ('IIN', 'FIN') then 1 else 0 end) as Cantidad_IN
 	, sum(case when TIPO in ('IUD', 'FUD') then 1 else 0 end) as Cantidad_UD
-FROM [fews].[dbo].[FEWS_AST_FEWS_LOG]
---where CUIT_EMPRESA <> '20225925055'
+FROM dbo.FEWS_AST_FEWS_LOG
+where CUIT_EMPRESA <> '20225925055'
 group by CUIT_EMPRESA, TIPO_COMPROBANTE, PUNTO_VENTA, NUMERO_COMPROBANTE
 order by max(id) desc
 
@@ -26,3 +26,19 @@ where f.CUIT_EMPRESA = t.CUIT_EMPRESA
 	and f.intento is null
 */
 
+/****** Script for SelectTopNRows command from SSMS  ******/
+SELECT max(id), 
+	CUIT_EMPRESA, TIPO_COMPROBANTE, PUNTO_VENTA, NUMERO_COMPROBANTE, INTENTO
+	, MIN(creado) INICIO
+	, MAX(creado) FINAL
+	, DATEDIFF(S,  MIN(creado), MAX(creado))/60 as Minutos
+	, DATEDIFF(SS,  MIN(creado), MAX(creado)) % 60 as Segundos
+	, sum(case when TIPO in ('IIN', 'FIN') then 1 else 0 end) as Cantidad_IN
+	, sum(case when TIPO in ('IUD', 'FUD') then 1 else 0 end) as Cantidad_UD
+FROM dbo.FEWS_AST_FEWS_LOG
+where CUIT_EMPRESA <> '20225925055'
+	and TIPO_COMPROBANTE = '03'
+	and PUNTO_VENTA = '0005'
+	and NUMERO_COMPROBANTE = '00002895'
+group by CUIT_EMPRESA, TIPO_COMPROBANTE, PUNTO_VENTA, NUMERO_COMPROBANTE, INTENTO
+order by max(id) desc

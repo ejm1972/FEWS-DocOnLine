@@ -73,6 +73,7 @@ public class LogTransaccionBusiness {
 			logDto.setObservacion(log.getObservacion());
 			logDto.setExcepcionWsaa(log.getExcepcionWsaa());
 			logDto.setExcepcionWsfev1(log.getExcepcionWsfev1());
+			logDto.setExcepcionWsfexv1(log.getExcepcionWsfexv1());
 			logDto.setResultado(log.getResultado());
 			logDto.setErrMsg(log.getErrMsg());
 			logDto.setObs(log.getObs());

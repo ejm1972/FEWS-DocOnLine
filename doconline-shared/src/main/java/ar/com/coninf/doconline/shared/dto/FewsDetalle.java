@@ -43,7 +43,10 @@ public class FewsDetalle implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
+	public void setId(Integer id) {
+		this.id = id.longValue();
+	}
+	
 	@Column(name = "tipo_reg")
 	public Integer getTipoReg() {
 		return tipoReg;

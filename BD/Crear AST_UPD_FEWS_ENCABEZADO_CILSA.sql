@@ -28,6 +28,16 @@ declare @intento datetime = getdate()
 begin tran
 
 --Borro todos los comprobantes pendientes
+delete FEWS_DETALLE
+from FEWS_DETALLE x, FEWS_ENCABEZADO e
+where (e.resultado is null or e.resultado <> 'A')
+	and e.id=x.id
+	
+delete FEWS_PERMISO
+from FEWS_PERMISO x, FEWS_ENCABEZADO e
+where (e.resultado is null or e.resultado <> 'A')
+	and e.id=x.id
+	
 delete FEWS_PERIODO_ASOC
 from FEWS_PERIODO_ASOC x, FEWS_ENCABEZADO e
 where (e.resultado is null or e.resultado <> 'A')

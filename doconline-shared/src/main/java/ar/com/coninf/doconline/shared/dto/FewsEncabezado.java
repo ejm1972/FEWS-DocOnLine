@@ -28,15 +28,22 @@ public class FewsEncabezado implements Serializable {
 	private Integer tipoCbte;
 	private Integer puntoVta;
 	private Integer cbteNro;
+	
+	private Integer tipoDoc;
+	private Long nroDoc;
+	
 	private Integer tipoExpo;
 	private String permisoExistente;
 	private Integer dstCmp;
+	private String idImpositivo;
+	
 	private String cuitPaisCliente;
 	private String nombreCliente;
-	private Integer tipoDoc;
-	private Long nroDoc;
 	private String domicilioCliente;
-	private String idImpositivo;
+	private String telefonoCliente;
+	private String localidadCliente;
+	private String provinciaCliente;
+	
 	private BigDecimal impTotal;
 	private BigDecimal impTotConc;
 	private BigDecimal impOpEx;
@@ -49,32 +56,37 @@ public class FewsEncabezado implements Serializable {
 	private BigDecimal impIibb;
 	private BigDecimal imptoPercMun;
 	private BigDecimal impInternos;
+	
 	private String monedaId;
 	private BigDecimal monedaCtz;
+	
 	private String obsComerciales;
 	private String obsGenerales;
 	private String formaPago;
 	private String incoterms;
 	private String incotermsDs;
 	private String idiomaCbte;
+	private String estadoImportacion;
+	
 	private String zona;
 	private String fechaVencPago;
 	private Integer prestaServ;
 	private String fechaServDesde;
 	private String fechaServHasta;
+	
 	private Long cae;
 	private String fechaVto;
 	private String resultado;
 	private String reproceso;
 	private String motivo;
-	private String telefonoCliente;
-	private String localidadCliente;
-	private String provinciaCliente;
+
 	private Integer formatoId;
 	private String email;
 	private String pdf;
+	
 	private String errCode;
 	private String errMsg;
+	
 	private String datoAdicional1;
 	private String datoAdicional2;
 	private String datoAdicional3;
@@ -82,7 +94,6 @@ public class FewsEncabezado implements Serializable {
 	private String datoAdicional5;
 	private String datoAdicional6;
 	private String datoAdicional7;
-	private String estadoImportacion;
 	
 	private String tipoComprobante;
 	private String numeroPuntoVenta;
