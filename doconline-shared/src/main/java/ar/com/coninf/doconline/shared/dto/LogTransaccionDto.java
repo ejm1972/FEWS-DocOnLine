@@ -56,6 +56,9 @@ public class LogTransaccionDto implements Serializable {
 	@Column(name = "EXCEPCION_WSFEV1")
 	private String excepcionWsfev1;
 	
+	@Column(name = "EXCEPCION_WSFEXV1")
+	private String excepcionWsfexv1;
+	
 	@Column(name = "RESULTADO")
 	private String resultado;
 	
@@ -203,6 +206,13 @@ public class LogTransaccionDto implements Serializable {
 		this.excepcionWsfev1 = excepcionWsfev1;
 	}
 
+	public String getExcepcionWsfexv1() {
+		return excepcionWsfexv1;
+	}
+	public void setExcepcionWsfexv1(String excepcionWsfev1) {
+		this.excepcionWsfexv1 = excepcionWsfev1;
+	}
+	
 	public String getResultado() {
 		return resultado;
 	}

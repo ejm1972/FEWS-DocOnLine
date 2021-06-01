@@ -72,7 +72,7 @@ commit tran
 	
 	declare @TipoCbteFC varchar(3)		= '19'
 	declare @PtoVtaFC varchar(5)		= N'00001'
-	declare @CbteFC int					= 1
+	declare @CbteFC int					= 5
 	declare @NroCbteFC varchar(8)		= right('00000000'+convert(varchar(8), @CbteFC),8)
 
 	declare @CuitEmpresa varchar(11)	= N'20225925055'
@@ -125,27 +125,55 @@ begin tran
 	(@CuitEmpresa,   @AsId,   @TipoCbteFC,        @PtoVtaFC,     @NroCbteFC,           @Codigo,  @Descrip,      @Cant,      @UniMed,         @Precio,  @ImpTotalDet,    @Bonif)
 commit tran
 
---	select @Id							= convert(int, (select isnull(max([AS_ID]),'0') id from [AST_FEWS_LOG]))
---	select @Id							= @Id + 1
---	select @AsId						= right('00000000'+convert(varchar(8), @Id),8)
+	select @Id							= convert(int, (select isnull(max([AS_ID]),'0') id from [AST_FEWS_LOG]))
+	select @Id							= @Id + 1
+	select @AsId						= right('00000000'+convert(varchar(8), @Id),8)
 
---	declare @TipoCbteNC varchar(3)		= '21'
---	declare @PtoVtaNC varchar(5)		= N'00001'
---	declare @CbteNC int					= 1
---	declare @NroCbteNC varchar(8)		= right('00000000'+convert(varchar(8), @CbteNC),8)
+	declare @TipoCbteNC varchar(3)		= '21'
+	declare @PtoVtaNC varchar(5)		= N'00001'
+	declare @CbteNC int					= 2
+	declare @NroCbteNC varchar(8)		= right('00000000'+convert(varchar(8), @CbteNC),8)
+
+	select @PermExistente = N''
 	
---begin tran	
---	INSERT [dbo].[AST_FEWS_LOG] 
---	([CUIT_EMPRESA], [TIPODOC_CLIENTE], [NRODOC_CLIENTE], [AS_ID], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [FECHA_COMPROBANTE], [MONEDA], [MONEDA_CTZ], [IMPORTE_TOTAL], [NETO_NOGRAVADO], [NETO_GRAVADO], [NETO_EXENTO], [IVA_TOTAL], [TRIBUTOS_TOTAL], [PERMISO_EXISTENTE], [TIPO_EXPORTACION], [CUIT_PAIS_CLIENTE], [CLIENTE], [DOMICILIO_CLIENTE], [DST_COMPROBANTE], [FORMA_PAGO], [ID_IMPOSITIVO], [IDIOMA_COMPROBANTE], [INCOTERMS], [INCOTERMS_DS], [OBS_COMERCIALES], [OBS_GENERALES]) VALUES 
---	(@CuitEmpresa,   @TipoDoc,          @DocCliente,      @AsId,   @TipoCbteNC,        @PtoVtaNC,     @NroCbteNC,           @Fec,                N'PES',   N'1.00',      N'100.00',       N'0.00',          N'0.00',        N'0.00',       N'0.00',     N'0.00',          )
+	select @Moneda = N'PES'
+	select @MonedaCtz = N'1.00'
+	select @ImpTotal = N'100.00'
+	select @NetoNoGrav = N'100.00'
+	select @NetoGrav = N'0.00'
+	select @NetoExen = N'0.00'
+	select @IvaTotal = N'0.00'
+	select @TribTotal = N'0.00'
 
---	INSERT [dbo].[AST_FEWS_LOG_PERMISO] 
---	([CUIT_EMPRESA], [AS_ID], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [ID_PERMISO], [DST_MERCADERIA]) VALUES 
---	(@CuitEmpresa,   @AsId,   @TipoCbteNC,        @PtoVtaNC,     @NroCbteNC,           @,            @)
+	select @TipoCbteFC = '19'
+	select @PtoVtaFC = N'00001'
+	select @CbteFC = 3
+	select @NroCbteFC = right('00000000'+convert(varchar(8), @CbteFC),8)
+	
+begin tran	
+	INSERT [dbo].[AST_FEWS_LOG] 
+	([CUIT_EMPRESA], [TIPODOC_CLIENTE], [NRODOC_CLIENTE], [AS_ID], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [FECHA_COMPROBANTE], [MONEDA], [MONEDA_CTZ], [IMPORTE_TOTAL], [NETO_NOGRAVADO], [NETO_GRAVADO], [NETO_EXENTO], [IVA_TOTAL], [TRIBUTOS_TOTAL], [PERMISO_EXISTENTE], [TIPO_EXPORTACION], [CUIT_PAIS_CLIENTE], [CLIENTE], [DOMICILIO_CLIENTE], [DST_COMPROBANTE], [FORMA_PAGO], [ID_IMPOSITIVO], [IDIOMA_COMPROBANTE], [INCOTERMS], [INCOTERMS_DS], [OBS_COMERCIALES], [OBS_GENERALES]) VALUES 
+	(@CuitEmpresa,   @TipoDoc,          @DocCliente,      @AsId,   @TipoCbteNC,        @PtoVtaNC,     @NroCbteNC,           @Fec,                @Moneda,   @MonedaCtz,  @ImpTotal,       @NetoNoGrav,      @NetoGrav,      @NetoExen,     @IvaTotal,   @TribTotal,       @PermExistente,      @TipoExp,           @CuitPais,           @Cliente,  @DomiCliente,        @DstCbt,           @FormaPago,   @IdImp,          @IdiomaCbt,           @Incoterms,  @IncotermsDs,   @ObsCom,           @ObsGral)
 
---	INSERT [dbo].[AST_FEWS_LOG_CBTE_ASOC]  
---	([AS_ID], [CUIT_EMPRESA], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [TIPO_COMPROBANTE_ASOC], [PUNTO_VENTA_ASOC], [NUMERO_COMPROBANTE_ASOC], [CUIT_ASOC] ) VALUES 
---	(@AsId,   @CuitEmpresa,   @TipoCbteNC,        @PtoVtaNC,     @NroCbteNC,           @TipoCbteFC,             @PtoVtaFC,          @NroCbteFC,                @CuitEmpresa)
---commit tran
+	INSERT [dbo].[AST_FEWS_LOG_PERMISO] 
+	([CUIT_EMPRESA], [AS_ID], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [ID_PERMISO], [DST_MERCADERIA]) VALUES 
+	(@CuitEmpresa,   @AsId,   @TipoCbteNC,        @PtoVtaNC,     @NroCbteNC,           @IdPerm,      @DstMer)
+
+	INSERT [dbo].[AST_FEWS_LOG_CBTE_ASOC]  
+	([AS_ID], [CUIT_EMPRESA], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [TIPO_COMPROBANTE_ASOC], [PUNTO_VENTA_ASOC], [NUMERO_COMPROBANTE_ASOC], [CUIT_ASOC] ) VALUES 
+	(@AsId,   @CuitEmpresa,   @TipoCbteNC,        @PtoVtaNC,     @NroCbteNC,           @TipoCbteFC,             @PtoVtaFC,          @NroCbteFC,                @CuitEmpresa)
+
+	select @Codigo = N'PRO1'
+	select @Descrip = N'Producto Tipo 1 Exportacion MERCOSUR ISO 9001'
+	select @Cant = N'1'
+	select @UniMed = 1
+	select @Precio = N'100.00'
+	select @ImpTotalDet = N'100.00'
+	select @Bonif = N'0.00'
+
+	INSERT [dbo].[AST_FEWS_LOG_DETALLE] 
+	([CUIT_EMPRESA], [AS_ID], [TIPO_COMPROBANTE], [PUNTO_VENTA], [NUMERO_COMPROBANTE], [CODIGO], [DESCRIPCION], [CANTIDAD], [UNIDAD_MEDIDA], [PRECIO], [IMPORTE_TOTAL], [BONIFICACION]) VALUES 
+	(@CuitEmpresa,   @AsId,   @TipoCbteNC,        @PtoVtaNC,     @NroCbteNC,           @Codigo,  @Descrip,      @Cant,      @UniMed,         @Precio,  @ImpTotalDet,    @Bonif)
+commit tran
 
 go

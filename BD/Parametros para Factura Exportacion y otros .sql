@@ -81,6 +81,11 @@ if not exists(select top 1 * from sys.columns c, sys.objects o where o.name = N'
 	ADD [excepcion_wsfexv1] [varchar](1000) NULL
 go
 
+if not exists(select top 1 * from sys.columns c, sys.objects o where o.name = N'LOG_TRANSACCIONES' and c.object_id=o.object_id and c.name = N'EXCEPCION_WSFEXV1')
+	ALTER TABLE [LOG_TRANSACCIONES]
+	ADD EXCEPCION_WSFEXV1 [varchar](1000) NULL
+go
+
 begin tran
 
 declare @Transac bigint

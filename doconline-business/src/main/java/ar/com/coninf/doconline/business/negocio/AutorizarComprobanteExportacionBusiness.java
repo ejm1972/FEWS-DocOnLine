@@ -23,7 +23,10 @@ import ar.com.coninf.doconline.shared.excepcion.ApplicationException;
 public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 
 	Logger logger = Logger.getLogger(this.getClass());
-
+	
+	ActiveXComponent wsaa;
+	ActiveXComponent wsfexv1;
+	
 	public synchronized ResponseAutorizarComprobanteExportacion autorizarComprobanteExportacion(RequestAutorizarComprobanteExportacion datos) {
 
 		logger.debug("Ejecucion autorizarComprobante() de WS");
@@ -31,7 +34,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 		ResponseAutorizarComprobanteExportacion resp = new ResponseAutorizarComprobanteExportacion();
 		resp.setEsReintento(false);
 		resp.cargarError(new Response(ErrorEnum.SIN_ERROR));
-
+		
 		try {
 
 			validarPuntoVenta(datos.getControlTransaccion().getInterfaz(), datos.getPtoVta());
@@ -57,7 +60,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 			LibraryLoader.loadJacobLibrary();
 
 			/* Crear objeto WSAA: Web Service de Autenticacion y Autorizacion */
-			ActiveXComponent wsaa = new ActiveXComponent("WSAA");
+			wsaa = new ActiveXComponent("WSAA");
 
 			logger.debug("Directorio de Instalacion: " +
 					Dispatch.get(wsaa, "InstallDir").toString() + 
@@ -87,7 +90,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 				/****************************************************************************************************/			
 
 				/* Instanciar WSFEv1: WebService de Factura Electronica version 1 */
-				ActiveXComponent wsfexv1 = new ActiveXComponent("WSFEXv1");
+				wsfexv1 = new ActiveXComponent("WSFEXv1");
 
 				logger.debug("Directorio de Instalacion: " +
 						Dispatch.get(wsfexv1, "InstallDir").toString() + 
@@ -100,8 +103,9 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 				Dispatch.put(wsfexv1, "Token", new Variant(token));
 				Dispatch.put(wsfexv1, "Sign", new Variant(sign));
 
+//********************************************************
 				/* Conectar al websrvice (cambiar URL para producción) */
-				wsdl = urlWsfev1;
+				wsdl = urlWsfexv1;
 				Dispatch.call(wsfexv1, "Conectar", 
 						new Variant(cache), 
 						new Variant(wsdl),
@@ -163,8 +167,8 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 							new Variant(obs_general),
 							new Variant(forma_pago),
 							new Variant(incoterms),
-							new Variant(incoterms_ds),
-							new Variant(idioma_cbte));
+							new Variant(idioma_cbte),
+							new Variant(incoterms_ds));
 					logger.debug("OK: " + ok.toString());
 					
 					/* Agrego Items de Factura */
@@ -221,21 +225,18 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 					}
 	    	    
 					/* Obtengo el último ID y le adiciono 1 (advertencia: evitar overflow!): */
-					long id_transaccion = Dispatch.call(wsfexv1, "GetLastID").getLong();
-					logger.debug("ID TRANSACCION OBTENIDO: " + id_transaccion);
-					id_transaccion++;
+					Variant idTransaccion = Dispatch.call(wsfexv1, "GetLastID");
+					logger.debug("ID TRANSACCION OBTENIDO: " + idTransaccion.toString());
+					Variant id_transaccion = new Variant(datos.getControlTransaccion().getNroTransaccion().toString());
 					logger.debug("ID TRANSACCION NUEVO: " + id_transaccion);
 
-					/* Habilito reprocesamiento automático (predeterminado): */
-					Dispatch.put(wsfexv1, "Reprocesar", new Variant(true));
-
 					/* Llamo al WebService de Autorización para obtener el CAE: */
-					String cae = Dispatch.call(wsfexv1, "Authorize", 
-							new Variant(id_transaccion)).toString();
+					Variant cae = Dispatch.call(wsfexv1, "Authorize", 
+							id_transaccion);
 
 					/* Datos devueltos */
 					logger.debug("CAE: " + cae);
-					resp.setCae(cae);
+					resp.setCae(cae.toString());
 
 					excepcion =  Dispatch.get(wsfexv1, "Excepcion").toString();
 					logger.debug("Excepcion: " + excepcion);
@@ -275,10 +276,51 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 					logger.debug("Vencimiento: " + resultado);
 					resp.setFechaVencimiento(fechaVencimiento.toString());
 					
-					if (!resultado.equals("A") && !resultado.equals("P")) {
-						//Debo enviar un Error cuando no se Autoriza ...
-						resp.cargarError(new Response(ErrorEnum.ERROR_ORIGEN_AFIP, obs));
-						logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion() + " - ErrMsg: " + resp.getErrMsg());
+					if (!resultado.equals("A")) {
+						//WSFEXV1 no tiene reprocesar 
+						String cae1 = Dispatch.call(wsfexv1, "GetCMP", 
+								tipo_cbte, pto_vta, cbte_nro).toString();
+						logger.debug("Reproceso CAE: " + cae1);
+						String obs1 =  Dispatch.get(wsfexv1, "Obs").toString();
+						logger.debug("Reproceso Obs: " + obs1);
+						String fecha_vencimiento1 = Dispatch.get(wsfexv1, "Vencimiento").toString();
+						logger.debug("Reproceso Vencimiento: " + fecha_vencimiento1);
+						String fecha_cbte1 = Dispatch.get(wsfexv1, "FechaCbte").toString();
+						logger.debug("Reproceso Fecha Cbte: " + fecha_cbte1);
+						String punto_vta1 = Dispatch.get(wsfexv1, "PuntoVenta").toString();
+						logger.debug("Reproceso Punto Venta: " + punto_vta1);
+						String resultado1 = Dispatch.get(wsfexv1, "Resultado").toString();
+						logger.debug("Reproceso Resultado: " + resultado1);
+						String cbte_nro1 = Dispatch.get(wsfexv1, "CbteNro").toString();
+						logger.debug("Reproceso CbteNro: " + cbte_nro1);
+						String imp_total1 = Dispatch.get(wsfexv1, "ImpTotal").toString();
+						logger.debug("Reproceso ImpTotal: " + imp_total1);
+						String excepcion1 =  Dispatch.get(wsfexv1, "Excepcion").toString();
+						logger.debug("Reproceso Excepcion: " + excepcion1);
+						String errmsg1 =  Dispatch.get(wsfexv1, "ErrMsg").toString();
+						logger.debug("Reproceso ErrMsg: " + errmsg1);
+						xmlReq = Dispatch.get(wsfexv1, "XmlRequest").toString();
+						xmlRes = Dispatch.get(wsfexv1, "XmlResponse").toString();
+						aux = Dispatch.get(wsfexv1, "Eventos");
+						eventos = aux.toSafeArray();
+						aux1 = eventos.toStringArray();
+						aux3 = 0;
+						for (String aux2 : aux1) {
+							logger.debug("Reproceso Evento[" + aux3 + "]: " + aux2);
+						}
+						
+						resp.setCae(cae1);
+						resp.setErrMsg(errmsg1);
+						resp.setFechaVencimiento(fecha_vencimiento1.substring(6).concat(fecha_vencimiento1.substring(3,5)).concat(fecha_vencimiento1.substring(0,2)));
+						resp.setObs(obs1);
+						resp.setObservacion(obs1);
+						resp.setResultado(resultado1);
+						
+						if (!resultado1.equals("A")) {
+							//Debo enviar un Error cuando no se Autoriza ...
+							resp.cargarError(new Response(ErrorEnum.ERROR_ORIGEN_AFIP, obs));
+							logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion() + " - ErrMsg: " + resp.getErrMsg());
+						}
 					}
 					
 				} else { //excepcion wsfe
@@ -286,15 +328,11 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 					logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion());
 				}
 				
-				wsfexv1.safeRelease();
-				
 			} else { //excepcion wsaa
 				resp.cargarError(new Response(ErrorEnum.ERROR_CONEXION_WSAA, excepcion));
 				logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion());
 			}
 			
-			wsaa.safeRelease();
-	
 		} catch (ComFailException e) {
 			resp.cargarError(new Response(ErrorEnum.ERROR_COMUNICACION_AFIP, e.getCause()!=null?e.getCause().getMessage():e.getMessage()));
 			logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion());
@@ -304,6 +342,11 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 		} catch (Exception e) {
 			resp.cargarError(new Response(ErrorEnum.ERROR_INESPERADO, e.getCause()!=null?e.getCause().getMessage():e.getMessage()));
 			logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion());
+		} finally {
+			if (wsaa!=null)
+				wsaa.safeRelease();
+			if (wsfexv1!=null)
+				wsfexv1.safeRelease();			
 		}
 
 		return resp;

@@ -25,6 +25,9 @@ import ar.com.coninf.doconline.shared.excepcion.ApplicationException;
 public class AutorizarComprobanteBusiness extends AbstractBusiness {
 
 	Logger logger = Logger.getLogger(this.getClass());
+	
+	ActiveXComponent wsaa;
+	ActiveXComponent wsfev1;
 
 	public synchronized ResponseAutorizarComprobante autorizarComprobante(RequestAutorizarComprobante datos) {
 
@@ -59,7 +62,7 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 			LibraryLoader.loadJacobLibrary();
 
 			/* Crear objeto WSAA: Web Service de Autenticacion y Autorizacion */
-			ActiveXComponent wsaa = new ActiveXComponent("WSAA");
+			wsaa = new ActiveXComponent("WSAA");
 
 			logger.debug("Directorio de Instalacion: " +
 					Dispatch.get(wsaa, "InstallDir").toString() + 
@@ -89,7 +92,7 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 				/****************************************************************************************************/			
 
 				/* Instanciar WSFEv1: WebService de Factura Electronica version 1 */
-				ActiveXComponent wsfev1 = new ActiveXComponent("WSFEv1");
+				wsfev1 = new ActiveXComponent("WSFEv1");
 
 				logger.debug("Directorio de Instalacion: " +
 						Dispatch.get(wsfev1, "InstallDir").toString() + 
@@ -323,16 +326,12 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 					resp.cargarError(new Response(ErrorEnum.ERROR_CONEXION_WSFE, excepcion));
 					logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion());
 				}
-				
-				wsfev1.safeRelease();
-				
+								
 			} else { //excepcion wsaa
 				resp.cargarError(new Response(ErrorEnum.ERROR_CONEXION_WSAA, excepcion));
 				logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion());
 			}
-			
-			wsaa.safeRelease();
-	
+				
 		} catch (ComFailException e) {
 			resp.cargarError(new Response(ErrorEnum.ERROR_COMUNICACION_AFIP, e.getCause()!=null?e.getCause().getMessage():e.getMessage()));
 			logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion());
@@ -343,7 +342,12 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 			resp.cargarError(new Response(ErrorEnum.ERROR_INESPERADO, e.getCause()!=null?e.getCause().getMessage():e.getMessage()));
 			logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion());
 		}
-
+		
+		if (wsaa!=null)
+			wsaa.safeRelease();
+		if (wsfev1!=null)
+			wsfev1.safeRelease();
+		
 		return resp;
 	}
 

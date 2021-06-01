@@ -26,8 +26,15 @@ public abstract class AbstractBusiness {
 	@Value("#{wsProperties.url_wsfev1_prod}")
 	protected String urlWsfev1Prod;
 	
+	@Value("#{wsProperties.url_wsfexv1_homo}")
+	protected String urlWsfexv1Homo;
+	
+	@Value("#{wsProperties.url_wsfexv1_prod}")
+	protected String urlWsfexv1Prod;
+	
 	protected String urlWsaa;
 	protected String urlWsfev1;
+	protected String urlWsfexv1;
 	protected String urlProxy;
 	protected String flagHomologacion;
 	protected String archivoKey;
@@ -66,9 +73,11 @@ public abstract class AbstractBusiness {
 		if (flagHomologacion.equals("SI")) {
 			urlWsaa = urlWsaaHomo;
 			urlWsfev1 = urlWsfev1Homo;
+			urlWsfexv1 = urlWsfexv1Homo;
 		} else {
 			urlWsaa = urlWsaaProd;
 			urlWsfev1 = urlWsfev1Prod;
+			urlWsfexv1 = urlWsfexv1Prod;
 		}
 
 	}

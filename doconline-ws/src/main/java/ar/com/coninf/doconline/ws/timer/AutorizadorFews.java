@@ -137,9 +137,9 @@ public class AutorizadorFews {
 		log.setCtxNroTransaccion(ctx.getNroTransaccion().toString());
 
 		log.setCtxServicio("DocOnlineServicioWebImpl - autorizarComprobante");
+		log.setOperacion("autorizarComprobante");
 		log.setCtxFechaTransaccion(new Date());
 		log.setFechaInicioOp(new Date());
-		log.setOperacion("autorizarComprobante");
 
 		BigDecimal big100 = new BigDecimal("100");
 		String concepto = selected.getConcepto()==null?"":selected.getConcepto().toString();
@@ -164,21 +164,21 @@ public class AutorizadorFews {
 		String impTrib = selected.getImpTrib().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP).toString();
 		String impOpEx = selected.getImpOpEx().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP).toString();
 		
-		String tipoExpo = selected.getTipoExpo().toString();
-		String permisoExistente = selected.getPermisoExistente();
-		String dstCmp = selected.getDstCmp().toString();
-		String idImpositivo = selected.getIdImpositivo();
+		String tipoExpo = selected.getTipoExpo()==null?"":selected.getTipoExpo().toString();
+		String permisoExistente = selected.getPermisoExistente()==null?"":selected.getPermisoExistente();
+		String dstCmp = selected.getDstCmp()==null?"":selected.getDstCmp().toString();
+		String idImpositivo = selected.getIdImpositivo()==null?"":selected.getIdImpositivo();
 		
-		String cuitPaisCliente = selected.getCuitPaisCliente();
-		String nombreCliente = selected.getNombreCliente();
-		String domicilioCliente = selected.getDomicilioCliente();
+		String cuitPaisCliente = selected.getCuitPaisCliente()==null?"":selected.getCuitPaisCliente();
+		String nombreCliente = selected.getNombreCliente()==null?"":selected.getNombreCliente();
+		String domicilioCliente = selected.getDomicilioCliente()==null?"":selected.getDomicilioCliente();
 		
-		String obsComerciales = selected.getObsComerciales();
-		String obsGenerales = selected.getObsGenerales();
-		String formaPago = selected.getFormaPago();
-		String incoterms = selected.getIncoterms();
-		String incotermsDs = selected.getIncotermsDs();
-		String idiomaCbte = selected.getIdiomaCbte();
+		String obsComerciales = selected.getObsComerciales()==null?"":selected.getObsComerciales();
+		String obsGenerales = selected.getObsGenerales()==null?"":selected.getObsGenerales();
+		String formaPago = selected.getFormaPago()==null?"":selected.getFormaPago();
+		String incoterms = selected.getIncoterms()==null?"":selected.getIncoterms();
+		String incotermsDs = selected.getIncotermsDs()==null?"":selected.getIncotermsDs();
+		String idiomaCbte = selected.getIdiomaCbte()==null?"":selected.getIdiomaCbte();
 
 		log.setTipoCbte(tipoCbte);
 		ptoVta = String.valueOf("00000").concat(ptoVta);
@@ -282,6 +282,10 @@ public class AutorizadorFews {
 
 		logger.debug("Ejecucion AutorizadorFews.registrarAuditoriaFin()");
 		
+		//Lo Agrego para no poner mas if o generar otro registrarAuditoriaIni solo por esto
+		log.setCtxServicio("DocOnlineServicioWebImpl - autorizarComprobanteExportacion");
+		log.setOperacion("autorizarComprobanteExportacion");
+
 		log.setCodigo(resp.getCodigo().toString());
 		log.setDescripcion(resp.getDescripcion());
 		log.setObservacion(resp.getObservacion());
@@ -913,7 +917,7 @@ public class AutorizadorFews {
 			String xmlRequest=respA.getXmlRequest();
 			String xmlResponse=respA.getXmlResponse();
 	
-			cae=cae==null||cae.equals("")?"0":cae;
+			cae=(cae==null||cae.equals("")||cae.equals("null")?"0":cae);
 			selected.setCae(Long.valueOf(cae));
 			selected.setFechaVto(fechaVto);
 			selected.setResultado(resultado);
