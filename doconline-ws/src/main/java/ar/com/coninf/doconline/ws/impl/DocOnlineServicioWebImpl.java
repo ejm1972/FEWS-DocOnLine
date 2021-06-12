@@ -531,11 +531,15 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		for (int i = 0; items != null && i < items.length; i++) {
 			if (!(items[i]).toString().trim().equals("")) {
 				if (items[i]!=null && items[i].getCodigo()!=null) {
+					items[i].setBonif(items[i].getBonif().divide(big100));
+					items[i].setImpTotal(items[i].getImpTotal().divide(big100));
+					items[i].setPrecio(items[i].getPrecio().divide(big100));
 					sumaItems = sumaItems.add(items[i].getImpTotal());
 				}
 			}
 		}
-		if (sumaItems.equals(BigDecimal.ZERO) && !datos.getImpTotal().equals(BigDecimal.ZERO)) {
+		if ((sumaItems.equals(BigDecimal.ZERO) && !datos.getImpTotal().equals(BigDecimal.ZERO)) ||
+				(!sumaItems.equals(BigDecimal.ZERO) && !datos.getImpTotal().equals(sumaItems))) {
 			throw new ApplicationException(ErrorEnum.ERROR_DIFERENCIA_TOTAL_ITEMS, "error.ws-diferencia_total_items");
 		}
 		

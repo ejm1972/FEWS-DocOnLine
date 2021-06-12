@@ -542,10 +542,10 @@ public class AutorizadorFews {
 				items[i].setCodigo( listFewsDetalle.get(i).getCodigo() );
 				items[i].setDs( listFewsDetalle.get(i).getDs() );
 				items[i].setQty( listFewsDetalle.get(i).getQty() );
-				items[i].setPrecio( listFewsDetalle.get(i).getPrecio() );
-				items[i].setBonif( listFewsDetalle.get(i).getBonif() );
+				items[i].setPrecio( listFewsDetalle.get(i).getPrecio().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP) );
+				items[i].setBonif( listFewsDetalle.get(i).getBonif().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP) );
 				items[i].setUmed( listFewsDetalle.get(i).getUmed() );
-				items[i].setImpTotal( listFewsDetalle.get(i).getImpTotal() );
+				items[i].setImpTotal( listFewsDetalle.get(i).getImpTotal().multiply(big100).setScale(0,BigDecimal.ROUND_HALF_UP) );
 				if (i>0) {
 					sbItem.append(",");
 				}

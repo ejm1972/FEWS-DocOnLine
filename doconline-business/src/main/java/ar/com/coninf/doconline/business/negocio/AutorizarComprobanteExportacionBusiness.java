@@ -78,7 +78,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 					new Variant(proxy));
 					
 			String excepcion =  Dispatch.get(wsaa, "Excepcion").toString();
-			logger.debug("Excepcion: " + excepcion);
+			logger.debug("Excepcion WSAA: " + excepcion);
 			resp.setExcepcionWsaa(excepcion);
 
 			if (excepcion.equals("")) {
@@ -115,7 +115,7 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 						new Variant(timeout));
 				
 				excepcion =  Dispatch.get(wsfexv1, "Excepcion").toString();
-				logger.debug("Excepcion: " + excepcion);
+				logger.debug("Excepcion WSFEX: " + excepcion);
 				resp.setExcepcionWsfexv1(excepcion);
 
 				if (excepcion.equals("")) {
@@ -137,17 +137,27 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 					
 					String permiso_existente = datos.getPermisoExistente();
 					int dst_cmp = datos.getDstCmp();
+					
 					String cliente = datos.getCliente();
 					String cuit_pais_cliente = datos.getCuitPaisCliente(); 
 					String domicilio_cliente = datos.getDomicilioCliente(); 
+					
 					String id_impositivo = datos.getIdImpositivo(); 
+					
 					String obs_comerciales = datos.getObsComerciales();
 					String obs_general = datos.getObsGenerales();
+					
 					String forma_pago = datos.getFormaPago();
+					String fecha_pago = "";
+					if (tipo_expo==2 || tipo_expo==4) {
+						fecha_pago = datos.getFechaVencPago();
+					}
+					
 					String incoterms = datos.getIncoterms();
 					String incoterms_ds = datos.getIncotermsDs();
+					
 					String idioma_cbte = datos.getIdiomaCbte();
-
+					
 					Variant ok = Dispatch.call(wsfexv1, "CrearFactura",
 							new Variant(tipo_cbte), 
 							new Variant(pto_vta), 
@@ -168,7 +178,8 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 							new Variant(forma_pago),
 							new Variant(incoterms),
 							new Variant(idioma_cbte),
-							new Variant(incoterms_ds));
+							new Variant(incoterms_ds),
+							new Variant(fecha_pago));
 					logger.debug("OK: " + ok.toString());
 					
 					/* Agrego Items de Factura */
@@ -238,8 +249,16 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 					logger.debug("CAE: " + cae);
 					resp.setCae(cae.toString());
 
+					String resultado = Dispatch.get(wsfexv1, "Resultado").toString();
+					logger.debug("Resultado: " + resultado);
+					resp.setResultado(resultado);
+
+					String fechaVencimiento = Dispatch.get(wsfexv1, "Vencimiento").toString();
+					logger.debug("Vencimiento: " + fechaVencimiento);
+					resp.setFechaVencimiento(fechaVencimiento);
+					
 					excepcion =  Dispatch.get(wsfexv1, "Excepcion").toString();
-					logger.debug("Excepcion: " + excepcion);
+					logger.debug("Excepcion WSFEX: " + excepcion);
 					resp.setExcepcionWsfexv1(excepcion);
 
 					/* Mostrar mensajes XML enviados y recibidos (depuración) */
@@ -259,10 +278,6 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 					resp.setObservacion(obs);
 					resp.setObs(obs);
 					
-					String resultado = Dispatch.get(wsfexv1, "Resultado").toString();
-					logger.debug("Resultado: " + resultado);
-					resp.setResultado(resultado);
-
 					Variant aux = Dispatch.get(wsfexv1, "Eventos");
 					SafeArray eventos = aux.toSafeArray();
 					String [] aux1 = eventos.toStringArray();
@@ -271,36 +286,66 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 						logger.debug("Evento[" + aux3 + "]: " + aux2);
 					}
 					
-					/* Mostrar Vencimiento */
-					Variant fechaVencimiento = Dispatch.get(wsfexv1, "Vencimiento");
-					logger.debug("Vencimiento: " + resultado);
-					resp.setFechaVencimiento(fechaVencimiento.toString());
-					
 					if (!resultado.equals("A")) {
+
 						//WSFEXV1 no tiene reprocesar 
 						String cae1 = Dispatch.call(wsfexv1, "GetCMP", 
 								tipo_cbte, pto_vta, cbte_nro).toString();
-						logger.debug("Reproceso CAE: " + cae1);
-						String obs1 =  Dispatch.get(wsfexv1, "Obs").toString();
-						logger.debug("Reproceso Obs: " + obs1);
-						String fecha_vencimiento1 = Dispatch.get(wsfexv1, "Vencimiento").toString();
-						logger.debug("Reproceso Vencimiento: " + fecha_vencimiento1);
-						String fecha_cbte1 = Dispatch.get(wsfexv1, "FechaCbte").toString();
-						logger.debug("Reproceso Fecha Cbte: " + fecha_cbte1);
-						String punto_vta1 = Dispatch.get(wsfexv1, "PuntoVenta").toString();
-						logger.debug("Reproceso Punto Venta: " + punto_vta1);
-						String resultado1 = Dispatch.get(wsfexv1, "Resultado").toString();
-						logger.debug("Reproceso Resultado: " + resultado1);
-						String cbte_nro1 = Dispatch.get(wsfexv1, "CbteNro").toString();
-						logger.debug("Reproceso CbteNro: " + cbte_nro1);
-						String imp_total1 = Dispatch.get(wsfexv1, "ImpTotal").toString();
-						logger.debug("Reproceso ImpTotal: " + imp_total1);
-						String excepcion1 =  Dispatch.get(wsfexv1, "Excepcion").toString();
-						logger.debug("Reproceso Excepcion: " + excepcion1);
-						String errmsg1 =  Dispatch.get(wsfexv1, "ErrMsg").toString();
-						logger.debug("Reproceso ErrMsg: " + errmsg1);
+						
 						xmlReq = Dispatch.get(wsfexv1, "XmlRequest").toString();
 						xmlRes = Dispatch.get(wsfexv1, "XmlResponse").toString();
+
+						String fecha_vencimiento1 = Dispatch.get(wsfexv1, "Vencimiento").toString();
+						String fecha_cbte1 = Dispatch.get(wsfexv1, "FechaCbte").toString();
+						String resultado1 = Dispatch.get(wsfexv1, "Resultado").toString();
+						String imp_total1 = Dispatch.get(wsfexv1, "ImpTotal").toString();
+						String excepcion1 =  Dispatch.get(wsfexv1, "Excepcion").toString();
+						String errmsg1 =  Dispatch.get(wsfexv1, "ErrMsg").toString();
+						int tipo_expo1 = 0;
+						int dst_cmp1 = 0;		
+						String cliente1 = "";			
+						String cuit_pais_cliente1 = "";	
+						String domicilio_cliente1 = "";	
+						String forma_pago1 = "";			
+						String idioma_cbte1 = "";			
+						String fecha_pago1 = "";			
+						String motivos_obs = "";			
+
+						ok = Dispatch.call(wsfexv1, "AnalizarXml");
+						if (ok.getBoolean()) {
+							motivos_obs = Dispatch.call(wsfexv1, "ObtenerTagXml", "Motivos_Obs").toString();
+							tipo_expo1 = Integer.valueOf(Dispatch.call(wsfexv1, "ObtenerTagXml", "Tipo_expo").toString()).intValue();
+							dst_cmp1 = Integer.valueOf(Dispatch.call(wsfexv1, "ObtenerTagXml", "Dst_cmp").toString()).intValue();
+							cliente1 = Dispatch.call(wsfexv1, "ObtenerTagXml", "Cliente").toString();
+							cuit_pais_cliente1 = Dispatch.call(wsfexv1, "ObtenerTagXml", "Cuit_pais_cliente").toString();
+							domicilio_cliente1 = Dispatch.call(wsfexv1, "ObtenerTagXml", "Domicilio_cliente").toString();
+							forma_pago1 = Dispatch.call(wsfexv1, "ObtenerTagXml", "Forma_pago").toString();
+							idioma_cbte1 = Dispatch.call(wsfexv1, "ObtenerTagXml", "Idioma_cbte").toString();
+							fecha_pago1 = Dispatch.call(wsfexv1, "ObtenerTagXml", "Fecha_pago").toString();
+						}
+						
+						logger.debug("Reproceso xmlReq:\r\n" + xmlReq);
+						logger.debug("Reproceso xmlRes:\r\n" + xmlRes);
+						logger.debug("Reproceso CbteTipo         : " + tipo_cbte);
+						logger.debug("Reproceso Punto Venta      : " + pto_vta);
+						logger.debug("Reproceso CbteNro          : " + cbte_nro);
+						logger.debug("Reproceso Fecha Cbte       : " + fecha_cbte1);
+						logger.debug("Reproceso ImpTotal         : " + imp_total1);
+						logger.debug("Reproceso Tipo_expo        : " + tipo_expo1);
+						logger.debug("Reproceso Dst_cmp          : " + dst_cmp1);
+						logger.debug("Reproceso Cliente          : " + cliente1);	
+						logger.debug("Reproceso Cuit_pais_cliente: " + cuit_pais_cliente1);
+						logger.debug("Reproceso Domicilio_cliente: " + domicilio_cliente1);
+						logger.debug("Reproceso Forma_pago       : " + forma_pago1);	
+						logger.debug("Reproceso Fecha_pago       : " + fecha_pago1);	
+						logger.debug("Reproceso Idioma_cbte      : " + idioma_cbte1);	
+						logger.debug("Reproceso Resultado        : " + resultado1);
+						logger.debug("Reproceso CAE              : " + cae1);
+						logger.debug("Reproceso Vencimiento      : " + fecha_vencimiento1);
+						logger.debug("Reproceso Obs              : " + motivos_obs);
+						logger.debug("Reproceso Excepcion        : " + excepcion1);
+						logger.debug("Reproceso ErrMsg           : " + errmsg1);
+						
 						aux = Dispatch.get(wsfexv1, "Eventos");
 						eventos = aux.toSafeArray();
 						aux1 = eventos.toStringArray();
@@ -309,14 +354,22 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 							logger.debug("Reproceso Evento[" + aux3 + "]: " + aux2);
 						}
 						
-						resp.setCae(cae1);
-						resp.setErrMsg(errmsg1);
-						resp.setFechaVencimiento(fecha_vencimiento1.substring(6).concat(fecha_vencimiento1.substring(3,5)).concat(fecha_vencimiento1.substring(0,2)));
-						resp.setObs(obs1);
-						resp.setObservacion(obs1);
-						resp.setResultado(resultado1);
-						
-						if (!resultado1.equals("A")) {
+						if (resultado1.equals("A") &&
+								fecha_cbte.equals(fecha_cbte1) && imp_total.equals(imp_total1) && 
+								tipo_expo==tipo_expo1 && dst_cmp==dst_cmp1 && idioma_cbte.equals(idioma_cbte1) &&
+								cliente.equals(cliente1) && cuit_pais_cliente.equals(cuit_pais_cliente1) && domicilio_cliente.equals(domicilio_cliente1) && forma_pago.equals(forma_pago1) &&  
+								fecha_pago.equals(fecha_pago1)) {
+							resp.setResultado(resultado1);
+							resp.setCae(cae1);
+							if (fecha_vencimiento1.length()==10)
+								resp.setFechaVencimiento(fecha_vencimiento1.substring(6).concat(fecha_vencimiento1.substring(3,5)).concat(fecha_vencimiento1.substring(0,2)));
+							else
+								resp.setFechaVencimiento(fecha_vencimiento1);
+							resp.setObs(motivos_obs);
+							resp.setObservacion(motivos_obs);
+							resp.setExcepcionWsfexv1(excepcion1);
+							resp.setErrMsg(errmsg1);						
+						} else {
 							//Debo enviar un Error cuando no se Autoriza ...
 							resp.cargarError(new Response(ErrorEnum.ERROR_ORIGEN_AFIP, obs));
 							logger.error("Codigo: " + resp.getCodigo() + " - Descripcion: " + resp.getDescripcion() + " - Observaciones: " + resp.getObservacion() + " - ErrMsg: " + resp.getErrMsg());

@@ -313,7 +313,7 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 
 					/* Mostrar Vencimiento */
 					Variant fechaVencimiento = Dispatch.get(wsfev1, "Vencimiento");
-					logger.debug("Vencimiento: " + resultado);
+					logger.debug("Vencimiento: " + fechaVencimiento.toString());
 					resp.setFechaVencimiento(fechaVencimiento.toString());
 					
 					if (!resultado.equals("A") && !resultado.equals("P")) {
