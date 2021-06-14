@@ -1,0 +1,417 @@
+{
+  "version": "6.0.0",
+  "timestamp": 1623079658085,
+  "projects": [
+    {
+      "name": "fews",
+      "documents": [
+        {
+          "type": "project",
+          "folderIds": [],
+          "name": "fews",
+          "selectedEnvironmentId": null,
+          "selectedFolderId": null,
+          "selectedSidebarTab": 0,
+          "selectedTabId": "3dc670d2-0c62-4af7-86e2-f2b0f17226e6",
+          "sidebarWidth": 0.3,
+          "createdAt": 1608159233465,
+          "id": "77561759-e1e8-4003-b3a9-2c20bb50c550",
+          "updatedAt": 1608163619748,
+          "sidebarView": "services"
+        },
+        {
+          "type": "tab",
+          "title": "Welcome",
+          "view": "Welcome",
+          "createdAt": 1608159233613,
+          "id": "2f5f4e3b-179d-4106-9b72-067549f7f492"
+        },
+        {
+          "type": "tab",
+          "title": "Add Service",
+          "view": "AddService",
+          "createdAt": 1608159239970,
+          "id": "0d4f9c7b-9a99-4816-9b65-175dd8c17f9c"
+        },
+        {
+          "type": "service",
+          "name": "DocOnlineServicioWeb",
+          "url": "http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb?wsdl",
+          "language": "wsdl",
+          "definition": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><wsdl:definitions xmlns:wsdl=\"http://schemas.xmlsoap.org/wsdl/\" xmlns:ns1=\"http://org.apache.axis2/xsd\" xmlns:ns=\"http://impl.ws.doconline.coninf.com.ar\" xmlns:wsaw=\"http://www.w3.org/2006/05/addressing/wsdl\" xmlns:ax25=\"http://request.model.rest.doconline.coninf.com.ar/xsd\" xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\" xmlns:ax23=\"http://response.model.rest.doconline.coninf.com.ar/xsd\" xmlns:ax21=\"http://tx.model.rest.doconline.coninf.com.ar/xsd\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\" xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\" xmlns:soap12=\"http://schemas.xmlsoap.org/wsdl/soap12/\" targetNamespace=\"http://impl.ws.doconline.coninf.com.ar\">\n    <wsdl:documentation>DocOnlineServicioWeb</wsdl:documentation>\n    <wsdl:types>\n        <xs:schema xmlns:ax26=\"http://tx.model.rest.doconline.coninf.com.ar/xsd\" attributeFormDefault=\"qualified\" elementFormDefault=\"qualified\" targetNamespace=\"http://request.model.rest.doconline.coninf.com.ar/xsd\">\n            <xs:import namespace=\"http://tx.model.rest.doconline.coninf.com.ar/xsd\"/>\n            <xs:complexType name=\"Request\">\n                <xs:sequence>\n                    <xs:element minOccurs=\"0\" name=\"controlTransaccion\" nillable=\"true\" type=\"ax21:ControlTransaccion\"/>\n                </xs:sequence>\n            </xs:complexType>\n            <xs:complexType name=\"RequestConsultarPadronLocal\">\n                <xs:complexContent>\n                    <xs:extension base=\"ax25:Request\">\n                        <xs:sequence>\n                            <xs:element minOccurs=\"0\" name=\"cbte\" nillable=\"true\" type=\"xs:int\"/>\n                            <xs:element minOccurs=\"0\" name=\"cuit\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"ptoVta\" nillable=\"true\" type=\"xs:int\"/>\n                            <xs:element minOccurs=\"0\" name=\"tipoCbte\" nillable=\"true\" type=\"xs:int\"/>\n                        </xs:sequence>\n                    </xs:extension>\n                </xs:complexContent>\n            </xs:complexType>\n            <xs:complexType name=\"RequestConsultarPadronOnline\">\n                <xs:complexContent>\n                    <xs:extension base=\"ax25:Request\">\n                        <xs:sequence>\n                            <xs:element minOccurs=\"0\" name=\"cbte\" nillable=\"true\" type=\"xs:int\"/>\n                            <xs:element minOccurs=\"0\" name=\"cuit\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"ptoVta\" nillable=\"true\" type=\"xs:int\"/>\n                            <xs:element minOccurs=\"0\" name=\"tipoCbte\" nillable=\"true\" type=\"xs:int\"/>\n                        </xs:sequence>\n                    </xs:extension>\n                </xs:complexContent>\n            </xs:complexType>\n            <xs:complexType name=\"RequestActualizarItemComprobante\">\n                <xs:complexContent>\n                    <xs:extension base=\"ax25:Request\">\n                        <xs:sequence>\n                            <xs:element minOccurs=\"0\" name=\"concepto\" nillable=\"true\" type=\"xs:int\"/>\n                            <xs:element minOccurs=\"0\" name=\"cuit\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"fechaCbte\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"fechaServDesde\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"fechaServHasta\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"fechaVencPago\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"impIva\" nillable=\"true\" type=\"xs:decimal\"/>\n                            <xs:element minOccurs=\"0\" name=\"impNeto\" nillable=\"true\" type=\"xs:decimal\"/>\n                            <xs:element minOccurs=\"0\" name=\"impOpEx\" nillable=\"true\" type=\"xs:decimal\"/>\n                            <xs:element minOccurs=\"0\" name=\"impTotConcNoGrav\" nillable=\"true\" type=\"xs:decimal\"/>\n                            <xs:element minOccurs=\"0\" name=\"impTotal\" nillable=\"true\" type=\"xs:decimal\"/>\n                            <xs:element minOccurs=\"0\" name=\"impTrib\" nillable=\"true\" type=\"xs:decimal\"/>\n                            <xs:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"ivas\" nillable=\"true\" type=\"ax21:TipoIva\"/>\n                            <xs:element minOccurs=\"0\" name=\"monedaCtz\" nillable=\"true\" type=\"xs:decimal\"/>\n                            <xs:element minOccurs=\"0\" name=\"monedaId\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"nroCbte\" nillable=\"true\" type=\"xs:long\"/>\n                            <xs:element minOccurs=\"0\" name=\"nroDoc\" nillable=\"true\" type=\"xs:long\"/>\n                            <xs:element minOccurs=\"0\" name=\"ptoVta\" nillable=\"true\" type=\"xs:int\"/>\n                            <xs:element minOccurs=\"0\" name=\"tipoCbte\" nillable=\"true\" type=\"xs:int\"/>\n                            <xs:element minOccurs=\"0\" name=\"tipoDoc\" nillable=\"true\" type=\"xs:int\"/>\n                            <xs:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"tributos\" nillable=\"true\" type=\"ax21:Tributo\"/>\n                        </xs:sequence>\n                    </xs:extension>\n                </xs:complexContent>\n            </xs:complexType>\n        </xs:schema>\n        <xs:schema attributeFormDefault=\"qualified\" elementFormDefault=\"qualified\" targetNamespace=\"http://response.model.rest.doconline.coninf.com.ar/xsd\">\n            <xs:complexType name=\"Response\">\n                <xs:sequence>\n                    <xs:element minOccurs=\"0\" name=\"codigo\" nillable=\"true\" type=\"xs:int\"/>\n                    <xs:element minOccurs=\"0\" name=\"descripcion\" nillable=\"true\" type=\"xs:string\"/>\n                    <xs:element minOccurs=\"0\" name=\"esReintento\" nillable=\"true\" type=\"xs:boolean\"/>\n                    <xs:element minOccurs=\"0\" name=\"observacion\" nillable=\"true\" type=\"xs:string\"/>\n                </xs:sequence>\n            </xs:complexType>\n            <xs:complexType name=\"ResponseConsultarComprobante\">\n                <xs:complexContent>\n                    <xs:extension base=\"ax23:Response\">\n                        <xs:sequence>\n                            <xs:element minOccurs=\"0\" name=\"cae\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"errMsg\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"excepcionWsaa\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"excepcionWsfev1\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"fechaCbte\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"fechaVencimiento\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"impTotal\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"obs\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"xmlRequest\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"xmlResponse\" nillable=\"true\" type=\"xs:string\"/>\n                        </xs:sequence>\n                    </xs:extension>\n                </xs:complexContent>\n            </xs:complexType>\n            <xs:complexType name=\"ResponseConsultarUltimoComprobante\">\n                <xs:complexContent>\n                    <xs:extension base=\"ax23:Response\">\n                        <xs:sequence>\n                            <xs:element minOccurs=\"0\" name=\"errMsg\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"excepcionWsaa\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"excepcionWsfev1\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"obs\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"ultimoComprobante\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"xmlRequest\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"xmlResponse\" nillable=\"true\" type=\"xs:string\"/>\n                        </xs:sequence>\n                    </xs:extension>\n                </xs:complexContent>\n            </xs:complexType>\n            <xs:complexType name=\"ResponseAutorizarComprobante\">\n                <xs:complexContent>\n                    <xs:extension base=\"ax23:Response\">\n                        <xs:sequence>\n                            <xs:element minOccurs=\"0\" name=\"cae\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"errMsg\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"excepcionWsaa\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"excepcionWsfev1\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"fechaVencimiento\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"obs\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"resultado\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"xmlRequest\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"xmlResponse\" nillable=\"true\" type=\"xs:string\"/>\n                        </xs:sequence>\n                    </xs:extension>\n                </xs:complexContent>\n            </xs:complexType>\n            <xs:complexType name=\"ResponseConsultarPadronLocal\">\n                <xs:complexContent>\n                    <xs:extension base=\"ax23:Response\">\n                        <xs:sequence>\n                            <xs:element minOccurs=\"0\" name=\"cae\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"errMsg\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"excepcionWsaa\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"excepcionWsfev1\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"fechaCbte\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"fechaVencimiento\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"impTotal\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"obs\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"xmlRequest\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"xmlResponse\" nillable=\"true\" type=\"xs:string\"/>\n                        </xs:sequence>\n                    </xs:extension>\n                </xs:complexContent>\n            </xs:complexType>\n            <xs:complexType name=\"ResponseConsultarPadronOnline\">\n                <xs:complexContent>\n                    <xs:extension base=\"ax23:Response\">\n                        <xs:sequence>\n                            <xs:element minOccurs=\"0\" name=\"cae\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"errMsg\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"excepcionWsaa\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"excepcionWsfev1\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"fechaCbte\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"fechaVencimiento\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"impTotal\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"obs\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"xmlRequest\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"xmlResponse\" nillable=\"true\" type=\"xs:string\"/>\n                        </xs:sequence>\n                    </xs:extension>\n                </xs:complexContent>\n            </xs:complexType>\n            <xs:complexType name=\"ResponseActualizarItemComprobante\">\n                <xs:complexContent>\n                    <xs:extension base=\"ax23:Response\">\n                        <xs:sequence>\n                            <xs:element minOccurs=\"0\" name=\"cae\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"errMsg\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"excepcionWsaa\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"excepcionWsfev1\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"fechaVencimiento\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"obs\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"resultado\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"xmlRequest\" nillable=\"true\" type=\"xs:string\"/>\n                            <xs:element minOccurs=\"0\" name=\"xmlResponse\" nillable=\"true\" type=\"xs:string\"/>\n                        </xs:sequence>\n                    </xs:extension>\n                </xs:complexContent>\n            </xs:complexType>\n            <xs:complexType name=\"ResponseAutenticacion\">\n                <xs:complexContent>\n                    <xs:extension base=\"ax23:Response\">\n                        <xs:sequence>\n                            <xs:element minOccurs=\"0\" name=\"idSesion\" nillable=\"true\" type=\"xs:string\"/>\n                        </xs:sequence>\n                    </xs:extension>\n                </xs:complexContent>\n            </xs:complexType>\n        </xs:schema>\n        <xs:schema attributeFormDefault=\"qualified\" elementFormDefault=\"qualified\" targetNamespace=\"http://tx.model.rest.doconline.coninf.com.ar/xsd\">\n            <xs:complexType name=\"ControlTransaccion\">\n                <xs:sequence>\n                    <xs:element minOccurs=\"0\" name=\"idSesion\" nillable=\"true\" type=\"xs:string\"/>\n                    <xs:element minOccurs=\"0\" name=\"interfaz\" nillable=\"true\" type=\"xs:int\"/>\n                    <xs:element minOccurs=\"0\" name=\"nroTransaccion\" nillable=\"true\" type=\"xs:long\"/>\n                </xs:sequence>\n            </xs:complexType>\n            <xs:complexType name=\"Tributo\">\n                <xs:sequence>\n                    <xs:element minOccurs=\"0\" name=\"tributoAlic\" nillable=\"true\" type=\"xs:decimal\"/>\n                    <xs:element minOccurs=\"0\" name=\"tributoBaseImp\" nillable=\"true\" type=\"xs:decimal\"/>\n                    <xs:element minOccurs=\"0\" name=\"tributoDesc\" nillable=\"true\" type=\"xs:string\"/>\n                    <xs:element minOccurs=\"0\" name=\"tributoId\" nillable=\"true\" type=\"xs:int\"/>\n                    <xs:element minOccurs=\"0\" name=\"tributoImporte\" nillable=\"true\" type=\"xs:decimal\"/>\n                </xs:sequence>\n            </xs:complexType>\n            <xs:complexType name=\"Iva\">\n                <xs:sequence>\n                    <xs:element minOccurs=\"0\" name=\"ivaBaseImp\" nillable=\"true\" type=\"xs:decimal\"/>\n                    <xs:element minOccurs=\"0\" name=\"ivaId\" nillable=\"true\" type=\"xs:int\"/>\n                    <xs:element minOccurs=\"0\" name=\"ivaImporte\" nillable=\"true\" type=\"xs:decimal\"/>\n                </xs:sequence>\n            </xs:complexType>\n            <xs:complexType name=\"ComprobanteAsociado\">\n                <xs:sequence>\n                    <xs:element minOccurs=\"0\" name=\"cbteNro\" nillable=\"true\" type=\"xs:int\"/>\n                    <xs:element minOccurs=\"0\" name=\"cuit\" nillable=\"true\" type=\"xs:string\"/>\n                    <xs:element minOccurs=\"0\" name=\"fechaCbte\" nillable=\"true\" type=\"xs:string\"/>\n                    <xs:element minOccurs=\"0\" name=\"puntoVta\" nillable=\"true\" type=\"xs:int\"/>\n                    <xs:element minOccurs=\"0\" name=\"tipoCbte\" nillable=\"true\" type=\"xs:int\"/>\n                </xs:sequence>\n            </xs:complexType>\n            <xs:complexType name=\"DatoOpcional\">\n                <xs:sequence>\n                    <xs:element minOccurs=\"0\" name=\"opcionalId\" nillable=\"true\" type=\"xs:int\"/>\n                    <xs:element minOccurs=\"0\" name=\"valor\" nillable=\"true\" type=\"xs:string\"/>\n                </xs:sequence>\n            </xs:complexType>\n            <xs:complexType name=\"TipoIva\">\n                <xs:sequence>\n                    <xs:element minOccurs=\"0\" name=\"ivaBaseImp\" nillable=\"true\" type=\"xs:decimal\"/>\n                    <xs:element minOccurs=\"0\" name=\"ivaId\" nillable=\"true\" type=\"xs:int\"/>\n                    <xs:element minOccurs=\"0\" name=\"ivaImporte\" nillable=\"true\" type=\"xs:decimal\"/>\n                </xs:sequence>\n            </xs:complexType>\n        </xs:schema>\n        <xs:schema xmlns:ax27=\"http://request.model.rest.doconline.coninf.com.ar/xsd\" xmlns:ax24=\"http://response.model.rest.doconline.coninf.com.ar/xsd\" xmlns:ax22=\"http://tx.model.rest.doconline.coninf.com.ar/xsd\" attributeFormDefault=\"qualified\" elementFormDefault=\"qualified\" targetNamespace=\"http://impl.ws.doconline.coninf.com.ar\">\n            <xs:import namespace=\"http://tx.model.rest.doconline.coninf.com.ar/xsd\"/>\n            <xs:import namespace=\"http://response.model.rest.doconline.coninf.com.ar/xsd\"/>\n            <xs:import namespace=\"http://request.model.rest.doconline.coninf.com.ar/xsd\"/>\n            <xs:element name=\"consultarComprobante\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"ctx\" nillable=\"true\" type=\"ax21:ControlTransaccion\"/>\n                        <xs:element minOccurs=\"0\" name=\"tipoCbte\" type=\"xs:int\"/>\n                        <xs:element minOccurs=\"0\" name=\"ptoVta\" type=\"xs:int\"/>\n                        <xs:element minOccurs=\"0\" name=\"cbte\" type=\"xs:int\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"consultarComprobanteResponse\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"return\" nillable=\"true\" type=\"ax23:ResponseConsultarComprobante\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"consultarUltimoComprobante\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"ctx\" nillable=\"true\" type=\"ax21:ControlTransaccion\"/>\n                        <xs:element minOccurs=\"0\" name=\"tipoCbte\" type=\"xs:int\"/>\n                        <xs:element minOccurs=\"0\" name=\"ptoVta\" type=\"xs:int\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"consultarUltimoComprobanteResponse\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"return\" nillable=\"true\" type=\"ax23:ResponseConsultarUltimoComprobante\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"autorizarComprobante\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"ctx\" nillable=\"true\" type=\"ax21:ControlTransaccion\"/>\n                        <xs:element minOccurs=\"0\" name=\"concepto\" type=\"xs:int\"/>\n                        <xs:element minOccurs=\"0\" name=\"tipoDoc\" type=\"xs:int\"/>\n                        <xs:element minOccurs=\"0\" name=\"nroDoc\" type=\"xs:long\"/>\n                        <xs:element minOccurs=\"0\" name=\"tipoCbte\" type=\"xs:int\"/>\n                        <xs:element minOccurs=\"0\" name=\"ptoVta\" type=\"xs:int\"/>\n                        <xs:element minOccurs=\"0\" name=\"nroCbte\" type=\"xs:long\"/>\n                        <xs:element minOccurs=\"0\" name=\"impTotal\" nillable=\"true\" type=\"xs:decimal\"/>\n                        <xs:element minOccurs=\"0\" name=\"impTotConcNoGrav\" nillable=\"true\" type=\"xs:decimal\"/>\n                        <xs:element minOccurs=\"0\" name=\"impNeto\" nillable=\"true\" type=\"xs:decimal\"/>\n                        <xs:element minOccurs=\"0\" name=\"impIva\" nillable=\"true\" type=\"xs:decimal\"/>\n                        <xs:element minOccurs=\"0\" name=\"impTrib\" nillable=\"true\" type=\"xs:decimal\"/>\n                        <xs:element minOccurs=\"0\" name=\"impOpEx\" nillable=\"true\" type=\"xs:decimal\"/>\n                        <xs:element minOccurs=\"0\" name=\"fechaCbte\" nillable=\"true\" type=\"xs:string\"/>\n                        <xs:element minOccurs=\"0\" name=\"fechaVencPago\" nillable=\"true\" type=\"xs:string\"/>\n                        <xs:element minOccurs=\"0\" name=\"fechaServDesde\" nillable=\"true\" type=\"xs:string\"/>\n                        <xs:element minOccurs=\"0\" name=\"fechaServHasta\" nillable=\"true\" type=\"xs:string\"/>\n                        <xs:element minOccurs=\"0\" name=\"monedaId\" nillable=\"true\" type=\"xs:string\"/>\n                        <xs:element minOccurs=\"0\" name=\"monedaCtz\" nillable=\"true\" type=\"xs:decimal\"/>\n                        <xs:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"tributos\" nillable=\"true\" type=\"ax21:Tributo\"/>\n                        <xs:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"ivas\" nillable=\"true\" type=\"ax21:Iva\"/>\n                        <xs:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"comprobantesAsociados\" nillable=\"true\" type=\"ax21:ComprobanteAsociado\"/>\n                        <xs:element maxOccurs=\"unbounded\" minOccurs=\"0\" name=\"datosOpcionales\" nillable=\"true\" type=\"ax21:DatoOpcional\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"autorizarComprobanteResponse\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"return\" nillable=\"true\" type=\"ax23:ResponseAutorizarComprobante\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"consultarPadronLocal\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"request\" nillable=\"true\" type=\"ax27:RequestConsultarPadronLocal\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"consultarPadronLocalResponse\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"return\" nillable=\"true\" type=\"ax23:ResponseConsultarPadronLocal\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"consultarPadronOnline\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"request\" nillable=\"true\" type=\"ax27:RequestConsultarPadronOnline\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"consultarPadronOnlineResponse\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"return\" nillable=\"true\" type=\"ax23:ResponseConsultarPadronOnline\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"actualizarItemComprobante\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"request\" nillable=\"true\" type=\"ax27:RequestActualizarItemComprobante\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"actualizarItemComprobanteResponse\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"return\" nillable=\"true\" type=\"ax23:ResponseActualizarItemComprobante\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"cerrarSesion\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"interfaz\" type=\"xs:int\"/>\n                        <xs:element minOccurs=\"0\" name=\"idSesion\" nillable=\"true\" type=\"xs:string\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"cerrarSesionResponse\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"return\" nillable=\"true\" type=\"ax23:Response\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"iniciarSesion\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"interfaz\" type=\"xs:int\"/>\n                        <xs:element minOccurs=\"0\" name=\"clave\" nillable=\"true\" type=\"xs:string\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n            <xs:element name=\"iniciarSesionResponse\">\n                <xs:complexType>\n                    <xs:sequence>\n                        <xs:element minOccurs=\"0\" name=\"return\" nillable=\"true\" type=\"ax23:ResponseAutenticacion\"/>\n                    </xs:sequence>\n                </xs:complexType>\n            </xs:element>\n        </xs:schema>\n    </wsdl:types>\n    <wsdl:message name=\"consultarPadronLocalRequest\">\n        <wsdl:part name=\"parameters\" element=\"ns:consultarPadronLocal\"/>\n    </wsdl:message>\n    <wsdl:message name=\"consultarPadronLocalResponse\">\n        <wsdl:part name=\"parameters\" element=\"ns:consultarPadronLocalResponse\"/>\n    </wsdl:message>\n    <wsdl:message name=\"consultarComprobanteRequest\">\n        <wsdl:part name=\"parameters\" element=\"ns:consultarComprobante\"/>\n    </wsdl:message>\n    <wsdl:message name=\"consultarComprobanteResponse\">\n        <wsdl:part name=\"parameters\" element=\"ns:consultarComprobanteResponse\"/>\n    </wsdl:message>\n    <wsdl:message name=\"iniciarSesionRequest\">\n        <wsdl:part name=\"parameters\" element=\"ns:iniciarSesion\"/>\n    </wsdl:message>\n    <wsdl:message name=\"iniciarSesionResponse\">\n        <wsdl:part name=\"parameters\" element=\"ns:iniciarSesionResponse\"/>\n    </wsdl:message>\n    <wsdl:message name=\"actualizarItemComprobanteRequest\">\n        <wsdl:part name=\"parameters\" element=\"ns:actualizarItemComprobante\"/>\n    </wsdl:message>\n    <wsdl:message name=\"actualizarItemComprobanteResponse\">\n        <wsdl:part name=\"parameters\" element=\"ns:actualizarItemComprobanteResponse\"/>\n    </wsdl:message>\n    <wsdl:message name=\"scheduleTimerFewsRequest\"/>\n    <wsdl:message name=\"scheduleTimerFewsResponse\"/>\n    <wsdl:message name=\"autorizarComprobanteRequest\">\n        <wsdl:part name=\"parameters\" element=\"ns:autorizarComprobante\"/>\n    </wsdl:message>\n    <wsdl:message name=\"autorizarComprobanteResponse\">\n        <wsdl:part name=\"parameters\" element=\"ns:autorizarComprobanteResponse\"/>\n    </wsdl:message>\n    <wsdl:message name=\"cerrarSesionRequest\">\n        <wsdl:part name=\"parameters\" element=\"ns:cerrarSesion\"/>\n    </wsdl:message>\n    <wsdl:message name=\"cerrarSesionResponse\">\n        <wsdl:part name=\"parameters\" element=\"ns:cerrarSesionResponse\"/>\n    </wsdl:message>\n    <wsdl:message name=\"scheduleTimerSqlRequest\"/>\n    <wsdl:message name=\"scheduleTimerSqlResponse\"/>\n    <wsdl:message name=\"consultarPadronOnlineRequest\">\n        <wsdl:part name=\"parameters\" element=\"ns:consultarPadronOnline\"/>\n    </wsdl:message>\n    <wsdl:message name=\"consultarPadronOnlineResponse\">\n        <wsdl:part name=\"parameters\" element=\"ns:consultarPadronOnlineResponse\"/>\n    </wsdl:message>\n    <wsdl:message name=\"consultarUltimoComprobanteRequest\">\n        <wsdl:part name=\"parameters\" element=\"ns:consultarUltimoComprobante\"/>\n    </wsdl:message>\n    <wsdl:message name=\"consultarUltimoComprobanteResponse\">\n        <wsdl:part name=\"parameters\" element=\"ns:consultarUltimoComprobanteResponse\"/>\n    </wsdl:message>\n    <wsdl:portType name=\"DocOnlineServicioWebPortType\">\n        <wsdl:operation name=\"consultarPadronLocal\">\n            <wsdl:input message=\"ns:consultarPadronLocalRequest\" wsaw:Action=\"urn:consultarPadronLocal\"/>\n            <wsdl:output message=\"ns:consultarPadronLocalResponse\" wsaw:Action=\"urn:consultarPadronLocalResponse\"/>\n        </wsdl:operation>\n        <wsdl:operation name=\"consultarComprobante\">\n            <wsdl:input message=\"ns:consultarComprobanteRequest\" wsaw:Action=\"urn:consultarComprobante\"/>\n            <wsdl:output message=\"ns:consultarComprobanteResponse\" wsaw:Action=\"urn:consultarComprobanteResponse\"/>\n        </wsdl:operation>\n        <wsdl:operation name=\"iniciarSesion\">\n            <wsdl:input message=\"ns:iniciarSesionRequest\" wsaw:Action=\"urn:iniciarSesion\"/>\n            <wsdl:output message=\"ns:iniciarSesionResponse\" wsaw:Action=\"urn:iniciarSesionResponse\"/>\n        </wsdl:operation>\n        <wsdl:operation name=\"actualizarItemComprobante\">\n            <wsdl:input message=\"ns:actualizarItemComprobanteRequest\" wsaw:Action=\"urn:actualizarItemComprobante\"/>\n            <wsdl:output message=\"ns:actualizarItemComprobanteResponse\" wsaw:Action=\"urn:actualizarItemComprobanteResponse\"/>\n        </wsdl:operation>\n        <wsdl:operation name=\"scheduleTimerFews\">\n            <wsdl:input message=\"ns:scheduleTimerFewsRequest\" wsaw:Action=\"urn:scheduleTimerFews\"/>\n            <wsdl:output message=\"ns:scheduleTimerFewsResponse\" wsaw:Action=\"urn:scheduleTimerFewsResponse\"/>\n        </wsdl:operation>\n        <wsdl:operation name=\"autorizarComprobante\">\n            <wsdl:input message=\"ns:autorizarComprobanteRequest\" wsaw:Action=\"urn:autorizarComprobante\"/>\n            <wsdl:output message=\"ns:autorizarComprobanteResponse\" wsaw:Action=\"urn:autorizarComprobanteResponse\"/>\n        </wsdl:operation>\n        <wsdl:operation name=\"cerrarSesion\">\n            <wsdl:input message=\"ns:cerrarSesionRequest\" wsaw:Action=\"urn:cerrarSesion\"/>\n            <wsdl:output message=\"ns:cerrarSesionResponse\" wsaw:Action=\"urn:cerrarSesionResponse\"/>\n        </wsdl:operation>\n        <wsdl:operation name=\"scheduleTimerSql\">\n            <wsdl:input message=\"ns:scheduleTimerSqlRequest\" wsaw:Action=\"urn:scheduleTimerSql\"/>\n            <wsdl:output message=\"ns:scheduleTimerSqlResponse\" wsaw:Action=\"urn:scheduleTimerSqlResponse\"/>\n        </wsdl:operation>\n        <wsdl:operation name=\"consultarPadronOnline\">\n            <wsdl:input message=\"ns:consultarPadronOnlineRequest\" wsaw:Action=\"urn:consultarPadronOnline\"/>\n            <wsdl:output message=\"ns:consultarPadronOnlineResponse\" wsaw:Action=\"urn:consultarPadronOnlineResponse\"/>\n        </wsdl:operation>\n        <wsdl:operation name=\"consultarUltimoComprobante\">\n            <wsdl:input message=\"ns:consultarUltimoComprobanteRequest\" wsaw:Action=\"urn:consultarUltimoComprobante\"/>\n            <wsdl:output message=\"ns:consultarUltimoComprobanteResponse\" wsaw:Action=\"urn:consultarUltimoComprobanteResponse\"/>\n        </wsdl:operation>\n    </wsdl:portType>\n    <wsdl:binding name=\"DocOnlineServicioWebSoap11Binding\" type=\"ns:DocOnlineServicioWebPortType\">\n        <soap:binding transport=\"http://schemas.xmlsoap.org/soap/http\" style=\"document\"/>\n        <wsdl:operation name=\"consultarPadronLocal\">\n            <soap:operation soapAction=\"urn:consultarPadronLocal\" style=\"document\"/>\n            <wsdl:input>\n                <soap:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"consultarComprobante\">\n            <soap:operation soapAction=\"urn:consultarComprobante\" style=\"document\"/>\n            <wsdl:input>\n                <soap:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"iniciarSesion\">\n            <soap:operation soapAction=\"urn:iniciarSesion\" style=\"document\"/>\n            <wsdl:input>\n                <soap:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"actualizarItemComprobante\">\n            <soap:operation soapAction=\"urn:actualizarItemComprobante\" style=\"document\"/>\n            <wsdl:input>\n                <soap:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"autorizarComprobante\">\n            <soap:operation soapAction=\"urn:autorizarComprobante\" style=\"document\"/>\n            <wsdl:input>\n                <soap:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"scheduleTimerFews\">\n            <soap:operation soapAction=\"urn:scheduleTimerFews\" style=\"document\"/>\n            <wsdl:input>\n                <soap:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"cerrarSesion\">\n            <soap:operation soapAction=\"urn:cerrarSesion\" style=\"document\"/>\n            <wsdl:input>\n                <soap:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"scheduleTimerSql\">\n            <soap:operation soapAction=\"urn:scheduleTimerSql\" style=\"document\"/>\n            <wsdl:input>\n                <soap:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"consultarUltimoComprobante\">\n            <soap:operation soapAction=\"urn:consultarUltimoComprobante\" style=\"document\"/>\n            <wsdl:input>\n                <soap:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"consultarPadronOnline\">\n            <soap:operation soapAction=\"urn:consultarPadronOnline\" style=\"document\"/>\n            <wsdl:input>\n                <soap:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n    </wsdl:binding>\n    <wsdl:binding name=\"DocOnlineServicioWebSoap12Binding\" type=\"ns:DocOnlineServicioWebPortType\">\n        <soap12:binding transport=\"http://schemas.xmlsoap.org/soap/http\" style=\"document\"/>\n        <wsdl:operation name=\"consultarPadronLocal\">\n            <soap12:operation soapAction=\"urn:consultarPadronLocal\" style=\"document\"/>\n            <wsdl:input>\n                <soap12:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap12:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"consultarComprobante\">\n            <soap12:operation soapAction=\"urn:consultarComprobante\" style=\"document\"/>\n            <wsdl:input>\n                <soap12:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap12:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"iniciarSesion\">\n            <soap12:operation soapAction=\"urn:iniciarSesion\" style=\"document\"/>\n            <wsdl:input>\n                <soap12:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap12:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"actualizarItemComprobante\">\n            <soap12:operation soapAction=\"urn:actualizarItemComprobante\" style=\"document\"/>\n            <wsdl:input>\n                <soap12:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap12:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"autorizarComprobante\">\n            <soap12:operation soapAction=\"urn:autorizarComprobante\" style=\"document\"/>\n            <wsdl:input>\n                <soap12:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap12:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"scheduleTimerFews\">\n            <soap12:operation soapAction=\"urn:scheduleTimerFews\" style=\"document\"/>\n            <wsdl:input>\n                <soap12:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap12:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"cerrarSesion\">\n            <soap12:operation soapAction=\"urn:cerrarSesion\" style=\"document\"/>\n            <wsdl:input>\n                <soap12:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap12:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"scheduleTimerSql\">\n            <soap12:operation soapAction=\"urn:scheduleTimerSql\" style=\"document\"/>\n            <wsdl:input>\n                <soap12:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap12:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"consultarUltimoComprobante\">\n            <soap12:operation soapAction=\"urn:consultarUltimoComprobante\" style=\"document\"/>\n            <wsdl:input>\n                <soap12:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap12:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"consultarPadronOnline\">\n            <soap12:operation soapAction=\"urn:consultarPadronOnline\" style=\"document\"/>\n            <wsdl:input>\n                <soap12:body use=\"literal\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <soap12:body use=\"literal\"/>\n            </wsdl:output>\n        </wsdl:operation>\n    </wsdl:binding>\n    <wsdl:binding name=\"DocOnlineServicioWebHttpBinding\" type=\"ns:DocOnlineServicioWebPortType\">\n        <http:binding verb=\"POST\"/>\n        <wsdl:operation name=\"consultarPadronLocal\">\n            <http:operation location=\"consultarPadronLocal\"/>\n            <wsdl:input>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"consultarComprobante\">\n            <http:operation location=\"consultarComprobante\"/>\n            <wsdl:input>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"iniciarSesion\">\n            <http:operation location=\"iniciarSesion\"/>\n            <wsdl:input>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"actualizarItemComprobante\">\n            <http:operation location=\"actualizarItemComprobante\"/>\n            <wsdl:input>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"autorizarComprobante\">\n            <http:operation location=\"autorizarComprobante\"/>\n            <wsdl:input>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"scheduleTimerFews\">\n            <http:operation location=\"scheduleTimerFews\"/>\n            <wsdl:input>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"cerrarSesion\">\n            <http:operation location=\"cerrarSesion\"/>\n            <wsdl:input>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"scheduleTimerSql\">\n            <http:operation location=\"scheduleTimerSql\"/>\n            <wsdl:input>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"consultarUltimoComprobante\">\n            <http:operation location=\"consultarUltimoComprobante\"/>\n            <wsdl:input>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:output>\n        </wsdl:operation>\n        <wsdl:operation name=\"consultarPadronOnline\">\n            <http:operation location=\"consultarPadronOnline\"/>\n            <wsdl:input>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:input>\n            <wsdl:output>\n                <mime:content type=\"application/xml\" part=\"parameters\"/>\n            </wsdl:output>\n        </wsdl:operation>\n    </wsdl:binding>\n    <wsdl:service name=\"DocOnlineServicioWeb\">\n        <wsdl:port name=\"DocOnlineServicioWebHttpSoap11Endpoint\" binding=\"ns:DocOnlineServicioWebSoap11Binding\">\n            <soap:address location=\"http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/\"/>\n        </wsdl:port>\n        <wsdl:port name=\"DocOnlineServicioWebHttpSoap12Endpoint\" binding=\"ns:DocOnlineServicioWebSoap12Binding\">\n            <soap12:address location=\"http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap12Endpoint/\"/>\n        </wsdl:port>\n        <wsdl:port name=\"DocOnlineServicioWebHttpEndpoint\" binding=\"ns:DocOnlineServicioWebHttpBinding\">\n            <http:address location=\"http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpEndpoint/\"/>\n        </wsdl:port>\n    </wsdl:service>\n</wsdl:definitions>",
+          "collapsed": false,
+          "createdAt": 1608159468335,
+          "id": "c9801565-c778-492a-9a42-9c90709d7aa7",
+          "updatedAt": 1608235751600
+        },
+        {
+          "type": "folder",
+          "name": "My Folder",
+          "description": null,
+          "collapsed": false,
+          "selectedEnvironmentId": null,
+          "requestIds": [],
+          "createdAt": 1608159522002,
+          "id": "2719bb49-a235-4301-a59b-afe030122b78"
+        },
+        {
+          "type": "request",
+          "projectId": null,
+          "folderId": "2719bb49-a235-4301-a59b-afe030122b78",
+          "name": "DocOnlineServicioWebHttpBinding_iniciarSesion_1",
+          "url": "http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/",
+          "method": "POST",
+          "bodyType": "xml",
+          "bodyXml": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:imp=\"http://impl.ws.doconline.coninf.com.ar\">\n    <x:Header/>\n    <x:Body>\n        <imp:iniciarSesion>\n            <imp:interfaz>9901</imp:interfaz>\n            <imp:clave>1234</imp:clave>\n        </imp:iniciarSesion>\n    </x:Body>\n</x:Envelope>",
+          "bodyJson": "",
+          "bodyText": "",
+          "authType": null,
+          "response": {
+            "contentType": "text/xml;charset=UTF-8",
+            "headers": [
+              {
+                "name": "connection",
+                "value": "keep-alive"
+              },
+              {
+                "name": "content-type",
+                "value": "text/xml;charset=UTF-8"
+              },
+              {
+                "name": "date",
+                "value": "Thu, 17 Dec 2020 00:06:54 GMT"
+              },
+              {
+                "name": "keep-alive",
+                "value": "timeout=20"
+              },
+              {
+                "name": "transfer-encoding",
+                "value": "chunked"
+              }
+            ],
+            "responseText": "<?xml version='1.0' encoding='UTF-8'?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"><soapenv:Body><ns:iniciarSesionResponse xmlns:ns=\"http://impl.ws.doconline.coninf.com.ar\"><ns:return xmlns:ax21=\"http://response.model.rest.doconline.coninf.com.ar/xsd\" xmlns:ax23=\"http://request.model.rest.doconline.coninf.com.ar/xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:ax24=\"http://tx.model.rest.doconline.coninf.com.ar/xsd\" xsi:type=\"ax21:ResponseAutenticacion\"><ax21:codigo>0</ax21:codigo><ax21:descripcion>Operacion realizada con exito</ax21:descripcion><ax21:esReintento>false</ax21:esReintento><ax21:observacion xsi:nil=\"true\" /><ax21:idSesion>dbb013c7420d4292aa2f8e72927f9fe3</ax21:idSesion></ns:return></ns:iniciarSesionResponse></soapenv:Body></soapenv:Envelope>",
+            "statusCode": 200,
+            "statusText": "",
+            "duration": 20,
+            "size": "811 bytes",
+            "sentRequest": {
+              "id": "3043bfd5-b735-405e-8ebf-a55f8220a9ce",
+              "method": "POST",
+              "url": "http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/",
+              "headers": {
+                "Content-Type": "text/xml; charset=utf-8",
+                "SOAPAction": "{N/A}"
+              },
+              "data": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:imp=\"http://impl.ws.doconline.coninf.com.ar\">\n    <x:Header/>\n    <x:Body>\n        <imp:iniciarSesion>\n            <imp:interfaz>9901</imp:interfaz>\n            <imp:clave>1234</imp:clave>\n        </imp:iniciarSesion>\n    </x:Body>\n</x:Envelope>"
+            }
+          },
+          "reqTabIndex": 0,
+          "resTabIndex": 0,
+          "description": null,
+          "reqPanelSize": 0,
+          "resPanelSize": 1,
+          "spec": "wsdl",
+          "serviceId": "c9801565-c778-492a-9a42-9c90709d7aa7",
+          "operationId": "DocOnlineServicioWebHttpBinding_iniciarSesion",
+          "saved": false,
+          "createdAt": 1608159522056,
+          "id": "3043bfd5-b735-405e-8ebf-a55f8220a9ce",
+          "updatedAt": 1608163614642,
+          "_inProgress": false
+        },
+        {
+          "enabled": true,
+          "name": "SOAPAction",
+          "value": "{N/A}",
+          "type": "requestHeader",
+          "requestId": "3043bfd5-b735-405e-8ebf-a55f8220a9ce",
+          "createdAt": 1608159522112,
+          "id": "58e90932-dceb-497e-9eff-e0be1bbb0ce2"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "text/xml; charset=utf-8",
+          "type": "requestHeader",
+          "requestId": "3043bfd5-b735-405e-8ebf-a55f8220a9ce",
+          "createdAt": 1608159522112,
+          "id": "83d95fce-6900-48ba-a11b-e250084840db"
+        },
+        {
+          "type": "tab",
+          "requestId": "3043bfd5-b735-405e-8ebf-a55f8220a9ce",
+          "title": "DocOnlineServicioWebHttpBinding_iniciarSesion_1",
+          "view": "HttpClient",
+          "createdAt": 1608159522113,
+          "id": "c454f078-c3a0-43cf-aeb9-ef4bc0d133e1"
+        },
+        {
+          "type": "request",
+          "projectId": null,
+          "folderId": "2719bb49-a235-4301-a59b-afe030122b78",
+          "name": "DocOnlineServicioWebHttpBinding_autorizarComprobante_2",
+          "url": "http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/",
+          "method": "POST",
+          "bodyType": "xml",
+          "bodyXml": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:imp=\"http://impl.ws.doconline.coninf.com.ar\"\n    xmlns:xsd2=\"http://tx.model.rest.doconline.coninf.com.ar/xsd\">\n    <x:Header/>\n    <x:Body>\n        <imp:autorizarComprobante>\n            <imp:ctx>\n                <xsd2:idSesion>50dd1446627546e49bf19c007e33e6b4</xsd2:idSesion>\n                <xsd2:interfaz>1</xsd2:interfaz>\n                <xsd2:nroTransaccion>1</xsd2:nroTransaccion>\n            </imp:ctx>\n            <imp:concepto>3</imp:concepto>\n            <imp:tipoDoc>80</imp:tipoDoc>\n            <imp:nroDoc>20000000001</imp:nroDoc>\n            <imp:tipoCbte>6</imp:tipoCbte>\n            <imp:ptoVta>1</imp:ptoVta>\n            <imp:nroCbte>0</imp:nroCbte>\n            <imp:impTotal>0</imp:impTotal>\n            <imp:impTotConcNoGrav>0</imp:impTotConcNoGrav>\n            <imp:impNeto>0</imp:impNeto>\n            <imp:impIva>0</imp:impIva>\n            <imp:impTrib>0</imp:impTrib>\n            <imp:impOpEx>0</imp:impOpEx>\n            <imp:fechaCbte>?</imp:fechaCbte>\n            <imp:fechaVencPago>?</imp:fechaVencPago>\n            <imp:fechaServDesde>?</imp:fechaServDesde>\n            <imp:fechaServHasta>?</imp:fechaServHasta>\n            <imp:monedaId>?</imp:monedaId>\n            <imp:monedaCtz>0</imp:monedaCtz>\n            <imp:tributos>\n                <xsd2:tributoAlic>0</xsd2:tributoAlic>\n                <xsd2:tributoBaseImp>0</xsd2:tributoBaseImp>\n                <xsd2:tributoDesc>?</xsd2:tributoDesc>\n                <xsd2:tributoId>0</xsd2:tributoId>\n                <xsd2:tributoImporte>0</xsd2:tributoImporte>\n            </imp:tributos>\n            <imp:ivas>\n                <xsd2:ivaBaseImp>0</xsd2:ivaBaseImp>\n                <xsd2:ivaId>0</xsd2:ivaId>\n                <xsd2:ivaImporte>0</xsd2:ivaImporte>\n            </imp:ivas>\n            <imp:comprobantesAsociados>\n                <xsd2:cbteNro>0</xsd2:cbteNro>\n                <xsd2:cuit>?</xsd2:cuit>\n                <xsd2:fechaCbte>?</xsd2:fechaCbte>\n                <xsd2:puntoVta>0</xsd2:puntoVta>\n                <xsd2:tipoCbte>0</xsd2:tipoCbte>\n            </imp:comprobantesAsociados>\n            <imp:datosOpcionales>\n                <xsd2:opcionalId>0</xsd2:opcionalId>\n                <xsd2:valor>?</xsd2:valor>\n            </imp:datosOpcionales>\n        </imp:autorizarComprobante>\n    </x:Body>\n</x:Envelope>",
+          "bodyJson": "",
+          "bodyText": "",
+          "authType": null,
+          "response": null,
+          "reqTabIndex": 0,
+          "resTabIndex": 0,
+          "description": null,
+          "reqPanelSize": 1,
+          "resPanelSize": 0,
+          "spec": "wsdl",
+          "serviceId": "c9801565-c778-492a-9a42-9c90709d7aa7",
+          "operationId": "DocOnlineServicioWebHttpBinding_autorizarComprobante",
+          "saved": false,
+          "createdAt": 1608159593877,
+          "id": "5fe9e29d-123f-4bb9-bba1-8bc15d8c01f4",
+          "updatedAt": 1608159676242
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "text/xml; charset=utf-8",
+          "type": "requestHeader",
+          "requestId": "5fe9e29d-123f-4bb9-bba1-8bc15d8c01f4",
+          "createdAt": 1608159593992,
+          "id": "713dea44-4541-4bbf-b4a6-a17ae35d7d55"
+        },
+        {
+          "enabled": true,
+          "name": "SOAPAction",
+          "value": "{N/A}",
+          "type": "requestHeader",
+          "requestId": "5fe9e29d-123f-4bb9-bba1-8bc15d8c01f4",
+          "createdAt": 1608159593992,
+          "id": "e68858d3-d78a-414b-a002-dd9d74f5c90f"
+        },
+        {
+          "type": "request",
+          "projectId": null,
+          "folderId": "2719bb49-a235-4301-a59b-afe030122b78",
+          "name": "DocOnlineServicioWebHttpBinding_consultarUltimoComprobante_3",
+          "url": "http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/",
+          "method": "POST",
+          "bodyType": "xml",
+          "bodyXml": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:imp=\"http://impl.ws.doconline.coninf.com.ar\"\n    xmlns:xsd2=\"http://tx.model.rest.doconline.coninf.com.ar/xsd\">\n    <x:Header/>\n    <x:Body>\n        <imp:consultarUltimoComprobante>\n            <imp:ctx>\n                <xsd2:idSesion>dbb013c7420d4292aa2f8e72927f9fe3</xsd2:idSesion>\n                <xsd2:interfaz>9901</xsd2:interfaz>\n                <xsd2:nroTransaccion>3</xsd2:nroTransaccion>\n            </imp:ctx>\n            <imp:tipoCbte>6</imp:tipoCbte>\n            <imp:ptoVta>1</imp:ptoVta>\n        </imp:consultarUltimoComprobante>\n    </x:Body>\n</x:Envelope>",
+          "bodyJson": "",
+          "bodyText": "",
+          "authType": null,
+          "response": {
+            "contentType": "text/xml;charset=UTF-8",
+            "headers": [
+              {
+                "name": "connection",
+                "value": "keep-alive"
+              },
+              {
+                "name": "content-type",
+                "value": "text/xml;charset=UTF-8"
+              },
+              {
+                "name": "date",
+                "value": "Thu, 17 Dec 2020 00:07:23 GMT"
+              },
+              {
+                "name": "keep-alive",
+                "value": "timeout=20"
+              },
+              {
+                "name": "transfer-encoding",
+                "value": "chunked"
+              }
+            ],
+            "responseText": "<?xml version='1.0' encoding='UTF-8'?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"><soapenv:Body><ns:consultarUltimoComprobanteResponse xmlns:ns=\"http://impl.ws.doconline.coninf.com.ar\"><ns:return xmlns:ax21=\"http://response.model.rest.doconline.coninf.com.ar/xsd\" xmlns:ax23=\"http://request.model.rest.doconline.coninf.com.ar/xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:ax24=\"http://tx.model.rest.doconline.coninf.com.ar/xsd\" xsi:type=\"ax21:ResponseConsultarUltimoComprobante\"><ax21:codigo>13099</ax21:codigo><ax21:descripcion>Ocurrio un error inesperado.</ax21:descripcion><ax21:esReintento>false</ax21:esReintento><ax21:observacion xsi:nil=\"true\" /><ax21:errMsg xsi:nil=\"true\" /><ax21:excepcionWsaa xsi:nil=\"true\" /><ax21:excepcionWsfev1 xsi:nil=\"true\" /><ax21:obs xsi:nil=\"true\" /><ax21:ultimoComprobante xsi:nil=\"true\" /><ax21:xmlRequest xsi:nil=\"true\" /><ax21:xmlResponse xsi:nil=\"true\" /></ns:return></ns:consultarUltimoComprobanteResponse></soapenv:Body></soapenv:Envelope>",
+            "statusCode": 200,
+            "statusText": "",
+            "duration": 9086,
+            "size": "1 KB",
+            "sentRequest": {
+              "id": "71f1de6d-6340-4f35-97cf-562c5b5efae9",
+              "method": "POST",
+              "url": "http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/",
+              "headers": {
+                "Content-Type": "text/xml; charset=utf-8",
+                "SOAPAction": "{N/A}"
+              },
+              "data": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:imp=\"http://impl.ws.doconline.coninf.com.ar\"\n    xmlns:xsd2=\"http://tx.model.rest.doconline.coninf.com.ar/xsd\">\n    <x:Header/>\n    <x:Body>\n        <imp:consultarUltimoComprobante>\n            <imp:ctx>\n                <xsd2:idSesion>dbb013c7420d4292aa2f8e72927f9fe3</xsd2:idSesion>\n                <xsd2:interfaz>9901</xsd2:interfaz>\n                <xsd2:nroTransaccion>3</xsd2:nroTransaccion>\n            </imp:ctx>\n            <imp:tipoCbte>6</imp:tipoCbte>\n            <imp:ptoVta>1</imp:ptoVta>\n        </imp:consultarUltimoComprobante>\n    </x:Body>\n</x:Envelope>"
+            }
+          },
+          "reqTabIndex": 0,
+          "resTabIndex": 0,
+          "description": null,
+          "reqPanelSize": 0,
+          "resPanelSize": 1,
+          "spec": "wsdl",
+          "serviceId": "c9801565-c778-492a-9a42-9c90709d7aa7",
+          "operationId": "DocOnlineServicioWebHttpBinding_consultarUltimoComprobante",
+          "saved": false,
+          "createdAt": 1608159678331,
+          "id": "71f1de6d-6340-4f35-97cf-562c5b5efae9",
+          "updatedAt": 1608163643734,
+          "_inProgress": false
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "text/xml; charset=utf-8",
+          "type": "requestHeader",
+          "requestId": "71f1de6d-6340-4f35-97cf-562c5b5efae9",
+          "createdAt": 1608159678468,
+          "id": "35022a37-668a-4a6e-8144-6a814bfe789a"
+        },
+        {
+          "enabled": true,
+          "name": "SOAPAction",
+          "value": "{N/A}",
+          "type": "requestHeader",
+          "requestId": "71f1de6d-6340-4f35-97cf-562c5b5efae9",
+          "createdAt": 1608159678468,
+          "id": "ec1b9e52-a94a-4ec3-a15b-eddda21dfea7"
+        },
+        {
+          "type": "tab",
+          "requestId": "71f1de6d-6340-4f35-97cf-562c5b5efae9",
+          "title": "DocOnlineServicioWebHttpBinding_consultarUltimoComprobante_3",
+          "view": "HttpClient",
+          "createdAt": 1608159678469,
+          "id": "3dc670d2-0c62-4af7-86e2-f2b0f17226e6"
+        },
+        {
+          "type": "request",
+          "projectId": null,
+          "folderId": "2719bb49-a235-4301-a59b-afe030122b78",
+          "name": "DocOnlineServicioWebHttpBinding_iniciarSesion_4",
+          "url": "http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/",
+          "method": "POST",
+          "bodyType": "xml",
+          "bodyXml": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:imp=\"http://impl.ws.doconline.coninf.com.ar\">\n    <x:Header/>\n    <x:Body>\n        <imp:iniciarSesion>\n            <imp:interfaz>0</imp:interfaz>\n            <imp:clave>?</imp:clave>\n        </imp:iniciarSesion>\n    </x:Body>\n</x:Envelope>",
+          "bodyJson": "",
+          "bodyText": "",
+          "authType": null,
+          "response": null,
+          "reqTabIndex": 0,
+          "resTabIndex": 0,
+          "description": null,
+          "reqPanelSize": 1,
+          "resPanelSize": 0,
+          "spec": "wsdl",
+          "serviceId": "c9801565-c778-492a-9a42-9c90709d7aa7",
+          "operationId": "DocOnlineServicioWebHttpBinding_iniciarSesion",
+          "saved": false,
+          "createdAt": 1608163569871,
+          "id": "124f062b-41fb-4767-9a62-f752bcaa1514"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "text/xml; charset=utf-8",
+          "type": "requestHeader",
+          "requestId": "124f062b-41fb-4767-9a62-f752bcaa1514",
+          "createdAt": 1608163569959,
+          "id": "62951f2f-eae8-45bb-bc1b-2b838ff83253"
+        },
+        {
+          "enabled": true,
+          "name": "SOAPAction",
+          "value": "{N/A}",
+          "type": "requestHeader",
+          "requestId": "124f062b-41fb-4767-9a62-f752bcaa1514",
+          "createdAt": 1608163569959,
+          "id": "e039c8fd-ce1e-4698-bd81-3acd64b0bfc0"
+        },
+        {
+          "type": "request",
+          "projectId": null,
+          "folderId": "2719bb49-a235-4301-a59b-afe030122b78",
+          "name": "DocOnlineServicioWebHttpBinding_iniciarSesion_5",
+          "url": "http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/",
+          "method": "POST",
+          "bodyType": "xml",
+          "bodyXml": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:imp=\"http://impl.ws.doconline.coninf.com.ar\">\n    <x:Header/>\n    <x:Body>\n        <imp:iniciarSesion>\n            <imp:interfaz>0</imp:interfaz>\n            <imp:clave>?</imp:clave>\n        </imp:iniciarSesion>\n    </x:Body>\n</x:Envelope>",
+          "bodyJson": "",
+          "bodyText": "",
+          "authType": null,
+          "response": null,
+          "reqTabIndex": 0,
+          "resTabIndex": 0,
+          "description": null,
+          "reqPanelSize": 1,
+          "resPanelSize": 0,
+          "spec": "wsdl",
+          "serviceId": "c9801565-c778-492a-9a42-9c90709d7aa7",
+          "operationId": "DocOnlineServicioWebHttpBinding_iniciarSesion",
+          "saved": false,
+          "createdAt": 1608163574976,
+          "id": "88236e1c-c5e6-41a8-b14a-4dc3f603f0ac"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "text/xml; charset=utf-8",
+          "type": "requestHeader",
+          "requestId": "88236e1c-c5e6-41a8-b14a-4dc3f603f0ac",
+          "createdAt": 1608163575057,
+          "id": "fa0f63be-dcfa-45c6-8385-dc7985d40f72"
+        },
+        {
+          "enabled": true,
+          "name": "SOAPAction",
+          "value": "{N/A}",
+          "type": "requestHeader",
+          "requestId": "88236e1c-c5e6-41a8-b14a-4dc3f603f0ac",
+          "createdAt": 1608163575058,
+          "id": "ccdd1048-e484-46a5-a011-67a2f2b31a83"
+        },
+        {
+          "type": "request",
+          "projectId": null,
+          "folderId": "2719bb49-a235-4301-a59b-afe030122b78",
+          "name": "DocOnlineServicioWebHttpBinding_iniciarSesion_6",
+          "url": "http://localhost:8080/doconline-ws/services/DocOnlineServicioWeb.DocOnlineServicioWebHttpSoap11Endpoint/",
+          "method": "POST",
+          "bodyType": "xml",
+          "bodyXml": "<x:Envelope\n    xmlns:x=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:imp=\"http://impl.ws.doconline.coninf.com.ar\">\n    <x:Header/>\n    <x:Body>\n        <imp:iniciarSesion>\n            <imp:interfaz>0</imp:interfaz>\n            <imp:clave>?</imp:clave>\n        </imp:iniciarSesion>\n    </x:Body>\n</x:Envelope>",
+          "bodyJson": "",
+          "bodyText": "",
+          "authType": null,
+          "response": null,
+          "reqTabIndex": 0,
+          "resTabIndex": 0,
+          "description": null,
+          "reqPanelSize": 1,
+          "resPanelSize": 0,
+          "spec": "wsdl",
+          "serviceId": "c9801565-c778-492a-9a42-9c90709d7aa7",
+          "operationId": "DocOnlineServicioWebHttpBinding_iniciarSesion",
+          "saved": false,
+          "createdAt": 1608163586392,
+          "id": "e612159f-32ea-4647-ab84-507bbfed766d"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "text/xml; charset=utf-8",
+          "type": "requestHeader",
+          "requestId": "e612159f-32ea-4647-ab84-507bbfed766d",
+          "createdAt": 1608163586471,
+          "id": "4f713c56-108c-4dd1-aafb-e8f44031a59a"
+        },
+        {
+          "enabled": true,
+          "name": "SOAPAction",
+          "value": "{N/A}",
+          "type": "requestHeader",
+          "requestId": "e612159f-32ea-4647-ab84-507bbfed766d",
+          "createdAt": 1608163586471,
+          "id": "90f26518-4a07-44fc-99f6-7e199cfa8e33"
+        }
+      ]
+    }
+  ]
+}
