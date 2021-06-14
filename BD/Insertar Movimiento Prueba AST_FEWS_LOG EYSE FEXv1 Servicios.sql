@@ -65,14 +65,14 @@ commit tran
 	declare @Id int						= convert(int, (select isnull(max([AS_ID]),'0') id from [AST_FEWS_LOG]))
 	select @Id							= @Id + 1
 	declare @AsId varchar(8)			= right('00000000'+convert(varchar(8), @Id),8)
-	declare @Fec varchar(8)				= '20210606' --convert(varchar(8), GETDATE()-5, 112)
+	declare @Fec varchar(8)				= convert(varchar(8), GETDATE()-5, 112)
 	declare @FecActual varchar(8)		= convert(varchar(8), GETDATE(), 112)
 	declare @TipoDoc varchar(3)			= N'80'
 	declare @DocCliente varchar(11)		= '30708074949' --'30708074949'
 	
 	declare @TipoCbteFC varchar(3)		= '19'
 	declare @PtoVtaFC varchar(5)		= N'00001'
-	declare @CbteFC int					= 7
+	declare @CbteFC int					= 9
 	declare @NroCbteFC varchar(8)		= right('00000000'+convert(varchar(8), @CbteFC),8)
 
 	declare @CuitEmpresa varchar(11)	= N'20225925055'
