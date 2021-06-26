@@ -30,42 +30,42 @@ begin tran
 --Borro todos los comprobantes pendientes
 delete FEWS_PERIODO_ASOC
 from FEWS_PERIODO_ASOC x, FEWS_ENCABEZADO e
-where (e.resultado is null or e.resultado <> 'A')
+where (e.resultado is null or e.resultado not in ('A','D'))
 	and e.id=x.id
 
 delete FEWS_QR
 from FEWS_QR x, FEWS_ENCABEZADO e
-where (e.resultado is null or e.resultado <> 'A')
+where (e.resultado is null or e.resultado not in ('A','D'))
 	and e.id=x.id
 	
 delete FEWS_XML
 from FEWS_XML x, FEWS_ENCABEZADO e
-where (e.resultado is null or e.resultado <> 'A')
+where (e.resultado is null or e.resultado not in ('A','D'))
 	and e.id=x.id
 
 delete FEWS_DATO_OPC
 from FEWS_DATO_OPC x, FEWS_ENCABEZADO e
-where (e.resultado is null or e.resultado <> 'A')
+where (e.resultado is null or e.resultado not in ('A','D'))
 	and e.id=x.id
 
 delete FEWS_CMP_ASOC
 from FEWS_CMP_ASOC x, FEWS_ENCABEZADO e
-where (e.resultado is null or e.resultado <> 'A')
+where (e.resultado is null or e.resultado not in ('A','D'))
 	and e.id=x.id
 
 delete FEWS_TRIBUTO
 from FEWS_TRIBUTO x, FEWS_ENCABEZADO e
-where (e.resultado is null or e.resultado <> 'A')
+where (e.resultado is null or e.resultado not in ('A','D'))
 	and e.id=x.id
 	
 delete FEWS_IVA
 from FEWS_IVA x, FEWS_ENCABEZADO e
-where (e.resultado is null or e.resultado <> 'A')
+where (e.resultado is null or e.resultado not in ('A','D'))
 	and e.id=x.id
 
 delete FEWS_ENCABEZADO
 from FEWS_ENCABEZADO e
-where (e.resultado is null or e.resultado <> 'A')
+where (e.resultado is null or e.resultado not in ('A','D'))
 
 commit tran
 
@@ -175,7 +175,7 @@ begin
 		and TIPO_COMPROBANTE=TC
 		and PUNTO_VENTA=PV
 		and NUMERO_COMPROBANTE=NC
-		and (e.resultado is null or e.resultado <> 'A')
+		and (e.resultado is null or e.resultado not in ('A','D'))
 
 	--INSERTA EN FEWS_TRIBUTO
 	INSERT INTO FEWS_TRIBUTO(
@@ -202,7 +202,7 @@ begin
 		and TIPO_COMPROBANTE=TC
 		and PUNTO_VENTA=PV
 		and NUMERO_COMPROBANTE=NC
-		and (e.resultado is null or e.resultado <> 'A')
+		and (e.resultado is null or e.resultado not in ('A','D'))
 
 	--INSERTA EN FEWS_XML
 	INSERT INTO FEWS_XML(
@@ -210,7 +210,7 @@ begin
 	SELECT
 		ID=IDC
 	FROM #pen p left outer join FEWS_ENCABEZADO e on e.cuit=p.CE COLLATE DATABASE_DEFAULT and e.tipo_cbte=p.NTC and e.punto_vta=p.NPV and e.cbte_nro=p.NNC
-	WHERE (e.resultado is null or e.resultado <> 'A')
+	WHERE (e.resultado is null or e.resultado not in ('A','D'))
 		
 	--INSERTA EN FEWS_CMP_ASOC
 	INSERT INTO FEWS_CMP_ASOC(
@@ -233,7 +233,7 @@ begin
 		and TIPO_COMPROBANTE=TC
 		and PUNTO_VENTA=PV
 		and NUMERO_COMPROBANTE=NC
-		and (e.resultado is null or e.resultado <> 'A')
+		and (e.resultado is null or e.resultado not in ('A','D'))
 
 	--INSERTA EN FEWS_DATO_OPC
 	INSERT INTO FEWS_DATO_OPC(
@@ -250,7 +250,7 @@ begin
 		and TIPO_COMPROBANTE=TC
 		and PUNTO_VENTA=PV
 		and NUMERO_COMPROBANTE=NC
-		and (e.resultado is null or e.resultado <> 'A')
+		and (e.resultado is null or e.resultado not in ('A','D'))
 	
 	--INSERTA EN FEWS_QR
 	INSERT INTO FEWS_QR(
@@ -258,7 +258,7 @@ begin
 	SELECT
 		ID=IDC
 	FROM #pen p left outer join FEWS_ENCABEZADO e on e.cuit=p.CE COLLATE DATABASE_DEFAULT and e.tipo_cbte=p.NTC and e.punto_vta=p.NPV and e.cbte_nro=p.NNC
-	WHERE (e.resultado is null or e.resultado <> 'A')
+	WHERE (e.resultado is null or e.resultado not in ('A','D'))
 	
 	--INSERTA EN FEWS_PERIODO_ASOC
 	INSERT INTO FEWS_PERIODO_ASOC(
@@ -275,7 +275,7 @@ begin
 		and TIPO_COMPROBANTE=TC
 		and PUNTO_VENTA=PV
 		and NUMERO_COMPROBANTE=NC
-		and (e.resultado is null or e.resultado <> 'A')
+		and (e.resultado is null or e.resultado not in ('A','D'))
 
 	commit tran
 end 
