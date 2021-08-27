@@ -254,6 +254,8 @@ public class AutorizarComprobanteExportacionBusiness extends AbstractBusiness {
 					resp.setResultado(resultado);
 
 					String fechaVencimiento = Dispatch.get(wsfexv1, "Vencimiento").toString();
+					if (fechaVencimiento.length()==10)
+						fechaVencimiento = fechaVencimiento.substring(6).concat(fechaVencimiento.substring(3,5)).concat(fechaVencimiento.substring(0,2));
 					logger.debug("Vencimiento: " + fechaVencimiento);
 					resp.setFechaVencimiento(fechaVencimiento);
 					

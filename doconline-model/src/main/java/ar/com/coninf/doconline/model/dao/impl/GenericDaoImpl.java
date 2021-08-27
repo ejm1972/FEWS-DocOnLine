@@ -310,8 +310,7 @@ public abstract class GenericDaoImpl<T> implements GenericDao<T> {
 	 * @return la cantidad de registros afectados.
 	 * @throws SQLException
 	 */
-	private int definirCamposYEjecutar(T entity, Object[] fields, String sql)
-			throws SQLException {
+	private int definirCamposYEjecutar(T entity, Object[] fields, String sql) throws SQLException {
 		PreparedStatement statement = null;
 		ResultSet generatedKeys = null;
 		int affectedRows = 0;
