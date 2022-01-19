@@ -1,10 +1,10 @@
 
 /****** Script for SelectTopNRows command from SSMS  ******/
-SELECT max(id), 
+SELECT max(id) max_id, 
 	CUIT_EMPRESA, TIPO_COMPROBANTE, PUNTO_VENTA, NUMERO_COMPROBANTE
-	, MAX(creado), MIN(creado)
-	, DATEDIFF(S,  MIN(creado), MAX(creado))/60 as Minutos
-	, DATEDIFF(SS,  MIN(creado), MAX(creado)) % 60 as Segundos
+	, MAX(creado) max_creado, MIN(creado) min_creado
+	, DATEDIFF(S,  MIN(creado), MAX(creado))/60 as diferencia_minutos
+	, DATEDIFF(SS,  MIN(creado), MAX(creado)) % 60 as diferencia_segundos
 	, sum(case when TIPO in ('IIN', 'FIN') then 1 else 0 end) as Cantidad_IN
 	, sum(case when TIPO in ('IUD', 'FUD') then 1 else 0 end) as Cantidad_UD
 FROM [fews].[dbo].[FEWS_AST_FEWS_LOG]
