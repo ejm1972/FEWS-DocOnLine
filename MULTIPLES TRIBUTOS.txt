@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://www.w3.org/2003/05/soap-envelope" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<autorizarComprobante xmlns="http://impl.ws.doconline.coninf.com.ar">
+	<ctx>
+		<idSesion xmlns="http://tx.model.rest.doconline.coninf.com.ar/xsd">fe00c9184def4388b982de7db5c1431a</idSesion>
+		<interfaz xmlns="http://tx.model.rest.doconline.coninf.com.ar/xsd">1003</interfaz>
+		<nroTransaccion xmlns="http://tx.model.rest.doconline.coninf.com.ar/xsd">41849715</nroTransaccion>
+	</ctx>
+	<concepto>1</concepto>
+	<tipoDoc>80</tipoDoc>
+	<nroDoc>30604784723</nroDoc>
+	<tipoCbte>1</tipoCbte>
+	<ptoVta>9535</ptoVta>
+	<nroCbte>433</nroCbte>
+	<impTotal>20898</impTotal>
+	<impTotConcNoGrav>0</impTotConcNoGrav>
+	<impNeto>16586</impNeto>
+	<impIva>3483</impIva>
+	<impTrib>829</impTrib>
+	<impOpEx>0</impOpEx>
+	<fechaCbte>20160905</fechaCbte>
+	<fechaVencPago>20160905</fechaVencPago>
+	<fechaServDesde>20160905</fechaServDesde>
+	<fechaServHasta>20160905</fechaServHasta>
+	<monedaId>PES</monedaId>
+	<monedaCtz>100</monedaCtz>
+	<tributos>
+		<tributoAlic xmlns="http://tx.model.rest.doconline.coninf.com.ar/xsd">500</tributoAlic>
+		<tributoBaseImp xmlns="http://tx.model.rest.doconline.coninf.com.ar/xsd">16586</tributoBaseImp>
+		<tributoDesc xmlns="http://tx.model.rest.doconline.coninf.com.ar/xsd">PERCEPCION_IB</tributoDesc>
+		<tributoId xmlns="http://tx.model.rest.doconline.coninf.com.ar/xsd">2</tributoId>
+		<tributoImporte xmlns="http://tx.model.rest.doconline.coninf.com.ar/xsd">829</tributoImporte>
+	</tributos>
+	<ivas>
+		<ivaBaseImp xmlns="http://tx.model.rest.doconline.coninf.com.ar/xsd">16586</ivaBaseImp>
+		<ivaId xmlns="http://tx.model.rest.doconline.coninf.com.ar/xsd">5</ivaId>
+		<ivaImporte xmlns="http://tx.model.rest.doconline.coninf.com.ar/xsd">3483</ivaImporte>
+	</ivas>
+</autorizarComprobante>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
