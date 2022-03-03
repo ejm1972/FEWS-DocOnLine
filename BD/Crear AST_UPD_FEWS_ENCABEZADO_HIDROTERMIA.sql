@@ -283,7 +283,8 @@ end
 --Actualizo los encabezados que existen
 UPDATE [LQ5\LQ5].FAF_HIDROTERMIA.dbo.AST_FEWS_LOG
 SET resultado='D',
-	cae=0,
+	cae=e.cae,
+	qr=fqr.imagen_qr,
 	err_msg='ERROR - COMPROBANTE PENDIENTE YA EXISTE AUTORIZADO - VERIFIQUE LA CONSOLA',
 	obs='CAE: '+ CONVERT(varchar(20), e.cae) + ' VEN: '+ e.fecha_vto + ' TOTAL: ' + convert(varchar(20), e.imp_total),
 	codigo='14002',
