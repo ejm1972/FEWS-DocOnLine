@@ -51,7 +51,7 @@ public class ScheduledTaskFews {
 		String ejecuta6001 = dolProperties.getProperty("interfaz_6001");
 		String ejecuta6002 = dolProperties.getProperty("interfaz_6002");
 		
-		if (ejecuta9901==null && ejecuta9902==null && ejecuta2001==null && ejecuta2006==null && ejecuta4001==null && ejecuta5001==null && ejecuta5002==null) {
+		if (ejecuta9901==null && ejecuta9902==null && ejecuta2001==null && ejecuta2006==null && ejecuta4001==null && ejecuta5001==null && ejecuta5002==null && ejecuta6001==null && ejecuta6002==null) {
 
 			logger.info("***");
 			logger.info("*** scheduledTaskFews " + poolSchedulerFews.getThreadNamePrefix() + "* shutdown *** " + new Date() + " - " + countScheduledTaskFews);
