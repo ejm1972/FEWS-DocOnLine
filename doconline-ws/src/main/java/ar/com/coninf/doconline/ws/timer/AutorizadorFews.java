@@ -320,6 +320,66 @@ public class AutorizadorFews {
 		logTransaccionFacade.registrarAuditoria(log);
 	}
 
+	LOGS_GENERICOS y su correspondiente vista en la consola
+	private void registrarAuditoriaIni(Integer intefaz, String ejecucion, String lanzador) {
+
+		logger.debug("Ejecucion AutorizadorFews.registrarAuditoriaIni()" + ejecucion);
+
+		log.setCtxInterfaz(intefaz.toString());
+		log.setCtxNroTransaccion("-");
+		log.setCtxServicio(lanzador);
+		log.setOperacion("logErroresSinTransacciones");
+		log.setCtxFechaTransaccion(new Date());
+		log.setFechaInicioOp(new Date());
+
+		log.setTipoCbte("-");
+		log.setPtoVtaCbte("-");
+		log.setNroCbte("-");
+		log.setCbte("-");
+		log.setFechaCbte("-");
+		log.setImpTotal("-");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("lanzador: " + lanzador);
+		sb.append("}");
+		
+		log.setXmlEntrada(sb.toString());
+	}
+
+	private void registrarAuditoriaFin(String ejecucion, String lanzador) {
+
+		logger.debug("Ejecucion AutorizadorFews.registrarAuditoriaFin()" + ejecucion);
+		
+		log.setCodigo("-");
+		log.setDescripcion("-");
+		log.setObservacion("-");
+
+		log.setExcepcionWsaa("-");
+		log.setExcepcionWsfexv1("-");
+		
+		log.setErrMsg("-");
+		log.setObs("-");
+		
+		log.setXmlRequest("-");
+		log.setXmlResponse("-");
+
+		log.setCae("-");
+		log.setFechaVencimiento("-");
+		log.setResultado("-");
+
+		log.setFechaFinOp(new Date());
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append(lanzador);
+		sb.append("}");
+
+		log.setXmlSalida(sb.toString());
+
+		logTransaccionFacade.registrarAuditoria(log);
+	}
+
 	public void logTimerSql() {
 		
 		logger.debug("Ejecucion AutorizadorFews.logTimerSql()");
@@ -363,6 +423,12 @@ public class AutorizadorFews {
 
 		} catch (Exception e) {
 			logger.error(e);
+			String lanzador = "AutorizadorFews.procesarPendientes";
+			String ejecucion = "->procesarPendientes()";
+			registrarAuditoriaIni(interfaz, ejecucion, lanzador);
+			logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaIni()->procesarPendientes()");
+			registrarAuditoriaFin(ejecucion, lanzador);
+			logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaFin()->procesarPendientes()");
 		}
 
 	}

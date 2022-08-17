@@ -8,7 +8,8 @@ public enum TipoTransaccionEnum {
 	generarQr(2001L),
 	autorizarComprobanteExportacion(3001L),
 	consultarUltimoComprobanteExportacion(3002L),
-	consultarComprobanteExportacion(3003L)
+	consultarComprobanteExportacion(3003L),
+	logErroresSinTransacciones(9999L)
 	;
 	
 	private Long idTransaccion;

@@ -1,4 +1,4 @@
-use fews_eyse
+use fews_vacia
 go
 begin tran
 delete from FEWS_AST_FEWS_LOG
