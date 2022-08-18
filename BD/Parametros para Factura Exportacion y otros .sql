@@ -1,4 +1,4 @@
-USE [fews]
+USE [fews_vacia]
 GO
 
 if not exists(select top 1 * from sys.columns c, sys.objects o where o.name = N'FEWS_ENCABEZADO' and c.object_id=o.object_id and c.name = N'CUIT_PAIS_CLIENTE')
@@ -99,7 +99,7 @@ begin
 end
 
 select @Transac = 3002
-if not exists(select top 1 ID_TIPO_TRANSACCION from TIPOS_TRANSACCIONES where ID_TIPO_TRANSACCION=2001)
+if not exists(select top 1 ID_TIPO_TRANSACCION from TIPOS_TRANSACCIONES where ID_TIPO_TRANSACCION=3002)
 begin
 	
 	insert [TIPOS_TRANSACCIONES] ([ID_TIPO_TRANSACCION], [TRANSACCION], [TIPO_TRANSACCION], [TRANSACCION_REST], [URL_REST]) 
@@ -108,7 +108,7 @@ begin
 end
 
 select @Transac = 3003
-if not exists(select top 1 ID_TIPO_TRANSACCION from TIPOS_TRANSACCIONES where ID_TIPO_TRANSACCION=2001)
+if not exists(select top 1 ID_TIPO_TRANSACCION from TIPOS_TRANSACCIONES where ID_TIPO_TRANSACCION=3003)
 begin
 	
 	insert [TIPOS_TRANSACCIONES] ([ID_TIPO_TRANSACCION], [TRANSACCION], [TIPO_TRANSACCION], [TRANSACCION_REST], [URL_REST]) 
