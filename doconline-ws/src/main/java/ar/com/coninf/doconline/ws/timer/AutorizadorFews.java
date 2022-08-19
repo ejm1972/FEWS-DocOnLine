@@ -1,6 +1,7 @@
 package ar.com.coninf.doconline.ws.timer;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -347,7 +348,7 @@ public class AutorizadorFews {
 		log.setTipoCbte("-");
 		log.setPtoVtaCbte("-");
 		log.setNroCbte("-");
-		log.setCbte("-");
+		log.setCbte(lanzador.substring(0, 30));
 		log.setFechaCbte("-");
 		log.setImpTotal("-");
 		
@@ -413,33 +414,46 @@ public class AutorizadorFews {
 
 	public void procesarPendientes(List<Long> interfaces) {
 
+		logger.debug("Ejecucion AutorizadorFews.procesarPendientes()");
+		
 		this.log = new LogTransaccionContenido();
+		
+		List<FewsEncabezado> pendientes = new ArrayList<FewsEncabezado>();
 
-		try {
-
-			logger.debug("Ejecucion AutorizadorFews.procesarPendientes()");
+		for (Long intrfz : interfaces) {
 			
-			for (Long intrfz : interfaces) {
+			try {
+
 				fewsEncabezadoDao.importLog(intrfz);
 				logger.debug("Fin Ejecucion fewsEncabezadoDao.importLog()="+intrfz);
-				
-				List<FewsEncabezado> pendientes = fewsEncabezadoDao.getFewsPendiente((long) -1);
-				logger.debug("Fin Ejecucion fewsEncabezadoDao.getFewsPendiente()");
-				
-				for (int i=0; i < pendientes.size(); i++) {
-	
-					autorizarComprobante(pendientes.get(i));
-					logger.debug("Fin Ejecucion AutorizadorFews.autorizarComprobante()="+pendientes.get(i).getId().toString()+","+pendientes.get(i).getIdInterfaz().toString());
-					
-				}
+			
+			} catch (Exception e) {
+				logger.error(e);
+				String lanzador = "AutorizadorFews.procesarPendientes()";
+				String ejecucion = "importLog()="+intrfz;
+				registrarAuditoriaIniFin(interfaz, ejecucion, lanzador, e);
+				logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaIniFin()->"+ejecucion);
 			}
 
-		} catch (Exception e) {
-			logger.error(e);
-			String lanzador = "AutorizadorFews.procesarPendientes";
-			String ejecucion = "->procesarPendientes()";
-			registrarAuditoriaIniFin(interfaz, ejecucion, lanzador, e);
-			logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaIniFin()->procesarPendientes()");
+			try {
+
+				pendientes = fewsEncabezadoDao.getFewsPendiente((long) -1);
+				logger.debug("Fin Ejecucion fewsEncabezadoDao.getFewsPendiente()");
+			
+			} catch (Exception e) {
+				logger.error(e);
+				String lanzador = "AutorizadorFews.procesarPendientes()";
+				String ejecucion = "importLog()="+intrfz;
+				registrarAuditoriaIniFin(interfaz, ejecucion, lanzador, e);
+				logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaIniFin()->"+ejecucion);
+			}
+
+			for (int i=0; i < pendientes.size(); i++) {
+
+				autorizarComprobante(pendientes.get(i));
+				logger.debug("Fin Ejecucion AutorizadorFews.autorizarComprobante()="+pendientes.get(i).getId().toString()+","+pendientes.get(i).getIdInterfaz().toString());
+				
+			}
 		}
 
 	}
