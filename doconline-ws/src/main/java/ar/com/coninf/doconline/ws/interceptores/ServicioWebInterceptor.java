@@ -138,8 +138,7 @@ public class ServicioWebInterceptor implements MethodInterceptor {
 		return arg0.proceed();
 	}
 
-	private Object registrarTx(Object proceed, ControlTransaccion ct,
-			String servicio, Date date) {
+	private Object registrarTx(Object proceed, ControlTransaccion ct, String servicio, Date date) {
 		
 		if(ct != null && !((Response)proceed).getEsReintento()){
 			try{

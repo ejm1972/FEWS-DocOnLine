@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import ar.com.coninf.doconline.business.enums.TipoComprobanteAFIP;
 import ar.com.coninf.doconline.business.facade.LogTransaccionFacade;
+import ar.com.coninf.doconline.business.facade.RegistroTransaccionFacade;
 import ar.com.coninf.doconline.business.log.LogTransaccionContenido;
 import ar.com.coninf.doconline.model.dao.FewsComprobanteAsociadoDao;
 import ar.com.coninf.doconline.model.dao.FewsDatoOpcionalDao;
@@ -48,6 +49,7 @@ import ar.com.coninf.doconline.shared.dto.FewsQr;
 import ar.com.coninf.doconline.shared.dto.FewsResultado;
 import ar.com.coninf.doconline.shared.dto.FewsTributo;
 import ar.com.coninf.doconline.shared.dto.FewsXml;
+import ar.com.coninf.doconline.shared.dto.RegistroTransaccionDto;
 import ar.com.coninf.doconline.ws.DocOnlineServicioWeb;
 
 
@@ -104,9 +106,13 @@ public class AutorizadorFews {
 	protected DocOnlineServicioWeb dolsw;
 
 	@Autowired
+	@Qualifier("facade.registroTransaccionFacade")
+	protected RegistroTransaccionFacade registroTransaccionFacade;
+	
+	@Autowired
 	@Qualifier("facade.logTransaccionFacade")
 	protected LogTransaccionFacade logTransaccionFacade;
-	
+
 	@Autowired
 	@Qualifier("parametroDao")
 	private ParametroDao parametroDao;
@@ -320,17 +326,23 @@ public class AutorizadorFews {
 		logTransaccionFacade.registrarAuditoria(log);
 	}
 
-	LOGS_GENERICOS y su correspondiente vista en la consola
-	private void registrarAuditoriaIni(Integer intefaz, String ejecucion, String lanzador) {
+	//LOGS_GENERICOS y su correspondiente vista en la consola
+	private void registrarAuditoriaIniFin(Integer intefaz, String ejecucion, String lanzador, Exception exception) {
 
-		logger.debug("Ejecucion AutorizadorFews.registrarAuditoriaIni()" + ejecucion);
+		logger.debug("Ejecucion AutorizadorFews.registrarAuditoriaIniFin()" + ejecucion);
 
+		Date fecha = new Date();
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("lanzador: " + lanzador);
+		sb.append("}");
+		
 		log.setCtxInterfaz(intefaz.toString());
-		log.setCtxNroTransaccion("-");
+		log.setCtxNroTransaccion("0");
 		log.setCtxServicio(lanzador);
 		log.setOperacion("logErroresSinTransacciones");
-		log.setCtxFechaTransaccion(new Date());
-		log.setFechaInicioOp(new Date());
+		log.setCtxFechaTransaccion(fecha);
+		log.setFechaInicioOp(fecha);
 
 		log.setTipoCbte("-");
 		log.setPtoVtaCbte("-");
@@ -339,23 +351,12 @@ public class AutorizadorFews {
 		log.setFechaCbte("-");
 		log.setImpTotal("-");
 		
-		StringBuilder sb = new StringBuilder();
-		sb.append("{");
-		sb.append("lanzador: " + lanzador);
-		sb.append("}");
-		
-		log.setXmlEntrada(sb.toString());
-	}
-
-	private void registrarAuditoriaFin(String ejecucion, String lanzador) {
-
-		logger.debug("Ejecucion AutorizadorFews.registrarAuditoriaFin()" + ejecucion);
-		
 		log.setCodigo("-");
-		log.setDescripcion("-");
-		log.setObservacion("-");
+		log.setDescripcion(exception.getMessage());
+		log.setObservacion(exception.getCause()!=null?exception.getCause().getMessage():"-");
 
 		log.setExcepcionWsaa("-");
+		log.setExcepcionWsfev1("-");
 		log.setExcepcionWsfexv1("-");
 		
 		log.setErrMsg("-");
@@ -370,14 +371,26 @@ public class AutorizadorFews {
 
 		log.setFechaFinOp(new Date());
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("{");
-		sb.append(lanzador);
-		sb.append("}");
-
+		log.setXmlEntrada(sb.toString());
 		log.setXmlSalida(sb.toString());
 
-		logTransaccionFacade.registrarAuditoria(log);
+		RegistroTransaccionDto registro = new RegistroTransaccionDto();
+		registro.setCodigoTransaccion(0);
+		registro.setFechaTransaccion(fecha);
+		registro.setInterfazId(intefaz);
+		registro.setServicio(lanzador);
+		registro.setDatosTransaccion(sb.toString().getBytes());
+
+		try {
+			registroTransaccionFacade.add(registro);
+			logger.info("Registro de Error registrado. Servicio: " + lanzador);
+
+			logTransaccionFacade.registrarAuditoria(log);
+
+		} catch (Throwable e) {
+			logger.error(e);
+		}
+
 	}
 
 	public void logTimerSql() {
@@ -425,10 +438,8 @@ public class AutorizadorFews {
 			logger.error(e);
 			String lanzador = "AutorizadorFews.procesarPendientes";
 			String ejecucion = "->procesarPendientes()";
-			registrarAuditoriaIni(interfaz, ejecucion, lanzador);
-			logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaIni()->procesarPendientes()");
-			registrarAuditoriaFin(ejecucion, lanzador);
-			logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaFin()->procesarPendientes()");
+			registrarAuditoriaIniFin(interfaz, ejecucion, lanzador, e);
+			logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaIniFin()->procesarPendientes()");
 		}
 
 	}
