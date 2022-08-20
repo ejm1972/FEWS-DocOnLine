@@ -62,14 +62,4 @@ begin
 	VALUES(3,@Interfaz,@PuntoVenta,'S','N')
 end
 
-select @PuntoVenta = '00156'
-select @IdPV = null
-select @IdPV = ID_PUNTO_VENTA from PUNTO_VENTA where PUNTO_VENTA=@PuntoVenta
-select @IdPV, @PuntoVenta
-if @IdPV is null
-begin
-	INSERT [PUNTO_VENTA]([ID_PUNTO_VENTA],[ID_INTERFAZ],[PUNTO_VENTA],[ACTIVADO],[FLG_CONTROL])
-	VALUES(4,@Interfaz,@PuntoVenta,'S','N')
-end
-
 commit tran
