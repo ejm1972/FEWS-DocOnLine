@@ -34,14 +34,14 @@ insert into [FEWS_AST_FEWS_LOG] (
 	,[TIPO_EXPORTACION],l.[PERMISO_EXISTENTE],[DST_COMPROBANTE],[CLIENTE],l.[CUIT_PAIS_CLIENTE],l.[DOMICILIO_CLIENTE],l.[ID_IMPOSITIVO],l.[OBS_COMERCIALES],l.[OBS_GENERALES],l.[FORMA_PAGO],l.[INCOTERMS],l.[INCOTERMS_DS],[IDIOMA_COMPROBANTE]
 	,l.[CAE],[FECHA_VENCIMIENTO],[CODIGO],[DESCRIPCION],[OBSERVACION],[EXCEPCION_WSAA],[EXCEPCION_WSFEV1],[EXCEPCION_WSFEXV1],l.[RESULTADO],l.[ERR_MSG],[OBS],[XML_REQUEST_AFIP],[XML_RESPONSE_AFIP],@intento
 from fews_encabezado fenc
-	, BRD2.FINN_BRD.dbo.ast_fews_log l
+	, BRDPS.FINN_BRD.dbo.ast_fews_log l
 where fenc.id=@id
 	and cuit_empresa=fenc.cuit collate database_default
 	and convert(int, tipo_comprobante)=fenc.tipo_cbte
 	and convert(int, punto_venta)=fenc.punto_vta
 	and convert(int, numero_comprobante)=fenc.cbte_nro
 	
-	update BRD2.FINN_BRD.dbo.AST_FEWS_LOG
+	update BRDPS.FINN_BRD.dbo.AST_FEWS_LOG
 	set resultado=fenc.resultado,
 		cae=fenc.cae,
 		fecha_vencimiento=fenc.fecha_vto,
@@ -60,7 +60,7 @@ where fenc.id=@id
 	from fews_encabezado fenc
 		, fews_xml fxml
 		, fews_qr fqr
-		, BRD2.FINN_BRD.dbo.ast_fews_log astl
+		, BRDPS.FINN_BRD.dbo.ast_fews_log astl
 
 	where 1=1
 		and fenc.id=@id
@@ -81,7 +81,7 @@ insert into [FEWS_AST_FEWS_LOG] (
 	,[TIPO_EXPORTACION],l.[PERMISO_EXISTENTE],[DST_COMPROBANTE],[CLIENTE],l.[CUIT_PAIS_CLIENTE],l.[DOMICILIO_CLIENTE],l.[ID_IMPOSITIVO],l.[OBS_COMERCIALES],l.[OBS_GENERALES],l.[FORMA_PAGO],l.[INCOTERMS],l.[INCOTERMS_DS],[IDIOMA_COMPROBANTE]
 	,l.[CAE],[FECHA_VENCIMIENTO],[CODIGO],[DESCRIPCION],[OBSERVACION],[EXCEPCION_WSAA],[EXCEPCION_WSFEV1],[EXCEPCION_WSFEXV1],l.[RESULTADO],l.[ERR_MSG],[OBS],[XML_REQUEST_AFIP],[XML_RESPONSE_AFIP],@intento
 from fews_encabezado fenc
-	, BRD2.FINN_BRD.dbo.ast_fews_log l
+	, BRDPS.FINN_BRD.dbo.ast_fews_log l
 where fenc.id=@id
 	and cuit_empresa=fenc.cuit collate database_default
 	and convert(int, tipo_comprobante)=fenc.tipo_cbte
@@ -99,5 +99,5 @@ GO
 
 --exec FEWS_UPD_AST_FEWS_LOG_BRDPS 1
 
---select * from BRD2.FINN_BRD.dbo.ast_fews_log where cuit_empresa='30711897581' and tipo_comprobante='01' and PUNTO_VENTA='0002' and numero_comprobante='00000003'
+--select * from BRDPS.FINN_BRD.dbo.ast_fews_log where cuit_empresa='30711897581' and tipo_comprobante='01' and PUNTO_VENTA='0002' and numero_comprobante='00000003'
 
