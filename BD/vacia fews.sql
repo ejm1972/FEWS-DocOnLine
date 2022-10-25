@@ -1,29 +1,29 @@
 use fews_vacia
 go
 begin tran
-delete from FEWS_AST_FEWS_LOG
+truncate table FEWS_AST_FEWS_LOG
 commit tran
 
 begin tran
-delete from FEWS_CMP_ASOC
-delete from FEWS_DATO_OPC
-delete from FEWS_DETALLE
-delete from FEWS_IVA
-delete from FEWS_PERIODO_ASOC
-delete from FEWS_PERMISO
-delete from FEWS_QR
-delete from FEWS_TRIBUTO
-delete from FEWS_XML
-delete from FEWS_ENCABEZADO
+truncate table FEWS_CMP_ASOC
+truncate table FEWS_DATO_OPC
+truncate table FEWS_DETALLE
+truncate table FEWS_IVA
+truncate table FEWS_PERIODO_ASOC
+truncate table FEWS_PERMISO
+truncate table FEWS_QR
+truncate table FEWS_TRIBUTO
+truncate table FEWS_XML
+truncate table FEWS_ENCABEZADO
 commit tran
 
 begin tran
-delete from LOG_CONSOLA
-delete from LOG_TIMER
-delete from LOG_TRANSACCION_HIS
-delete from REGISTRO_TRANSACCION_HIS
-delete from LOGS_AUDITORIA
-delete from LOGS_GENERICOS
-delete from LOG_TRANSACCIONES
-delete from REGISTROS_TRANSACCIONES
+truncate table LOG_CONSOLA
+truncate table LOG_TIMER
+truncate table LOG_TRANSACCION_HIS
+truncate table REGISTRO_TRANSACCION_HIS
+truncate table LOGS_AUDITORIA
+truncate table LOGS_GENERICOS
+truncate table LOG_TRANSACCIONES
+truncate table REGISTROS_TRANSACCIONES
 commit tran
