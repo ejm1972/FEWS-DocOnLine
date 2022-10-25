@@ -1,52 +1,54 @@
-/****** Object:  LinkedServer [BRDPN]    Script Date: 08/28/2022 10:38:47 ******/
-IF  EXISTS (SELECT srv.name FROM sys.servers srv WHERE srv.server_id != 0 AND srv.name = N'BRDPN')EXEC master.dbo.sp_dropserver @server=N'BRDPN', @droplogins='droplogins'
+USE [master]
 GO
 
-/****** Object:  LinkedServer [BRDPN]    Script Date: 08/28/2022 10:38:47 ******/
-EXEC master.dbo.sp_addlinkedserver @server = N'BRDPN', @srvproduct=N'SQL Server'
+/****** Object:  LinkedServer [CLPRI]    Script Date: 24/10/2022 22:31:40 ******/
+EXEC master.dbo.sp_dropserver @server=N'CLPRI', @droplogins='droplogins'
+GO
+
+/****** Object:  LinkedServer [CLPRI]    Script Date: 24/10/2022 22:31:40 ******/
+EXEC master.dbo.sp_addlinkedserver @server = N'CLPRI', @srvproduct=N'SQL Server'
  /* For security reasons the linked server remote logins password is changed with ######## */
-EXEC master.dbo.sp_addlinkedsrvlogin @rmtsrvname=N'BRDPN',@useself=N'False',@locallogin=NULL,@rmtuser=NULL,@rmtpassword=NULL
-EXEC master.dbo.sp_addlinkedsrvlogin @rmtsrvname=N'BRDPN',@useself=N'False',@locallogin=N'sa',@rmtuser=N'sa',@rmtpassword='########'
-
+EXEC master.dbo.sp_addlinkedsrvlogin @rmtsrvname=N'CLPRI',@useself=N'False',@locallogin=NULL,@rmtuser=NULL,@rmtpassword=NULL
+EXEC master.dbo.sp_addlinkedsrvlogin @rmtsrvname=N'CLPRI',@useself=N'False',@locallogin=N'sa',@rmtuser=N'sa',@rmtpassword='AQsw142536'
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'collation compatible', @optvalue=N'false'
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'collation compatible', @optvalue=N'false'
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'data access', @optvalue=N'true'
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'data access', @optvalue=N'true'
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'dist', @optvalue=N'false'
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'dist', @optvalue=N'false'
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'pub', @optvalue=N'false'
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'pub', @optvalue=N'false'
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'rpc', @optvalue=N'false'
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'rpc', @optvalue=N'false'
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'rpc out', @optvalue=N'false'
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'rpc out', @optvalue=N'false'
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'sub', @optvalue=N'false'
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'sub', @optvalue=N'false'
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'connect timeout', @optvalue=N'0'
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'connect timeout', @optvalue=N'0'
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'collation name', @optvalue=null
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'collation name', @optvalue=null
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'lazy schema validation', @optvalue=N'false'
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'lazy schema validation', @optvalue=N'false'
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'query timeout', @optvalue=N'0'
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'query timeout', @optvalue=N'0'
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'use remote collation', @optvalue=N'true'
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'use remote collation', @optvalue=N'true'
 GO
 
-EXEC master.dbo.sp_serveroption @server=N'BRDPN', @optname=N'remote proc transaction promotion', @optvalue=N'true'
+EXEC master.dbo.sp_serveroption @server=N'CLPRI', @optname=N'remote proc transaction promotion', @optvalue=N'true'
 GO
 
 
