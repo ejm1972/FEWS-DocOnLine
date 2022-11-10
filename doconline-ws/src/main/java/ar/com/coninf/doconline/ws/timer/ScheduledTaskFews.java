@@ -50,8 +50,9 @@ public class ScheduledTaskFews {
 		String ejecuta5002 = dolProperties.getProperty("interfaz_5002");
 		String ejecuta6001 = dolProperties.getProperty("interfaz_6001");
 		String ejecuta6002 = dolProperties.getProperty("interfaz_6002");
+		String ejecuta7001 = dolProperties.getProperty("interfaz_7001");
 		
-		if (ejecuta9901==null && ejecuta9902==null && ejecuta2001==null && ejecuta2006==null && ejecuta4001==null && ejecuta5001==null && ejecuta5002==null && ejecuta6001==null && ejecuta6002==null) {
+		if (ejecuta9901==null && ejecuta9902==null && ejecuta2001==null && ejecuta2006==null && ejecuta4001==null && ejecuta5001==null && ejecuta5002==null && ejecuta6001==null && ejecuta6002==null && ejecuta7001==null) {
 
 			logger.info("***");
 			logger.info("*** scheduledTaskFews " + poolSchedulerFews.getThreadNamePrefix() + "* shutdown *** " + new Date() + " - " + countScheduledTaskFews);
@@ -83,6 +84,8 @@ public class ScheduledTaskFews {
 					interfaces.add(6001L);
 				if (ejecuta6002!=null)
 					interfaces.add(6002L);
+				if (ejecuta7001!=null)
+					interfaces.add(7001L);
 			}
 
 			ApplicationException applicationException = null;
