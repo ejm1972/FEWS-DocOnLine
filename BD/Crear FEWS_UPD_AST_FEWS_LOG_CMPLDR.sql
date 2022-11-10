@@ -1,22 +1,22 @@
 USE [fews]
 GO
 
-/****** Object:  StoredProcedure [dbo].[FEWS_UPD_AST_FEWS_LOG_BRDPS]    Script Date: 12/05/2018 13:04:30 ******/
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FEWS_UPD_AST_FEWS_LOG_BRDPS]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[FEWS_UPD_AST_FEWS_LOG_BRDPS]
+/****** Object:  StoredProcedure [dbo].[FEWS_UPD_AST_FEWS_LOG_CMPLDR]    Script Date: 12/05/2018 13:04:30 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FEWS_UPD_AST_FEWS_LOG_CMPLDR]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[FEWS_UPD_AST_FEWS_LOG_CMPLDR]
 GO
 
 USE [fews]
 GO
 
-/****** Object:  StoredProcedure [dbo].[FEWS_UPD_AST_FEWS_LOG_BRDPS]    Script Date: 12/05/2018 13:04:30 ******/
+/****** Object:  StoredProcedure [dbo].[FEWS_UPD_AST_FEWS_LOG_CMPLDR]    Script Date: 12/05/2018 13:04:30 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [FEWS_UPD_AST_FEWS_LOG_BRDPS]
+CREATE PROCEDURE [FEWS_UPD_AST_FEWS_LOG_CMPLDR]
 	@id int
 AS
 BEGIN 
@@ -34,14 +34,14 @@ insert into [FEWS_AST_FEWS_LOG] (
 	,[TIPO_EXPORTACION],l.[PERMISO_EXISTENTE],[DST_COMPROBANTE],[CLIENTE],l.[CUIT_PAIS_CLIENTE],l.[DOMICILIO_CLIENTE],l.[ID_IMPOSITIVO],l.[OBS_COMERCIALES],l.[OBS_GENERALES],l.[FORMA_PAGO],l.[INCOTERMS],l.[INCOTERMS_DS],[IDIOMA_COMPROBANTE]
 	,l.[CAE],[FECHA_VENCIMIENTO],[CODIGO],[DESCRIPCION],[OBSERVACION],[EXCEPCION_WSAA],[EXCEPCION_WSFEV1],[EXCEPCION_WSFEXV1],l.[RESULTADO],l.[ERR_MSG],[OBS],[XML_REQUEST_AFIP],[XML_RESPONSE_AFIP],@intento
 from fews_encabezado fenc
-	, BRDPS.FINN_BRD.dbo.ast_fews_log l
+	, CLPRI.FINN_COMPULIDER.dbo.ast_fews_log l
 where fenc.id=@id
 	and cuit_empresa=fenc.cuit collate database_default
 	and convert(int, tipo_comprobante)=fenc.tipo_cbte
 	and convert(int, punto_venta)=fenc.punto_vta
 	and convert(int, numero_comprobante)=fenc.cbte_nro
 	
-	update BRDPS.FINN_BRD.dbo.AST_FEWS_LOG
+	update CLPRI.FINN_COMPULIDER.dbo.AST_FEWS_LOG
 	set resultado=fenc.resultado,
 		cae=fenc.cae,
 		fecha_vencimiento=fenc.fecha_vto,
@@ -60,7 +60,7 @@ where fenc.id=@id
 	from fews_encabezado fenc
 		, fews_xml fxml
 		, fews_qr fqr
-		, BRDPS.FINN_BRD.dbo.ast_fews_log astl
+		, CLPRI.FINN_COMPULIDER.dbo.ast_fews_log astl
 
 	where 1=1
 		and fenc.id=@id
@@ -81,7 +81,7 @@ insert into [FEWS_AST_FEWS_LOG] (
 	,[TIPO_EXPORTACION],l.[PERMISO_EXISTENTE],[DST_COMPROBANTE],[CLIENTE],l.[CUIT_PAIS_CLIENTE],l.[DOMICILIO_CLIENTE],l.[ID_IMPOSITIVO],l.[OBS_COMERCIALES],l.[OBS_GENERALES],l.[FORMA_PAGO],l.[INCOTERMS],l.[INCOTERMS_DS],[IDIOMA_COMPROBANTE]
 	,l.[CAE],[FECHA_VENCIMIENTO],[CODIGO],[DESCRIPCION],[OBSERVACION],[EXCEPCION_WSAA],[EXCEPCION_WSFEV1],[EXCEPCION_WSFEXV1],l.[RESULTADO],l.[ERR_MSG],[OBS],[XML_REQUEST_AFIP],[XML_RESPONSE_AFIP],@intento
 from fews_encabezado fenc
-	, BRDPS.FINN_BRD.dbo.ast_fews_log l
+	, CLPRI.FINN_COMPULIDER.dbo.ast_fews_log l
 where fenc.id=@id
 	and cuit_empresa=fenc.cuit collate database_default
 	and convert(int, tipo_comprobante)=fenc.tipo_cbte
@@ -97,7 +97,7 @@ SET NOCOUNT OFF
 END
 GO
 
---exec FEWS_UPD_AST_FEWS_LOG_BRDPS 1
+--exec FEWS_UPD_AST_FEWS_LOG_CMPLDR 1
 
---select * from BRDPS.FINN_BRD.dbo.ast_fews_log where cuit_empresa='30711897581' and tipo_comprobante='01' and PUNTO_VENTA='0002' and numero_comprobante='00000003'
+--select * from CLPRI.FINN_COMPULIDER.dbo.ast_fews_log where cuit_empresa='30711897581' and tipo_comprobante='01' and PUNTO_VENTA='0002' and numero_comprobante='00000003'
 

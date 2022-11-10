@@ -11,8 +11,8 @@ declare @Param bigint
 declare @Param_valor bigint
 declare @Modo_Intrfz varchar(4)
 
-select @Interfaz = 6001
-select @Nombre = 'BRD - PLAYA NORTE'
+select @Interfaz = 7001
+select @Nombre = 'COMPULIDER'
 select @Pass = 'D404559F602EAB6FD602AC7680DACBFAADD13630335E951F097AF3900E9DE176B6DB28512F2E000B9D04FBA5133E8B1C6E8DF59DB3A8AB9D60BE4B97CC9E81DB'
 select @Cuit = '30517537620'
 select @Modo_Intrfz = 'HOMO' --'HOMO' o 'PROD'
@@ -42,7 +42,7 @@ begin
 end
 
 
-select @PuntoVenta = '00154'
+select @PuntoVenta = '00011'
 select @IdPV = null
 select @IdPV = ID_PUNTO_VENTA from PUNTO_VENTA where PUNTO_VENTA=@PuntoVenta
 select @IdPV, @PuntoVenta
@@ -50,16 +50,6 @@ if @IdPV is null
 begin
 	INSERT [PUNTO_VENTA]([ID_PUNTO_VENTA],[ID_INTERFAZ],[PUNTO_VENTA],[ACTIVADO],[FLG_CONTROL])
 	VALUES(2,@Interfaz,@PuntoVenta,'S','N')
-end
-
-select @PuntoVenta = '00155'
-select @IdPV = null
-select @IdPV = ID_PUNTO_VENTA from PUNTO_VENTA where PUNTO_VENTA=@PuntoVenta
-select @IdPV, @PuntoVenta
-if @IdPV is null
-begin
-	INSERT [PUNTO_VENTA]([ID_PUNTO_VENTA],[ID_INTERFAZ],[PUNTO_VENTA],[ACTIVADO],[FLG_CONTROL])
-	VALUES(3,@Interfaz,@PuntoVenta,'S','N')
 end
 
 commit tran
