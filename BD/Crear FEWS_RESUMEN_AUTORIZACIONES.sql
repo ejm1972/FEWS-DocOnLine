@@ -43,7 +43,7 @@ DROP PROCEDURE [dbo].[FEWS_RESUMEN_AUTORIZACIONES]
 GO
 
 -- exec FEWS_RESUMEN_AUTORIZACIONES '9901','20210101','20211231','DETALLE'
--- exec FEWS_RESUMEN_AUTORIZACIONES '9901','20210101','20211231','CON_TOTALES'
+-- exec FEWS_RESUMEN_AUTORIZACIONES '9901','20210101','20211231','SOLO_TOTALES'
 -- exec FEWS_RESUMEN_AUTORIZACIONES '9901','20210101','20211231','SIN_TOTALES'
 
 CREATE PROCEDURE [dbo].[FEWS_RESUMEN_AUTORIZACIONES]
@@ -54,192 +54,146 @@ CREATE PROCEDURE [dbo].[FEWS_RESUMEN_AUTORIZACIONES]
 as
 begin
 
-	if @tipo='CON_TOTALES' or @tipo='DETALLE' 
-	begin
-		select
-			right('000000'+convert(varchar(6), id_interfaz),6)
-				+right('00000'+convert(varchar(5), punto_vta),5)
-				+right('000'+convert(varchar(3), tipo_cbte),3)
-				+right('00000000'+convert(varchar(8), cbte_nro),8) orden,
-			'Detalle' titulo,
-			convert(bigint, max(fe.id)) id,
-			fe.id_interfaz,
-			fe.tipo_cbte,
-			fe.punto_vta,
-			fe.cbte_nro,
-			convert(datetime, fe.fecha_cbte, 112) fecha_cbte,
-			convert(datetime, @fdesde, 112) fecha_desde,
-			convert(datetime, @fhasta, 112) fecha_hasta,
-			min(fe.cbte_nro) primer_comprobante,
-			max(fe.cbte_nro) ultimo_comprobante,
-			sum(fe.imp_neto) importe_neto,
-			sum(fe.imp_tot_conc) importe_no_gravado,
-			sum(fe.imp_op_ex) importe_exento,
-			sum(case when fi.iva_id = 4 then isnull(fi.importe, 0) else 0 end) importe_iva_10_50,
-			sum(case when fi.iva_id = 5 then isnull(fi.importe, 0) else 0 end) importe_iva_21_00,
-			sum(case when fi.iva_id = 6 then isnull(fi.importe, 0) else 0 end) importe_iva_27_00,
-			sum(case when fi.iva_id not in (4,5,6) then isnull(fi.importe, 0) else 0 end) importe_iva_otras_alic,
-			sum(fe.imp_iva) importe_iva,
-			sum(fe.imp_trib) importe_tributo,
-			sum(fe.imp_total) importe_total,
-			right('000000'+convert(varchar(6), id_interfaz),6) interfaz_000000,
-			right('00000'+convert(varchar(5), punto_vta),5) punto_vta_00000,
-			right('000'+convert(varchar(3), tipo_cbte),3) tipo_cbte_000,
-			right('00000000'+convert(varchar(8), cbte_nro),8) cbte_nro_00000000,
-			right('00000'+convert(varchar(5), punto_vta),5)+right('000'+convert(varchar(3), tipo_cbte),3)  punto_vta_00000_tipo_cbte_000,
-			max(isnull(ftca.nombre,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_nombre,
-			max(isnull(ftca.descripcion,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_descripcion,
-			max(isnull(ftca.prefijo,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_prefijo
-		into #det
-		from FEWS_ENCABEZADO fe left outer join FEWS_IVA fi on fe.id = fi.id
-			left outer join FEWS_TIPO_COMPROBANTE_AFIP ftca on fe.tipo_cbte = ftca.id_afip
-		where fe.id_interfaz = @interfaz
-			and fecha_cbte between @fdesde and @fhasta
-			and @tipo is not null
-			and @tipo = 'DETALLE'
-		group by fe.id_interfaz, fe.tipo_cbte, fe.punto_vta, fe.cbte_nro, fe.fecha_cbte
-	
-		select
-			right('000000'+convert(varchar(6), id_interfaz),6)
-				+right('00000'+convert(varchar(5), punto_vta),5)
-				+right('000'+convert(varchar(3), tipo_cbte),3)
-				+'99999999' orden,
-			'Total Tipo Comprobante y Punto Venta' titulo,
-			convert(bigint, max(fe.id)*10) id,
-			fe.id_interfaz,
-			fe.tipo_cbte,
-			fe.punto_vta,
-			null cbte_nro,
-			null fecha_cbte,
-			convert(datetime, @fdesde, 112) fecha_desde,
-			convert(datetime, @fhasta, 112) fecha_hasta,
-			min(fe.cbte_nro) primer_comprobante,
-			max(fe.cbte_nro) ultimo_comprobante,
-			sum(fe.imp_neto) importe_neto,
-			sum(fe.imp_tot_conc) importe_no_gravado,
-			sum(fe.imp_op_ex) importe_exento,
-			sum(case when fi.iva_id = 4 then isnull(fi.importe, 0) else 0 end) importe_iva_10_50,
-			sum(case when fi.iva_id = 5 then isnull(fi.importe, 0) else 0 end) importe_iva_21_00,
-			sum(case when fi.iva_id = 6 then isnull(fi.importe, 0) else 0 end) importe_iva_27_00,
-			sum(case when fi.iva_id not in (4,5,6) then isnull(fi.importe, 0) else 0 end) importe_iva_otras_alic,
-			sum(fe.imp_iva) importe_iva,
-			sum(fe.imp_trib) importe_tributo,
-			sum(fe.imp_total) importe_total,
-			right('000000'+convert(varchar(6), id_interfaz),6) interfaz_000000,
-			right('00000'+convert(varchar(5), punto_vta),5) punto_vta_00000,
-			right('000'+convert(varchar(3), tipo_cbte),3) tipo_cbte_000,
-			null cbte_nro_00000000,
-			right('00000'+convert(varchar(5), punto_vta),5)+right('000'+convert(varchar(3), tipo_cbte),3)  punto_vta_00000_tipo_cbte_000,
-			max(isnull(ftca.nombre,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_nombre,
-			max(isnull(ftca.descripcion,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_descripcion,
-			max(isnull(ftca.prefijo,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_prefijo
-		into #com
-		from FEWS_ENCABEZADO fe left outer join FEWS_IVA fi on fe.id = fi.id
-			left outer join FEWS_TIPO_COMPROBANTE_AFIP ftca on fe.tipo_cbte = ftca.id_afip
-		where fe.id_interfaz = @interfaz
-			and fecha_cbte between @fdesde and @fhasta
-		group by fe.id_interfaz, fe.tipo_cbte, fe.punto_vta
+	select
+		right('000000'+convert(varchar(6), id_interfaz),6)
+			+right('00000'+convert(varchar(5), punto_vta),5)
+			+right('000'+convert(varchar(3), tipo_cbte),3)
+			+right('00000000'+convert(varchar(8), cbte_nro),8) orden,
+		'Detalle' titulo,
+		convert(bigint, max(fe.id)) id,
+		fe.id_interfaz,
+		fe.tipo_cbte,
+		fe.punto_vta,
+		fe.cbte_nro,
+		convert(datetime, fe.fecha_cbte, 112) fecha_cbte,
+		convert(datetime, @fdesde, 112) fecha_desde,
+		convert(datetime, @fhasta, 112) fecha_hasta,
+		min(fe.cbte_nro) primer_comprobante,
+		max(fe.cbte_nro) ultimo_comprobante,
+		sum(fe.imp_neto) importe_neto,
+		sum(fe.imp_tot_conc) importe_no_gravado,
+		sum(fe.imp_op_ex) importe_exento,
+		sum(case when fi.iva_id = 4 then isnull(fi.importe, 0) else 0 end) importe_iva_10_50,
+		sum(case when fi.iva_id = 5 then isnull(fi.importe, 0) else 0 end) importe_iva_21_00,
+		sum(case when fi.iva_id = 6 then isnull(fi.importe, 0) else 0 end) importe_iva_27_00,
+		sum(case when fi.iva_id not in (4,5,6) then isnull(fi.importe, 0) else 0 end) importe_iva_otras_alic,
+		sum(fe.imp_iva) importe_iva,
+		sum(fe.imp_trib) importe_tributo,
+		sum(fe.imp_total) importe_total,
+		right('000000'+convert(varchar(6), id_interfaz),6) interfaz_000000,
+		right('00000'+convert(varchar(5), punto_vta),5) punto_vta_00000,
+		right('000'+convert(varchar(3), tipo_cbte),3) tipo_cbte_000,
+		right('00000000'+convert(varchar(8), cbte_nro),8) cbte_nro_00000000,
+		right('00000'+convert(varchar(5), punto_vta),5)+right('000'+convert(varchar(3), tipo_cbte),3)  punto_vta_00000_tipo_cbte_000,
+		max(isnull(ftca.nombre,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_nombre,
+		max(isnull(ftca.descripcion,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_descripcion,
+		max(isnull(ftca.prefijo,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_prefijo
+	into #det
+	from FEWS_ENCABEZADO fe left outer join FEWS_IVA fi on fe.id = fi.id
+		left outer join FEWS_TIPO_COMPROBANTE_AFIP ftca on fe.tipo_cbte = ftca.id_afip
+	where fe.id_interfaz = @interfaz
+		and fecha_cbte between @fdesde and @fhasta
+		and @tipo is not null
+		and (@tipo = 'DETALLE'
+			or @tipo = 'SIN_TOTALES')
+	group by fe.id_interfaz, fe.tipo_cbte, fe.punto_vta, fe.cbte_nro, fe.fecha_cbte
+		
+	select
+		right('000000'+convert(varchar(6), id_interfaz),6)
+			+right('00000'+convert(varchar(5), punto_vta),5)
+			+right('000'+convert(varchar(3), tipo_cbte),3)
+			+'99999999' orden,
+		'Total Tipo Comprobante y Punto Venta' titulo,
+		convert(bigint, max(fe.id)*10) id,
+		fe.id_interfaz,
+		fe.tipo_cbte,
+		fe.punto_vta,
+		null cbte_nro,
+		null fecha_cbte,
+		convert(datetime, @fdesde, 112) fecha_desde,
+		convert(datetime, @fhasta, 112) fecha_hasta,
+		min(fe.cbte_nro) primer_comprobante,
+		max(fe.cbte_nro) ultimo_comprobante,
+		sum(fe.imp_neto) importe_neto,
+		sum(fe.imp_tot_conc) importe_no_gravado,
+		sum(fe.imp_op_ex) importe_exento,
+		sum(case when fi.iva_id = 4 then isnull(fi.importe, 0) else 0 end) importe_iva_10_50,
+		sum(case when fi.iva_id = 5 then isnull(fi.importe, 0) else 0 end) importe_iva_21_00,
+		sum(case when fi.iva_id = 6 then isnull(fi.importe, 0) else 0 end) importe_iva_27_00,
+		sum(case when fi.iva_id not in (4,5,6) then isnull(fi.importe, 0) else 0 end) importe_iva_otras_alic,
+		sum(fe.imp_iva) importe_iva,
+		sum(fe.imp_trib) importe_tributo,
+		sum(fe.imp_total) importe_total,
+		right('000000'+convert(varchar(6), id_interfaz),6) interfaz_000000,
+		right('00000'+convert(varchar(5), punto_vta),5) punto_vta_00000,
+		right('000'+convert(varchar(3), tipo_cbte),3) tipo_cbte_000,
+		'' cbte_nro_00000000,
+		right('00000'+convert(varchar(5), punto_vta),5)+right('000'+convert(varchar(3), tipo_cbte),3)  punto_vta_00000_tipo_cbte_000,
+		max(isnull(ftca.nombre,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_nombre,
+		max(isnull(ftca.descripcion,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_descripcion,
+		max(isnull(ftca.prefijo,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_prefijo
+	into #com
+	from FEWS_ENCABEZADO fe left outer join FEWS_IVA fi on fe.id = fi.id
+		left outer join FEWS_TIPO_COMPROBANTE_AFIP ftca on fe.tipo_cbte = ftca.id_afip
+	where fe.id_interfaz = @interfaz
+		and fecha_cbte between @fdesde and @fhasta
+		and (@tipo = 'DETALLE'
+			or @tipo = 'SOLO_TOTALES')
+	group by fe.id_interfaz, fe.tipo_cbte, fe.punto_vta
 
-		select
-			right('000000'+convert(varchar(6), id_interfaz),6)
-				+'9999999999999999' orden,
-			'Total General' titulo,
-			convert(bigint, max(fe.id)*100) id,
-			fe.id_interfaz,
-			null tipo_cbte,
-			null punto_venta,
-			null cbte_nro,
-			null fecha_cbte,
-			convert(datetime, @fdesde, 112) fecha_desde,
-			convert(datetime, @fhasta, 112) fecha_hasta,
-			null primer_comprobante,
-			null ultimo_comprobante,
-			sum(fe.imp_neto) importe_neto,
-			sum(fe.imp_tot_conc) importe_no_gravado,
-			sum(fe.imp_op_ex) importe_exento,
-			sum(case when fi.iva_id = 4 then isnull(fi.importe, 0) else 0 end) importe_iva_10_50,
-			sum(case when fi.iva_id = 5 then isnull(fi.importe, 0) else 0 end) importe_iva_21_00,
-			sum(case when fi.iva_id = 6 then isnull(fi.importe, 0) else 0 end) importe_iva_27_00,
-			sum(case when fi.iva_id not in (4,5,6) then isnull(fi.importe, 0) else 0 end) importe_iva_otras_alic,
-			sum(fe.imp_iva) importe_iva,
-			sum(fe.imp_trib) importe_tributo,
-			sum(fe.imp_total) importe_total,
-			right('000000'+convert(varchar(6), id_interfaz),6) interfaz_000000,
-			null punto_vta_00000,
-			null tipo_cbte_000,
-			null cbte_nro_00000000,
-			'99999999' punto_vta_00000_tipo_cbte_000,
-			'' tipo_cbte_nombre,
-			'' tipo_cbte_descripcion,
-			'' tipo_cbte_prefijo
-		into #tot
-		from FEWS_ENCABEZADO fe left outer join FEWS_IVA fi on fe.id = fi.id
-			left outer join FEWS_TIPO_COMPROBANTE_AFIP ftca on fe.tipo_cbte = ftca.id_afip
-		where fe.id_interfaz = @interfaz
-			and fecha_cbte between @fdesde and @fhasta
-		group by fe.id_interfaz
+	select
+		right('000000'+convert(varchar(6), id_interfaz),6)
+			+'9999999999999999' orden,
+		'Total General' titulo,
+		convert(bigint, max(fe.id)*100) id,
+		fe.id_interfaz,
+		null tipo_cbte,
+		null punto_venta,
+		null cbte_nro,
+		null fecha_cbte,
+		convert(datetime, @fdesde, 112) fecha_desde,
+		convert(datetime, @fhasta, 112) fecha_hasta,
+		null primer_comprobante,
+		null ultimo_comprobante,
+		sum(fe.imp_neto) importe_neto,
+		sum(fe.imp_tot_conc) importe_no_gravado,
+		sum(fe.imp_op_ex) importe_exento,
+		sum(case when fi.iva_id = 4 then isnull(fi.importe, 0) else 0 end) importe_iva_10_50,
+		sum(case when fi.iva_id = 5 then isnull(fi.importe, 0) else 0 end) importe_iva_21_00,
+		sum(case when fi.iva_id = 6 then isnull(fi.importe, 0) else 0 end) importe_iva_27_00,
+		sum(case when fi.iva_id not in (4,5,6) then isnull(fi.importe, 0) else 0 end) importe_iva_otras_alic,
+		sum(fe.imp_iva) importe_iva,
+		sum(fe.imp_trib) importe_tributo,
+		sum(fe.imp_total) importe_total,
+		right('000000'+convert(varchar(6), id_interfaz),6) interfaz_000000,
+		'' punto_vta_00000,
+		'' tipo_cbte_000,
+		'' cbte_nro_00000000,
+		'99999999' punto_vta_00000_tipo_cbte_000,
+		'' tipo_cbte_nombre,
+		'' tipo_cbte_descripcion,
+		'' tipo_cbte_prefijo
+	into #tot
+	from FEWS_ENCABEZADO fe left outer join FEWS_IVA fi on fe.id = fi.id
+		left outer join FEWS_TIPO_COMPROBANTE_AFIP ftca on fe.tipo_cbte = ftca.id_afip
+	where fe.id_interfaz = @interfaz
+		and fecha_cbte between @fdesde and @fhasta
+		and (@tipo = 'DETALLE'
+			or @tipo = 'SOLO_TOTALES')
+	group by fe.id_interfaz
 
-		select *
-		from #det
-		union all
-		select *
-		from #com
-		union all
-		select *
-		from #tot
-		order by orden
-	end 
-	else if @tipo='SIN_TOTALES'
-	begin
-		select
-			right('000000'+convert(varchar(6), id_interfaz),6)
-				+right('00000'+convert(varchar(5), punto_vta),5)
-				+right('000'+convert(varchar(3), tipo_cbte),3)
-				+right('00000000'+convert(varchar(8), cbte_nro),8) orden,
-			@tipo titulo,
-			convert(bigint, max(fe.id)) id,
-			fe.id_interfaz,
-			fe.tipo_cbte,
-			fe.punto_vta,
-			fe.cbte_nro,
-			convert(datetime, fe.fecha_cbte, 112) fecha_cbte,
-			convert(datetime, @fdesde, 112) fecha_desde,
-			convert(datetime, @fhasta, 112) fecha_hasta,
-			min(fe.cbte_nro) primer_comprobante,
-			max(fe.cbte_nro) ultimo_comprobante,
-			sum(fe.imp_neto) importe_neto,
-			sum(fe.imp_tot_conc) importe_no_gravado,
-			sum(fe.imp_op_ex) importe_exento,
-			sum(case when fi.iva_id = 4 then isnull(fi.importe, 0) else 0 end) importe_iva_10_50,
-			sum(case when fi.iva_id = 5 then isnull(fi.importe, 0) else 0 end) importe_iva_21_00,
-			sum(case when fi.iva_id = 6 then isnull(fi.importe, 0) else 0 end) importe_iva_27_00,
-			sum(case when fi.iva_id not in (4,5,6) then isnull(fi.importe, 0) else 0 end) importe_iva_otras_alic,
-			sum(fe.imp_iva) importe_iva,
-			sum(fe.imp_trib) importe_tributo,
-			sum(fe.imp_total) importe_total,
-			right('000000'+convert(varchar(6), id_interfaz),6) interfaz_000000,
-			right('00000'+convert(varchar(5), punto_vta),5) punto_vta_00000,
-			right('000'+convert(varchar(3), tipo_cbte),3) tipo_cbte_000,
-			right('00000000'+convert(varchar(8), cbte_nro),8) cbte_nro_00000000,
-			right('00000'+convert(varchar(5), punto_vta),5)+right('000'+convert(varchar(3), tipo_cbte),3)  punto_vta_00000_tipo_cbte_000,
-			max(isnull(ftca.nombre,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_nombre,
-			max(isnull(ftca.descripcion,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_descripcion,
-			max(isnull(ftca.prefijo,right('000'+convert(varchar(3), tipo_cbte),3))) tipo_cbte_prefijo
-		into #det1
-		from FEWS_ENCABEZADO fe left outer join FEWS_IVA fi on fe.id = fi.id
-			left outer join FEWS_TIPO_COMPROBANTE_AFIP ftca on fe.tipo_cbte = ftca.id_afip
-		where fe.id_interfaz = @interfaz
-			and fecha_cbte between @fdesde and @fhasta
-			and @tipo is not null
-		group by fe.id_interfaz, fe.tipo_cbte, fe.punto_vta, fe.cbte_nro, fe.fecha_cbte
-	
-		select *
-		from #det1
-		order by orden
-	end
-
+	select *
+	from #det
+	union all
+	select *
+	from #com
+	union all
+	select *
+	from #tot
+	order by orden
 end
 GO
 
 -- exec FEWS_RESUMEN_AUTORIZACIONES '9901','20210101','20211231','DETALLE'
 -- exec FEWS_RESUMEN_AUTORIZACIONES '9901','20210101','20211231','SIN_TOTALES'
+-- exec FEWS_RESUMEN_AUTORIZACIONES '9901','20210101','20211231','SOLO_TOTALES'
