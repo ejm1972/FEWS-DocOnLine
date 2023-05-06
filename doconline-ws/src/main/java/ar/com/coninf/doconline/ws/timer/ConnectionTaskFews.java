@@ -31,13 +31,14 @@ public class ConnectionTaskFews {
     	countConnectionTaskFews++;
 
     	logger.info(" *** ");
+    	logger.info(" *** " + poolSchedulerFews.getThreadNamePrefix()  + poolSchedulerFews.getActiveCount() + " *** ");
     	logger.info(" *** connectionTaskFews 60 segundos *** " + countConnectionTaskFews + " *** Anterior: " + countScheduledTaskFewsAnterior + " *** Actual: " + countScheduledTaskFews + " " + new Date());
     	logger.info(" *** ");
 
-    	if (countScheduledTaskFewsAnterior!=0 && countScheduledTaskFewsAnterior==countScheduledTaskFews) {
-    		logger.info(" *** connectionTaskFews 60 segundos *** " + countConnectionTaskFews + " *** Anterior: " + countScheduledTaskFewsAnterior + " *** Actual: " + countScheduledTaskFews + " " + new Date());
-    		logger.info(" *** ");
-    	}
+//    	if (countScheduledTaskFewsAnterior!=0 && countScheduledTaskFewsAnterior==countScheduledTaskFews) {
+//    		logger.info(" *** connectionTaskFews 60 segundos *** " + countConnectionTaskFews + " *** Anterior: " + countScheduledTaskFewsAnterior + " *** Actual: " + countScheduledTaskFews + " " + new Date());
+//    		logger.info(" *** ");
+//    	}
 
     	countScheduledTaskFewsAnterior = countScheduledTaskFews;
     }
