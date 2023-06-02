@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import ar.com.coninf.doconline.shared.anotacion.InsertOptional;
 
@@ -94,10 +93,6 @@ public class FewsEncabezado implements Serializable {
 	private String datoAdicional5;
 	private String datoAdicional6;
 	private String datoAdicional7;
-	
-	private String tipoComprobante;
-	private String numeroPuntoVenta;
-	private String numeroComprobante;
 	
 	@Id
 	@Column(name = "id", unique = true, nullable = false)
@@ -626,30 +621,6 @@ public class FewsEncabezado implements Serializable {
 		this.estadoImportacion = estadoImportacion;
 	}
 
-	@Transient
-	public String getTipoComprobante() {
-		return tipoComprobante;
-	}
-	public void setTipoComprobante(String tipoComprobante) {
-		this.tipoComprobante = tipoComprobante;
-	}
-
-	@Transient
-	public String getNumeroPuntoVenta() {
-		return numeroPuntoVenta;
-	}
-	public void setNumeroPuntoVenta(String numeroPuntoVenta) {
-		this.numeroPuntoVenta = numeroPuntoVenta;
-	}
-	
-	@Transient
-	public String getNumeroComprobante() {
-		return numeroComprobante;
-	}
-	public void setNumeroComprobante(String numeroComprobante) {
-		this.numeroComprobante = numeroComprobante;
-	}
-
 	@Column(name = "cuit")
 	public String getCuit() {
 		return cuit;
@@ -657,6 +628,5 @@ public class FewsEncabezado implements Serializable {
 	public void setCuit(String cuit) {
 		this.cuit = cuit;
 	}
-	
 }
 

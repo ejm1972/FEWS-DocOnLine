@@ -341,7 +341,7 @@ public class AutorizadorFews {
 		log.setCtxInterfaz(intefaz.toString());
 		log.setCtxNroTransaccion("0");
 		log.setCtxServicio(lanzador);
-		log.setOperacion("logErroresSinTransacciones");
+		log.setOperacion("logAuditoriaSinTransacciones");
 		log.setCtxFechaTransaccion(fecha);
 		log.setFechaInicioOp(fecha);
 
@@ -353,8 +353,8 @@ public class AutorizadorFews {
 		log.setImpTotal("-");
 		
 		log.setCodigo("-");
-		log.setDescripcion(exception.getMessage());
-		log.setObservacion(exception.getCause()!=null?exception.getCause().getMessage():"-");
+		log.setDescripcion(exception!=null?exception.getMessage():"-");
+		log.setObservacion(exception!=null&&exception.getCause()!=null?exception.getCause().getMessage():"-");
 
 		log.setExcepcionWsaa("-");
 		log.setExcepcionWsfev1("-");
@@ -384,12 +384,16 @@ public class AutorizadorFews {
 
 		try {
 			registroTransaccionFacade.add(registro);
-			logger.info("Registro de Error registrado. Servicio: " + lanzador);
+			logger.debug("registroTransaccionFacade.add(registro) - Interfaz: " + interfaz + ", Servicio: " + lanzador);
 
 			logTransaccionFacade.registrarAuditoria(log);
-
+			logger.debug("logTransaccionFacade.registrarAuditoria(log) - Interfaz: " + interfaz + ", Servicio: " + lanzador);
+			
 		} catch (Throwable e) {
 			logger.error(e);
+			logger.debug("Error en registroTransaccionFacade.add(registro) o logTransaccionFacade.registrarAuditoria(log) - Interfaz: " + interfaz + ", Servicio: " + lanzador);
+		} finally {
+			logger.debug("finally registroTransaccionFacade.add(registro) o logTransaccionFacade.registrarAuditoria(log) - Interfaz: " + interfaz + ", Servicio: " + lanzador);			
 		}
 
 	}
@@ -422,30 +426,38 @@ public class AutorizadorFews {
 
 		for (Long intrfz : interfaces) {
 			
+			Exception exception = null;
+			
 			try {
 
 				fewsEncabezadoDao.importLog(intrfz);
-				logger.debug("Fin Ejecucion fewsEncabezadoDao.importLog()="+intrfz);
-			
+		
 			} catch (Exception e) {
+				exception = e;
 				logger.error(e);
 				String lanzador = "AutorizadorFews.procesarPendientes()";
 				String ejecucion = "importLog()="+intrfz;
-				registrarAuditoriaIniFin(interfaz, ejecucion, lanzador, e);
+				registrarAuditoriaIniFin(interfaz, ejecucion, lanzador, exception);
 				logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaIniFin()->"+ejecucion);
+			} finally {
+				logger.debug("Fin Ejecucion fewsEncabezadoDao.importLog()="+intrfz);								
 			}
+
+			exception = null;
 
 			try {
 
 				pendientes = fewsEncabezadoDao.getFewsPendiente((long) -1);
-				logger.debug("Fin Ejecucion fewsEncabezadoDao.getFewsPendiente()");
 			
 			} catch (Exception e) {
+				exception = e;
 				logger.error(e);
 				String lanzador = "AutorizadorFews.procesarPendientes()";
 				String ejecucion = "importLog()="+intrfz;
-				registrarAuditoriaIniFin(interfaz, ejecucion, lanzador, e);
+				registrarAuditoriaIniFin(interfaz, ejecucion, lanzador, exception);
 				logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaIniFin()->"+ejecucion);
+			} finally {
+				logger.debug("Fin Ejecucion fewsEncabezadoDao.getFewsPendiente()");
 			}
 
 			for (int i=0; i < pendientes.size(); i++) {
@@ -485,7 +497,17 @@ public class AutorizadorFews {
 			Integer tipoCbte = selected.getTipoCbte();
 			Integer ptoVta = selected.getPuntoVta();
 			Long nroCbte = selected.getCbteNro().longValue();
-
+			
+			String strTmp; 
+			StringBuilder sbComprobante = new StringBuilder();
+			sbComprobante.append(TipoComprobanteAFIP.findPref4Cod(tipoCbte.toString()));
+			sbComprobante.append("-");
+			strTmp = String.valueOf("00000").concat(ptoVta.toString());
+			sbComprobante.append(strTmp.substring(strTmp.length()-5));
+			sbComprobante.append("-");
+			strTmp = String.valueOf("00000000").concat(nroCbte.toString());
+			sbComprobante.append(strTmp.substring(strTmp.length()-8));
+			
 			String fechaCbte = selected.getFechaCbte();
 			String fechaVencPago = selected.getFechaVencPago();
 			String fechaServDesde = selected.getFechaServDesde();
@@ -523,16 +545,16 @@ public class AutorizadorFews {
 			
 			Permiso[] permisos = new Permiso[listFewsPermiso.size()];
 			Item[] items = new Item[listFewsDetalle.size()];
-
-			logger.debug("Comprobante:"+selected.getTipoComprobante()+"-"+selected.getNumeroPuntoVenta()+"-"+selected.getNumeroComprobante());
-			logger.debug("Fecha:"+selected.getFechaCbte());
-			logger.debug("ImpTotal:"+selected.getImpTotal().toString());
-			logger.debug("ImpTotConc:"+selected.getImpTotConc().toString());
-			logger.debug("ImpNeto:"+selected.getImpNeto().toString());
-			logger.debug("ImpIva:"+selected.getImpIva().toString());
-			logger.debug("ImpTrib:"+selected.getImpTrib().toString());
-			logger.debug("ImpOpEx:"+selected.getImpOpEx().toString());
-			logger.debug("MonedaCtz:"+selected.getMonedaCtz().toString());
+			
+			logger.debug("Comprobante: "+sbComprobante.toString());
+			logger.debug("Fecha: "+selected.getFechaCbte());
+			logger.debug("ImpTotal: "+selected.getImpTotal().toString());
+			logger.debug("ImpTotConc: "+selected.getImpTotConc().toString());
+			logger.debug("ImpNeto: "+selected.getImpNeto().toString());
+			logger.debug("ImpIva: "+selected.getImpIva().toString());
+			logger.debug("ImpTrib: "+selected.getImpTrib().toString());
+			logger.debug("ImpOpEx: "+selected.getImpOpEx().toString());
+			logger.debug("MonedaCtz: "+selected.getMonedaCtz().toString());
 
 			StringBuilder sbIva = new StringBuilder("[");
 			int size;

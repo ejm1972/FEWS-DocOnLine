@@ -13,7 +13,7 @@ public class ConnectionTaskFews {
 	private  ScheduledTaskFews scheduledTaskFews; 
 
 	@Autowired
-	private ThreadPoolTaskScheduler poolSchedulerFews;
+	private ThreadPoolTaskScheduler poolConnectionTaskFews;
 	
 	private int countConnectionTaskFews;
 	private int countScheduledTaskFews;
@@ -31,7 +31,7 @@ public class ConnectionTaskFews {
     	countConnectionTaskFews++;
 
     	logger.info(" *** ");
-    	logger.info(" *** " + poolSchedulerFews.getThreadNamePrefix()  + poolSchedulerFews.getActiveCount() + " *** ");
+    	logger.info(" *** " + poolConnectionTaskFews.getThreadNamePrefix()  + poolConnectionTaskFews.getActiveCount() + " *** ");
     	logger.info(" *** connectionTaskFews 60 segundos *** " + countConnectionTaskFews + " *** Anterior: " + countScheduledTaskFewsAnterior + " *** Actual: " + countScheduledTaskFews + " " + new Date());
     	logger.info(" *** ");
 

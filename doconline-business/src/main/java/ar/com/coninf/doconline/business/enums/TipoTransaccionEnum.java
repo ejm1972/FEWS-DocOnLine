@@ -9,7 +9,7 @@ public enum TipoTransaccionEnum {
 	autorizarComprobanteExportacion(3001L),
 	consultarUltimoComprobanteExportacion(3002L),
 	consultarComprobanteExportacion(3003L),
-	logErroresSinTransacciones(9999L)
+	logAuditoriaSinTransacciones(9999L)
 	;
 	
 	private Long idTransaccion;

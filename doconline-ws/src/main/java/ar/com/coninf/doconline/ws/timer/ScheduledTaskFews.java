@@ -20,7 +20,7 @@ public class ScheduledTaskFews {
 	private List<Long> interfaces;
 
 	@Autowired
-	ThreadPoolTaskScheduler poolSchedulerFews;
+	ThreadPoolTaskScheduler poolSchedulerTaskFews;
 	
 	@Autowired
 	@Qualifier("dolProperties")
@@ -55,12 +55,12 @@ public class ScheduledTaskFews {
 		if (ejecuta9901==null && ejecuta9902==null && ejecuta2001==null && ejecuta2006==null && ejecuta4001==null && ejecuta5001==null && ejecuta5002==null && ejecuta6001==null && ejecuta6002==null && ejecuta7001==null) {
 
 			logger.info("***");
-			logger.info("*** scheduledTaskFews " + poolSchedulerFews.getThreadNamePrefix() + poolSchedulerFews.getActiveCount() + " shutdown *** " + new Date() + " - " + countScheduledTaskFews);
+			logger.info("*** scheduledTaskFews " + poolSchedulerTaskFews.getThreadNamePrefix() + poolSchedulerTaskFews.getActiveCount() + " shutdown *** " + new Date() + " - " + countScheduledTaskFews);
 			logger.info("***");
 
-			poolSchedulerFews.shutdown();
+			poolSchedulerTaskFews.shutdown();
 
-			poolSchedulerFews.destroy();
+			poolSchedulerTaskFews.destroy();
 
 		} else {
 			
@@ -94,7 +94,7 @@ public class ScheduledTaskFews {
 				countScheduledTaskFews++;
 
 				logger.info("***");
-				logger.info("*** Ini scheduledTaskFews " + poolSchedulerFews.getThreadNamePrefix() +  + poolSchedulerFews.getActiveCount() + " *** " + new Date() + " - " + countScheduledTaskFews);
+				logger.info("*** Ini scheduledTaskFews " + poolSchedulerTaskFews.getThreadNamePrefix() +  + poolSchedulerTaskFews.getActiveCount() + " *** " + new Date() + " - " + countScheduledTaskFews);
 				logger.info("***");
 
 				autorizadorFews.procesarPendientes(interfaces);
@@ -118,7 +118,7 @@ public class ScheduledTaskFews {
 			}
 
 			logger.info("***");
-			logger.info("*** Fin scheduledTaskFews " + poolSchedulerFews.getThreadNamePrefix()  + poolSchedulerFews.getActiveCount() + " *** " + new Date() + " - " + countScheduledTaskFews);
+			logger.info("*** Fin scheduledTaskFews " + poolSchedulerTaskFews.getThreadNamePrefix()  + poolSchedulerTaskFews.getActiveCount() + " *** " + new Date() + " - " + countScheduledTaskFews);
 			logger.info("***");
 
 		}
