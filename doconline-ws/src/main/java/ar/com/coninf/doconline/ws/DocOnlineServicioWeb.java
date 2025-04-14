@@ -39,7 +39,8 @@ public interface DocOnlineServicioWeb {
 			Integer concepto, Integer tipoDoc, Long nroDoc, Integer tipoCbte, Integer ptoVta, Long nroCbte, 
 			BigDecimal impTotal, BigDecimal impTotConcNoGrav, BigDecimal impNeto, BigDecimal impIva, BigDecimal impTrib, BigDecimal impOpEx, 
 			String fechaCbte, String fechaVencPago, String fechaServDesde, String fechaServHasta,
-			String monedaId, BigDecimal monedaCtz, 
+			String monedaId, BigDecimal monedaCtz,
+			Integer condicionIvaReceptorId, String cancelaMismaMonedaExt,
 			Tributo[] tributos, Iva[] ivas, ComprobanteAsociado[] comprobantesAsociados, 
 			DatoOpcional[] datosOpcionales, PeriodoComprobanteAsociado[] periodosAsociados);
 	
@@ -56,6 +57,7 @@ public interface DocOnlineServicioWeb {
 			BigDecimal impTotal, BigDecimal impTotConcNoGrav, BigDecimal impNeto, BigDecimal impIva, BigDecimal impTrib, BigDecimal impOpEx, 
 			String fechaCbte, String fechaVencPago, String fechaServDesde, String fechaServHasta,
 			String monedaId, BigDecimal monedaCtz, 
+			Integer condicionIvaReceptorId, String cancelaMismaMonedaExt,
 			Integer tipoExpo, String permisoExistente, Integer dstCmp, 
 			String cliente, String cuitPaisCliente, String domicilioCliente, String idImpositivo, 
 			String obsComerciales, String obsGenerales, String formaPago, 

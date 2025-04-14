@@ -137,7 +137,8 @@ begin
 		, fecha_venc_pago
 		
 		, movimiento
-		, id_interfaz )
+		, id_interfaz
+		, condicion_iva_receptor_id )
 	SELECT 
 		CUIT_EMPRESA, TIPODOC_CLIENTE, NRODOC_CLIENTE,
 
@@ -173,6 +174,7 @@ begin
 			+right('0000'+CONVERT(varchar(4), NPV),4)
 			+right('00000000'+CONVERT(varchar(8), NNC),8)
 		, p.ID_INTERFAZ
+		, CATEGORIA_FISCAL
 	FROM EYSELIFIN.FINN_EYSE.dbo.AST_FEWS_LOG l
 		, #pen p left outer join FEWS_ENCABEZADO e on e.cuit=p.CE COLLATE DATABASE_DEFAULT and e.tipo_cbte=p.NTC and e.punto_vta=p.NPV and e.cbte_nro=p.NNC
 	WHERE CUIT_EMPRESA=CE

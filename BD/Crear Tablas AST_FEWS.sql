@@ -1,34 +1,5 @@
--- /****** Object:  Table [dbo].[AST_FEWS_LOG]    Script Date: 05/25/2016 10:40:21 ******/
--- DROP TABLE [dbo].[AST_FEWS_LOG]
--- GO
-
--- /****** Object:  Table [dbo].[AST_FEWS_LOG_IVA]    Script Date: 05/25/2016 10:40:21 ******/
--- DROP TABLE [dbo].[AST_FEWS_LOG_IVA]
--- GO
-
--- /****** Object:  Table [dbo].[AST_FEWS_LOG_TRIBUTOS]    Script Date: 05/25/2016 10:40:21 ******/
--- DROP TABLE [dbo].[AST_FEWS_LOG_TRIBUTOS]
--- GO
-
--- /****** Object:  Table [dbo].[AST_FEWS_LOG_DATOS_OPC]    Script Date: 05/25/2016 10:40:21 ******/
--- DROP TABLE [dbo].[AST_FEWS_LOG_DATOS_OPC]
--- GO
-
--- /****** Object:  Table [dbo].[AST_FEWS_LOG_CBTE_ASOC]    Script Date: 05/25/2016 10:40:21 ******/
--- DROP TABLE [dbo].[AST_FEWS_LOG_CBTE_ASOC]
--- GO
-
--- /****** Object:  Table [dbo].[AST_FEWS_LOG_PERIODO_ASOC]    Script Date: 05/25/2016 10:40:21 ******/
--- DROP TABLE [dbo].[AST_FEWS_LOG_PERIODO_ASOC]
--- GO
-
--- /****** Object:  Table [dbo].[AST_FEWS_LOG_PERMISO]    Script Date: 05/25/2016 10:40:21 ******/
--- DROP TABLE [dbo].[AST_FEWS_LOG_PERMISO]
--- GO
-
--- /****** Object:  Table [dbo].[AST_FEWS_LOG_DETALLE]    Script Date: 05/25/2016 10:40:21 ******/
--- DROP TABLE [dbo].[AST_FEWS_LOG_DETALLE]
--- GO
+USE 
+GO
 
 /****** Object:  Table [dbo].[AST_FEWS_LOG_DETALLE]    Script Date: 05/25/2016 10:40:21 ******/
 SET ANSI_NULLS ON
@@ -43,14 +14,15 @@ CREATE TABLE [dbo].[AST_FEWS_LOG_DETALLE](
     [TIPO_COMPROBANTE] VARCHAR(3) NULL,
     [PUNTO_VENTA] VARCHAR(10) NULL,
     [NUMERO_COMPROBANTE] VARCHAR(20) NULL,
-	[CODIGO] [varchar](30) NULL,
-	[DESCRIPCION] [varchar](4000) NULL,
-	[CANTIDAD] [varchar](20) NULL,
-	[UNIDAD_MEDIDA] [smallint] NULL,
-	[PRECIO] [varchar](20) NULL,
-	[IMPORTE_TOTAL] [varchar](20) NULL,
-	[BONIFICACION] [varchar](20) NULL
-) ON [PRIMARY]
+	---------------------------------------
+	[CODIGO] [varchar](30) NULL,					--Código de articulo
+	[DESCRIPCION] [varchar](4000) NULL,				--Descripcion del artículo
+	[CANTIDAD] [varchar](20) NULL,					--Cantidad
+	[UNIDAD_MEDIDA] [smallint] NULL,				--Unidad de Medida según tabla AFIP
+	[PRECIO] [varchar](20) NULL,					--Precio Unitario
+	[IMPORTE_TOTAL] [varchar](20) NULL,				--Importe Total Precio * Cantidad - Bonificación
+	[BONIFICACION] [varchar](20) NULL				--Bonificación del Item
+	) ON [PRIMARY]
 GO
 SET ANSI_PADDING OFF
 GO
@@ -68,8 +40,9 @@ CREATE TABLE [dbo].[AST_FEWS_LOG_PERMISO](
     [TIPO_COMPROBANTE] VARCHAR(3) NULL,
     [PUNTO_VENTA] VARCHAR(10) NULL,
     [NUMERO_COMPROBANTE] VARCHAR(20) NULL,
-	[ID_PERMISO] [varchar](16) NULL,
-	[DST_MERCADERIA] [smallint] NULL
+	--------------------------------
+	[ID_PERMISO] [varchar](16) NULL,				--Identificador de Permiso
+	[DST_MERCADERIA] [smallint] NULL				--Destino de la mercadería según tabla AFIP
 ) ON [PRIMARY]
 GO
 SET ANSI_PADDING OFF

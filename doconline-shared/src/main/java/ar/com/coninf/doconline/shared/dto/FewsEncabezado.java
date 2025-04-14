@@ -59,6 +59,9 @@ public class FewsEncabezado implements Serializable {
 	private String monedaId;
 	private BigDecimal monedaCtz;
 	
+	private Integer condicionIvaReceptorId;
+	private String cancelaMismaMonedaExt;
+
 	private String obsComerciales;
 	private String obsGenerales;
 	private String formaPago;
@@ -627,6 +630,22 @@ public class FewsEncabezado implements Serializable {
 	}
 	public void setCuit(String cuit) {
 		this.cuit = cuit;
+	}
+	
+	@Column(name = "condicion_iva_receptor_id")
+	public Integer getCondicionIvaReceptorId() {
+		return condicionIvaReceptorId;
+	}
+	public void setCondicionIvaReceptorId(Integer condicionIvaReceptorId) {
+		this.condicionIvaReceptorId = condicionIvaReceptorId;
+	}
+
+	@Column(name = "cancela_misma_moneda_ext")
+	public String getCancelaMismaMonedaExt() {
+		return cancelaMismaMonedaExt;
+	}
+	public void setCancelaMismaMonedaExt(String cancelaMismaMonedaExt) {
+		this.cancelaMismaMonedaExt = cancelaMismaMonedaExt;
 	}
 }
 

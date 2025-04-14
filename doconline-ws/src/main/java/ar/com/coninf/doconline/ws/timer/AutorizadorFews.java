@@ -186,6 +186,9 @@ public class AutorizadorFews {
 		String incoterms = selected.getIncoterms()==null?"":selected.getIncoterms();
 		String incotermsDs = selected.getIncotermsDs()==null?"":selected.getIncotermsDs();
 		String idiomaCbte = selected.getIdiomaCbte()==null?"":selected.getIdiomaCbte();
+		
+		Integer condicionIvaReceptorId = selected.getCondicionIvaReceptorId();
+		String cancelaMismaMonedaExt = selected.getCancelaMismaMonedaExt();
 
 		log.setTipoCbte(tipoCbte);
 		ptoVta = String.valueOf("00000").concat(ptoVta);
@@ -220,6 +223,7 @@ public class AutorizadorFews {
 		sb.append(", obsGenerales: "+obsGenerales);
 		sb.append(", incoterms: "+incoterms+", incotermsDs: "+incotermsDs);
 		sb.append(", formaPago: "+formaPago+", idiomaCbte: "+idiomaCbte);
+		sb.append(", condicionIvaReceptorId: "+condicionIvaReceptorId+", cancelaMismaMonedaExt: "+cancelaMismaMonedaExt);
 		
 		if (!ivas.equals("")) {
 			sb.append(", ivas: "+ivas);
@@ -546,6 +550,9 @@ public class AutorizadorFews {
 			Permiso[] permisos = new Permiso[listFewsPermiso.size()];
 			Item[] items = new Item[listFewsDetalle.size()];
 			
+			Integer condicionIvaReceptorId = selected.getCondicionIvaReceptorId();
+			String cancelaMismaMonedaExt = selected.getCancelaMismaMonedaExt();
+			
 			logger.debug("Comprobante: "+sbComprobante.toString());
 			logger.debug("Fecha: "+selected.getFechaCbte());
 			logger.debug("ImpTotal: "+selected.getImpTotal().toString());
@@ -555,7 +562,8 @@ public class AutorizadorFews {
 			logger.debug("ImpTrib: "+selected.getImpTrib().toString());
 			logger.debug("ImpOpEx: "+selected.getImpOpEx().toString());
 			logger.debug("MonedaCtz: "+selected.getMonedaCtz().toString());
-
+			logger.debug("CondicionIvaReceptorId: "+selected.getCondicionIvaReceptorId().toString());
+			
 			StringBuilder sbIva = new StringBuilder("[");
 			int size;
 			size = listFewsIva.size();
@@ -722,6 +730,9 @@ public class AutorizadorFews {
 							
 							monedaId,
 							monedaCtz,
+							
+							condicionIvaReceptorId,
+							cancelaMismaMonedaExt,
 
 							tipoExpo, 
 							permisoExistente, 
@@ -763,9 +774,13 @@ public class AutorizadorFews {
 							 fechaVencPago,
 							 fechaServDesde,
 							 fechaServHasta,
+
 							 monedaId,
 							 monedaCtz,
 							 							 
+						     condicionIvaReceptorId,
+							 cancelaMismaMonedaExt,
+
 							 impTotal,
 							 impTotConcNoGrav,
 							 impNeto,
@@ -813,6 +828,8 @@ public class AutorizadorFews {
 			String fechaServHasta,
 			String monedaId,
 			BigDecimal monedaCtz,
+			Integer condicionIvaReceptorId,
+			String cancelaMismaMonedaExt,
 			BigDecimal impTotal,
 			BigDecimal impTotConcNoGrav,
 			BigDecimal impNeto,
@@ -835,6 +852,7 @@ public class AutorizadorFews {
 					impTotal, impTotConcNoGrav, impNeto, impIva, impTrib, impOpEx, 
 					fechaCbte, fechaVencPago, fechaServDesde, fechaServHasta, 
 					monedaId, monedaCtz, 
+					condicionIvaReceptorId, cancelaMismaMonedaExt,
 					tributos, ivas, comprobantesAsociados, datosOpcionales, periodosAsociados);
 			logger.debug("Ejecucion dolws.autorizarComprobante() de WS");
 	
@@ -960,6 +978,9 @@ public class AutorizadorFews {
 			String fechaServHasta,
 			String monedaId,
 			BigDecimal monedaCtz,
+			
+			Integer condicionIvaReceptorId,
+			String cancelaMismaMonedaExt,
 
 			Integer tipoExpo, String permisoExistente, Integer dstCmp, 
 			String cliente, String cuitPaisCliente, String domicilioCliente, String idImpositivo, 
@@ -991,6 +1012,7 @@ public class AutorizadorFews {
 					impTotal, impTotConcNoGrav, impNeto, impIva, impTrib, impOpEx, 
 					fechaCbte, fechaVencPago, fechaServDesde, fechaServHasta, 
 					monedaId, monedaCtz, 
+					condicionIvaReceptorId, cancelaMismaMonedaExt,
 					tipoExpo, permisoExistente, dstCmp, 
 					cliente, cuitPaisCliente, domicilioCliente, idImpositivo, 
 					obsComerciales, obsGenerales, formaPago, 

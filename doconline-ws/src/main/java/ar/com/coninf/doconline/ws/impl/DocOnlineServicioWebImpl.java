@@ -118,6 +118,7 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 			BigDecimal impTotal, BigDecimal impTotConcNoGrav, BigDecimal impNeto, BigDecimal impIva, BigDecimal impTrib, BigDecimal impOpEx, 
 			String fechaCbte, String fechaVencPago, String fechaServDesde, String fechaServHasta,
 			String monedaId, BigDecimal monedaCtz, 
+			Integer condicionIvaReceptorId, String cancelaMismaMonedaExt,
 			Tributo[] tributos, Iva[] ivas, ComprobanteAsociado[] comprobantesAsociados, 
 			DatoOpcional[] datosOpcionales, PeriodoComprobanteAsociado[] periodosAsociados)  {
 
@@ -180,6 +181,8 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		datos.setFechaVencPago(fechaVencPago);
 		datos.setMonedaId(monedaId);
 		datos.setMonedaCtz(monedaCtz.divide(big100));
+		datos.setCondicionIvaReceptorId(condicionIvaReceptorId);
+		datos.setCancelaMismaMonedaExt(cancelaMismaMonedaExt);
 		
 		BigDecimal sumaTotal = BigDecimal.ZERO;
 		sumaTotal = sumaTotal.add(impTotConcNoGrav);
@@ -387,6 +390,7 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 			BigDecimal impIva, BigDecimal impTrib, BigDecimal impOpEx, 
 			String fechaCbte, String fechaVencPago, String fechaServDesde, String fechaServHasta,
 			String monedaId, BigDecimal monedaCtz, 
+			Integer condicionIvaReceptorId, String cancelaMismaMonedaExt,
 			Integer tipoExpo, String permisoExistente, Integer dstCmp, 
 			String cliente, String cuitPaisCliente, String domicilioCliente, String idImpositivo, 
 			String obsComerciales, String obsGenerales, String formaPago, 
@@ -467,7 +471,9 @@ public class DocOnlineServicioWebImpl implements DocOnlineServicioWeb {
 		datos.setIncoterms(incoterms);
 		datos.setIncotermsDs(incotermsDs);
 		datos.setIdiomaCbte(idiomaCbte);
-
+		datos.setCondicionIvaReceptorId(condicionIvaReceptorId);
+		datos.setCancelaMismaMonedaExt(cancelaMismaMonedaExt);
+		
 		BigDecimal sumaTotal = BigDecimal.ZERO;
 		sumaTotal = sumaTotal.add(impTotConcNoGrav);
 		sumaTotal = sumaTotal.add(impNeto);

@@ -167,8 +167,12 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 						fecha_venc_pago = "";
 					}
 
-					String moneda_id = datos.getMonedaId(), moneda_ctz = datos.getMonedaCtz().toString();
-
+					String moneda_id = datos.getMonedaId();
+					String moneda_ctz = datos.getMonedaCtz().toString();
+					
+					Integer condicion_iva_receptor_id = datos.getCondicionIvaReceptorId();
+					String cancela_misma_moneda_ext = datos.getCancelaMismaMonedaExt();
+					
 					Variant ok = Dispatch.call(wsfev1, "CrearFactura",
 							new Variant(concepto), new Variant(tipo_doc), 
 							new Variant(nro_doc), new Variant(tipo_cbte), 
@@ -179,7 +183,8 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 							new Variant(imp_trib), new Variant(imp_op_ex), 
 							new Variant(fecha_cbte), new Variant(fecha_venc_pago), 
 							new Variant(fecha_serv_desde), new Variant(fecha_serv_hasta),
-							new Variant(moneda_id), new Variant(moneda_ctz));
+							new Variant(moneda_id), new Variant(moneda_ctz), 
+							new Variant(condicion_iva_receptor_id));
 					logger.debug("CrearFactura: " + ok.toString());
 
 					/* Agrego Otros Tributos */
