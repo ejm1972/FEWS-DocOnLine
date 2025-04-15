@@ -78,34 +78,32 @@ public class ConsultarUltimoComprobanteExportacionBusiness extends AbstractBusin
 				logger.info("Sign: " + sign);
 				/****************************************************************************************************/			
 
-				/* Instanciar WSFEv1: WebService de Factura Electronica version 1 */
-				ActiveXComponent wsfev1 = new ActiveXComponent("WSFEv1");
+				/* Instanciar WSFEXv1: WebService de Factura Electronica version 1 */
+				ActiveXComponent wsfexv1 = new ActiveXComponent("WSFEXv1");
 
 				/* Establecer parametros de uso: */
-				Dispatch.put(wsfev1, "Cuit", new Variant(datos.getCuit()));
-				Dispatch.put(wsfev1, "Token", new Variant(token));
-				Dispatch.put(wsfev1, "Sign", new Variant(sign));
+				Dispatch.put(wsfexv1, "Cuit", new Variant(datos.getCuit()));
+				Dispatch.put(wsfexv1, "Token", new Variant(token));
+				Dispatch.put(wsfexv1, "Sign", new Variant(sign));
 
 				/* Conectar al websrvice (cambiar URL para producción) */
-				wsdl = urlWsfev1;
-				Dispatch.call(wsfev1, "Conectar", 
+				wsdl = urlWsfexv1;
+				Dispatch.call(wsfexv1, "Conectar", 
 						new Variant(cache), 
 						new Variant(wsdl),
 						new Variant(proxy));
 
 				//Ver Excepcion
-				excepcion =  Dispatch.get(wsfev1, "Excepcion").toString();
+				excepcion =  Dispatch.get(wsfexv1, "Excepcion").toString();
 				logger.info("Excepcion: " + excepcion);
 				resp.setExcepcionWsfexv1(excepcion);
 
 				if (excepcion.equals("")) {
 
-					Variant ult1 = Dispatch.call(wsfev1, "ParamGetTiposOpcional");
-					
-					/* Consultar último comprobante autorizado en AFIP */
+					/* Consultar Ultimo comprobante autorizado en AFIP */
 					String tipo_cbte = datos.getTipoCbte().toString();
 					String pto_vta = datos.getPtoVta().toString();
-					Variant ult = Dispatch.call(wsfev1, "CompUltimoAutorizado", 
+					Variant ult = Dispatch.call(wsfexv1, "GetLastCMP", 
 							new Variant(tipo_cbte), 
 							new Variant(pto_vta));
 					
@@ -113,23 +111,23 @@ public class ConsultarUltimoComprobanteExportacionBusiness extends AbstractBusin
 					resp.setUltimoComprobante(ult.toString());
 
 					//Ver Excepcion
-					excepcion =  Dispatch.get(wsfev1, "Excepcion").toString();
+					excepcion =  Dispatch.get(wsfexv1, "Excepcion").toString();
 					logger.info("Excepcion: " + excepcion);
 					resp.setExcepcionWsfexv1(excepcion);
 					
 					/* Mostrar mensajes XML enviados y recibidos (depuración) */
-					String xmlReq = Dispatch.get(wsfev1, "XmlRequest").toString();
+					String xmlReq = Dispatch.get(wsfexv1, "XmlRequest").toString();
 					logger.info("XmlRequest: " + xmlReq);
 					resp.setXmlRequest(xmlReq);
-					String xmlRes = Dispatch.get(wsfev1, "XmlResponse").toString();
+					String xmlRes = Dispatch.get(wsfexv1, "XmlResponse").toString();
 					logger.info("XmlResponse: " + xmlRes);
 					resp.setXmlResponse(xmlRes);
 
-					String errmsg =  Dispatch.get(wsfev1, "ErrMsg").toString();
+					String errmsg =  Dispatch.get(wsfexv1, "ErrMsg").toString();
 					logger.info("ErrMsg: " + errmsg);
 					resp.setErrMsg(errmsg);
 
-					String obs =  Dispatch.get(wsfev1, "Obs").toString();
+					String obs =  Dispatch.get(wsfexv1, "Obs").toString();
 					logger.info("Obs: " + obs);
 					resp.setObservacion(obs);
 
@@ -137,7 +135,7 @@ public class ConsultarUltimoComprobanteExportacionBusiness extends AbstractBusin
 					resp.cargarError(new Response(ErrorEnum.ERROR_CONEXION_WSFE));
 				}
 				
-				wsfev1.safeRelease();
+				wsfexv1.safeRelease();
 				
 			} else { //excepcion wsaa
 				resp.cargarError(new Response(ErrorEnum.ERROR_CONEXION_WSAA));

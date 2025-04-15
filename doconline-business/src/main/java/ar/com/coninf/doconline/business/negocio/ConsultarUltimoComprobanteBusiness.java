@@ -99,10 +99,8 @@ public class ConsultarUltimoComprobanteBusiness extends AbstractBusiness {
 				resp.setExcepcionWsfev1(excepcion);
 
 				if (excepcion.equals("")) {
-
-					Variant ult1 = Dispatch.call(wsfev1, "ParamGetTiposOpcional");
 					
-					/* Consultar último comprobante autorizado en AFIP */
+					/* Consultar Ultimo comprobante autorizado en AFIP */
 					String tipo_cbte = datos.getTipoCbte().toString();
 					String pto_vta = datos.getPtoVta().toString();
 					Variant ult = Dispatch.call(wsfev1, "CompUltimoAutorizado", 

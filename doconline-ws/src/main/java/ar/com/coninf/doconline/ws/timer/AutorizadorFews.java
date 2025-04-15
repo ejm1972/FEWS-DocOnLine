@@ -223,7 +223,7 @@ public class AutorizadorFews {
 		sb.append(", obsGenerales: "+obsGenerales);
 		sb.append(", incoterms: "+incoterms+", incotermsDs: "+incotermsDs);
 		sb.append(", formaPago: "+formaPago+", idiomaCbte: "+idiomaCbte);
-		sb.append(", condicionIvaReceptorId: "+condicionIvaReceptorId+", cancelaMismaMonedaExt: "+cancelaMismaMonedaExt);
+		sb.append(", condicionIvaReceptorId: "+(condicionIvaReceptorId==null?"N/D":condicionIvaReceptorId)+", cancelaMismaMonedaExt: "+(cancelaMismaMonedaExt==null?"N/D":cancelaMismaMonedaExt));
 		
 		if (!ivas.equals("")) {
 			sb.append(", ivas: "+ivas);
@@ -562,7 +562,7 @@ public class AutorizadorFews {
 			logger.debug("ImpTrib: "+selected.getImpTrib().toString());
 			logger.debug("ImpOpEx: "+selected.getImpOpEx().toString());
 			logger.debug("MonedaCtz: "+selected.getMonedaCtz().toString());
-			logger.debug("CondicionIvaReceptorId: "+selected.getCondicionIvaReceptorId().toString());
+			logger.debug("CondicionIvaReceptorId: "+(selected.getCondicionIvaReceptorId()==null?"N/D":selected.getCondicionIvaReceptorId().toString()));
 			
 			StringBuilder sbIva = new StringBuilder("[");
 			int size;
