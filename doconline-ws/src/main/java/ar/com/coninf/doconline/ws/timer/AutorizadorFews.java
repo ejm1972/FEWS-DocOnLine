@@ -457,7 +457,7 @@ public class AutorizadorFews {
 				exception = e;
 				logger.error(e);
 				String lanzador = "AutorizadorFews.procesarPendientes()";
-				String ejecucion = "importLog()="+intrfz;
+				String ejecucion = "getFewsPendiente((long) -1)";
 				registrarAuditoriaIniFin(interfaz, ejecucion, lanzador, exception);
 				logger.debug("Fin Ejecucion AutorizadorFews.registrarAuditoriaIniFin()->"+ejecucion);
 			} finally {

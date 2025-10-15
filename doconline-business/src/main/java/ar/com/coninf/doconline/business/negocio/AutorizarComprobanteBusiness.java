@@ -173,6 +173,9 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 					Integer condicion_iva_receptor_id = datos.getCondicionIvaReceptorId();
 					String cancela_misma_moneda_ext = datos.getCancelaMismaMonedaExt();
 					
+					Boolean caea = null;
+					String fecha_hs_gen = null;
+
 					Variant ok = Dispatch.call(wsfev1, "CrearFactura",
 							new Variant(concepto), new Variant(tipo_doc), 
 							new Variant(nro_doc), new Variant(tipo_cbte), 
@@ -184,6 +187,8 @@ public class AutorizarComprobanteBusiness extends AbstractBusiness {
 							new Variant(fecha_cbte), new Variant(fecha_venc_pago), 
 							new Variant(fecha_serv_desde), new Variant(fecha_serv_hasta),
 							new Variant(moneda_id), new Variant(moneda_ctz), 
+							new Variant(caea), new Variant(fecha_hs_gen), 
+							new Variant(cancela_misma_moneda_ext), 
 							new Variant(condicion_iva_receptor_id));
 					logger.debug("CrearFactura: " + ok.toString());
 
