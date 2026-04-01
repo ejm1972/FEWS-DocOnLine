@@ -35,3 +35,5 @@ build/
 ### VS Code ###
 .vscode/
 /BD/*.BAK
+/BD/*.7z
+/BD/*.rar
