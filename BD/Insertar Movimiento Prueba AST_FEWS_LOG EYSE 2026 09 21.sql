@@ -1,4 +1,4 @@
-USE FAF_HIDROTERMIA
+USE FINN_EYSE
 go
 	
 begin tran
@@ -53,14 +53,14 @@ commit tran
 	declare @FecActual varchar(8)		= convert(varchar(8), GETDATE(), 112)
 	declare @TipoDoc varchar(3)			= N'80'
 	declare @DocCliente varchar(11)		= '30708074949' --'30708074949'
+	declare @CategoriaFiscal varchar(20)	= N'1'
 	
 	declare @TipoCbteFC varchar(3)		= '1'
 	declare @PtoVtaFC varchar(5)		= N'00001'
-	declare @CbteFC int					= 84
+	declare @CbteFC int					= 83
 	declare @NroCbteFC varchar(8)		= right('00000000'+convert(varchar(8), @CbteFC),8)
 
 	declare @CuitEmpresa varchar(11)	= N'20225925055'
-	declare @CategoriaFiscal varchar(20)	= N'1'
 
 begin tran	
 	INSERT [dbo].[AST_FEWS_LOG_IVA] 
@@ -78,7 +78,7 @@ commit tran
 
 	declare @TipoCbteNC varchar(3)		= '3'
 	declare @PtoVtaNC varchar(5)		= N'00001'
-	declare @CbteNC int					= 20
+	declare @CbteNC int					= 19
 	declare @NroCbteNC varchar(8)		= right('00000000'+convert(varchar(8), @CbteNC),8)
 	
 begin tran	
